@@ -96,7 +96,7 @@ app.get("/callback", (req, res) => {
 
     const access_token = body.access_token;
     const refresh_token = body.refresh_token;
-    res.send(body);
+    res.redirect(baseUrl + "/?authorized=true&access_token=" + access_token);
   });
 });
 
