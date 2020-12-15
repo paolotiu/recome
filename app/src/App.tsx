@@ -1,13 +1,36 @@
 import React from "react";
-import logo from "./logo.svg";
-import { Login } from "./Components/index";
-import "./App.css";
+import { Login, Recommend, Wave } from "./Components/index";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Redirect,
+} from "react-router-dom";
+import { Theme } from "./Theme";
 
 function App() {
+  const params = new URLSearchParams(window.location.search);
+  const access_token = params.get("access_token")!;
+
   return (
-    <div className="App">
-      <Login />
-    </div>
+    <Theme>
+      <Wave />
+      <div className="App">
+        <Router>
+          <Switch>
+            <Route path="/login">
+              <Login />
+            </Route>
+            <Route path="/recommend">
+              <Recommend access_token={access_token} />
+            </Route>
+            <Route path="/">
+              <Redirect to="/recommend" />
+            </Route>
+          </Switch>
+        </Router>
+      </div>
+    </Theme>
   );
 }
 
