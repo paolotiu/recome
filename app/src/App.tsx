@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Header, Home, Login, Recommend, Wave } from "./Components/index";
 import { getUser } from "./functions/api";
 import {
@@ -8,66 +8,96 @@ import {
   Redirect,
 } from "react-router-dom";
 import { Theme } from "./Theme";
-import { IUser } from "./types";
-
+import { useUpdateUser } from "./UserContext";
 function App() {
   const [token, setToken] = useState(localStorage.getItem("token"));
-  const [user, setUser] = useState<IUser>();
+  const [isLoading, setIsLoading] = useState(true);
+  const [isAuth, setIsAuth] = useState(false);
 
+  const { current: setUser } = useRef(useUpdateUser());
   const params = useMemo(() => new URLSearchParams(window.location.search), []);
   const access_token = params.get("access_token")!;
-  useEffect(() => {
-    console.log("effect");
-    if (!token || token === "null") {
-      console.log(params);
 
-      if (params) {
+  //Check if logged in
+  useEffect(() => {
+    if (!token || token === "null") {
+      if (access_token) {
         setToken(access_token);
+        logIn();
         localStorage.setItem("token", access_token);
       } else {
+        logOut();
+        setIsLoading(false);
         setToken(null);
       }
     } else {
+      setIsLoading(true);
       getUser(token)
-        .then((res: any) => {})
+        .then((res: any) => {
+          setUser({
+            displayName: res.display_name!,
+            product: res.product,
+            url: res.external_urls.spotify,
+            followers: res.followers.total,
+            id: res.id,
+          });
+          logIn();
+          setIsLoading(false);
+        })
         .catch((err) => {
           setToken("");
+          setIsLoading(false);
           localStorage.removeItem("token");
         });
     }
-  }, [token, setToken, params, access_token]);
+  }, [token, setToken, params, access_token, setUser]);
 
   return (
     <Theme>
       <Wave />
 
       <div className="App">
-        <Header />
         <Router>
+          <Header />
           <Switch>
             <Route path="/login" exact>
-              {token && token !== "null" ? <Redirect to="/home" /> : <Login />}
+              <Login />
             </Route>
-            {token && token !== "null" ? (
-              <>
-                <Route path="/recommend" exact>
-                  <Recommend access_token={token!} />
-                </Route>
-                <Route path="/home">
-                  {/* <Home token={access_token} /> */}
-                </Route>
-                <Route path="/">
-                  <Redirect to="/home" />
-                </Route>{" "}
-              </>
-            ) : (
-              <Redirect to="/login" />
-            )}
+            <Route path="/recommend">
+              {isAuth ? (
+                <Recommend token={token!} />
+              ) : isLoading ? (
+                ""
+              ) : (
+                <Redirect to="login" />
+              )}
+            </Route>
+            <Route path="/home">
+              {/* Redirect to login page if not authenticated */}
+              {isAuth ? (
+                <Home token={token!} />
+              ) : isLoading ? (
+                ""
+              ) : (
+                <Redirect to="login" />
+              )}
+            </Route>
+            <Route path="/">
+              <Redirect to="/home" />
+            </Route>
           </Switch>
         </Router>
       </div>
     </Theme>
   );
+
+  function logIn() {
+    setIsAuth(true);
+  }
+
+  function logOut() {
+    setIsAuth(false);
+  }
 }
 
 export default App;

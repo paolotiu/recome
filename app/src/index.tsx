@@ -3,21 +3,13 @@ import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import { ThemeProvider } from "styled-components";
-
-const theme = {
-  primary: "#222831",
-  secondary: "#00ADB5",
-  accent: "#00ADB5",
-  light: "#EEEEEE",
-  buttonBg: "#00ADB5",
-};
+import { UserProvider } from "./UserContext";
 
 ReactDOM.render(
   <React.StrictMode>
-    <ThemeProvider theme={theme}>
+    <UserProvider>
       <App />
-    </ThemeProvider>
+    </UserProvider>
   </React.StrictMode>,
   document.getElementById("root")
 );

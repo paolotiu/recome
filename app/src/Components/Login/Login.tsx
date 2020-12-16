@@ -23,6 +23,7 @@ const StyledLogin = styled.div`
 
     .bird-svg {
       grid-area: svg;
+      fill: initial;
     }
 
     .text {

@@ -22,4 +22,6 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 server/.env
+server/.gitignore
 .eslintcache
+Procfile

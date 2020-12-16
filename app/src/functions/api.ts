@@ -11,7 +11,6 @@ export const getUser = async (token: string) => {
       },
     });
 
-    console.log(res);
     return await res.data;
   } catch (err) {
     throw err;
