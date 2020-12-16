@@ -54,7 +54,7 @@ interface TokenResponse {
 }
 
 // Callback url from Spotify verification
-const baseUrl = "http://localhost:3000";
+const baseUrl = process.env.FRONTEND_URI || "http://localhost:3000";
 app.get("/callback", (req, res) => {
   const code = req.query.code || null;
   const state = req.query.state || null;
@@ -98,6 +98,10 @@ app.get("/callback", (req, res) => {
     const refresh_token = body.refresh_token;
     res.redirect(baseUrl + "/?authorized=true&access_token=" + access_token);
   });
+});
+
+app.use("/", (req, res, next) => {
+  res.json({ error: "endpoint not found" });
 });
 
 let port = process.env.PORT || 8888;
