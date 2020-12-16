@@ -1,25 +1,27 @@
 import React from "react";
 import { Button } from "../General/index";
 import { ReactComponent as Bird } from "../../static/bird.svg";
-import { ReactComponent as Wave } from "../../static/wave.svg";
 import styled from "styled-components";
 interface Props {}
 
 const StyledLogin = styled.div`
   main {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     display: grid;
     width: 100%;
     justify-content: center;
-    height: 50vh;
+
     padding: 1em 2em;
     grid-template-columns: 300px 400px;
     grid-template-areas: "svg text" "button button";
-    margin-top: 200px;
     align-items: center;
     column-gap: 3em;
-    row-gap: 0;
+    row-gap: 3em;
 
-    svg {
+    .bird-svg {
       grid-area: svg;
     }
 
@@ -47,7 +49,6 @@ const StyledLogin = styled.div`
 
   @media (max-width: 768px) {
     main {
-      margin-top: 0;
       grid-template-columns: 300px;
       row-gap: 2em;
       grid-template-areas: "text" "button" "svg";
@@ -68,7 +69,7 @@ export const Login: React.FC = () => {
     <div>
       <StyledLogin>
         <main>
-          <Bird width="100%" height="100%" />
+          <Bird width="100%" height="100%" className="bird-svg" />
           <div className="text">
             <h1>Search for</h1>
             <h1>recommendations</h1>
@@ -79,7 +80,7 @@ export const Login: React.FC = () => {
           <Button
             text="Login to Spotify"
             className="loginbtn"
-            link="http://localhost:8888/login"
+            link="https://recome-server.herokuapp.com/login"
           />
         </main>
       </StyledLogin>
