@@ -1,10 +1,15 @@
 import React from "react";
-import { Redirect } from "react-router";
+
+import styled from "styled-components";
 
 interface Props {
   token: string;
 }
 
+const StyledDiv = styled.div`
+  overflow-wrap: break-word;
+`;
+
 export const Recommend: React.FC<Props> = ({ token }) => {
-  return <div>{token} Hey</div>;
+  return <StyledDiv>{token}</StyledDiv>;
 };

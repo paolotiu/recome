@@ -8,7 +8,7 @@ const StyledHeader = styled.header`
   grid-template-columns: 200px 1fr;
   justify-content: center;
   align-items: center;
-  padding: 1em;
+  padding: 2em;
 
   .logo-svg {
     width: 100px;
@@ -21,6 +21,9 @@ const StyledHeader = styled.header`
       }
       width: 3em;
     }
+  }
+  @media (max-width: 600px) {
+    padding: 1em;
   }
 `;
 interface Props {}

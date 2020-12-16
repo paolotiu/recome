@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { Component, useEffect, useMemo, useRef, useState } from "react";
 import { Header, Home, Login, Recommend, Wave } from "./Components/index";
 import { getUser } from "./functions/api";
 import {
@@ -9,6 +9,27 @@ import {
 } from "react-router-dom";
 import { Theme } from "./Theme";
 import { useUpdateUser } from "./UserContext";
+
+const Protected: React.FC<PropsProtected> = ({
+  component: Component,
+  isAuth,
+  isLoading,
+  ...rest
+}) => {
+  console.log(Component);
+  if (isLoading) {
+    return <> </>;
+  }
+  return (
+    <Route
+      {...rest}
+      render={(props) =>
+        isAuth ? <Component {...props} /> : <Redirect to="/login" />
+      }
+    />
+  );
+};
+
 function App() {
   const [token, setToken] = useState(localStorage.getItem("token"));
   const [isLoading, setIsLoading] = useState(true);
@@ -54,33 +75,27 @@ function App() {
 
   return (
     <Theme>
-      <Wave />
-
       <div className="App">
         <Router>
+          <Wave />
           <Header />
           <Switch>
             <Route path="/login" exact>
               <Login />
             </Route>
             <Route path="/recommend">
-              {isAuth ? (
-                <Recommend token={token!} />
-              ) : isLoading ? (
-                ""
-              ) : (
-                <Redirect to="login" />
-              )}
+              <Protected
+                isLoading={isLoading}
+                component={() => <Recommend token={token!} />}
+                isAuth={isAuth}
+              />
             </Route>
             <Route path="/home">
-              {/* Redirect to login page if not authenticated */}
-              {isAuth ? (
-                <Home token={token!} />
-              ) : isLoading ? (
-                ""
-              ) : (
-                <Redirect to="login" />
-              )}
+              <Protected
+                isLoading={isLoading}
+                component={() => <Home token={token!} />}
+                isAuth={isAuth}
+              />
             </Route>
             <Route path="/">
               <Redirect to="/home" />
@@ -98,6 +113,13 @@ function App() {
   function logOut() {
     setIsAuth(false);
   }
+}
+
+interface PropsProtected {
+  component: any;
+  isAuth: boolean;
+  isLoading: boolean;
+  [key: string]: any;
 }
 
 export default App;
