@@ -7,12 +7,17 @@ const StyledWave = styled.div`
   top: 0;
   right: 0;
   width: max(400px, 40vw);
+
   .z {
     transform: rotate(180deg);
     position: fixed;
     bottom: 0;
     left: 0;
     width: min(350px, 40vw);
+  }
+
+  @media (max-width: 600px) {
+    width: min(500px, 70vw);
   }
 `;
 
