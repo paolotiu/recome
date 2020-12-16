@@ -1,5 +1,5 @@
 import React from "react";
-import { Login, Recommend, Wave } from "./Components/index";
+import { Header, Home, Login, Recommend, Wave } from "./Components/index";
 import {
   BrowserRouter as Router,
   Switch,
@@ -15,17 +15,23 @@ function App() {
   return (
     <Theme>
       <Wave />
+
       <div className="App">
+        <Header />
         <Router>
           <Switch>
-            <Route path="/login">
+            <Route path="/login" exact>
               <Login />
             </Route>
-            <Route path="/recommend">
+            <Route path="/recommend" exact>
               <Recommend access_token={access_token} />
             </Route>
+            <Route path="/home">
+              <Home token={access_token} />
+            </Route>
+
             <Route path="/">
-              <Redirect to="/recommend" />
+              <Redirect to="/home" />
             </Route>
           </Switch>
         </Router>
