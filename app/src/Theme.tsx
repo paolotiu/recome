@@ -5,6 +5,8 @@ const theme = {
   mainFont: "Poppins",
   primary: "#222831",
   secondary: "#00ADB5",
+  lightenedDark: "#444444",
+  background: "#393939",
   light: "#EEEEEE",
   buttonBg: "#00ADB5",
   buttonText: "#EEEEEE",

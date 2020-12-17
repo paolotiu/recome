@@ -16,7 +16,6 @@ const Protected: React.FC<PropsProtected> = ({
   isLoading,
   ...rest
 }) => {
-  console.log(Component);
   if (isLoading) {
     return <> </>;
   }
