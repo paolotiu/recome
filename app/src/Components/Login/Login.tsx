@@ -2,7 +2,6 @@ import React from "react";
 import { Button } from "../General/index";
 import { ReactComponent as Bird } from "../../static/bird.svg";
 import styled from "styled-components";
-interface Props {}
 
 const StyledLogin = styled.div`
   main {

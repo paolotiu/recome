@@ -1,7 +1,6 @@
 import React from "react";
 import { Redirect } from "react-router";
 import styled from "styled-components";
-import { Tile } from "../General/Tile";
 import { ReactComponent as Glass } from "../../static/glass.svg";
 
 import { HomeTile } from "./HomeTile/HomeTile";

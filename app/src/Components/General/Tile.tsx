@@ -1,6 +1,4 @@
-import React from "react";
 import styled from "styled-components";
-import { lighten } from "polished";
 export const Tile = styled.div`
   width: 230px;
   height: 256px;

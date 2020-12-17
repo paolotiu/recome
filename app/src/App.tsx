@@ -1,4 +1,4 @@
-import React, { Component, useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Header, Home, Login, Recommend, Wave } from "./Components/index";
 import { getUser } from "./functions/api";
 import {

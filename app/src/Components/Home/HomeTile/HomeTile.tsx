@@ -2,7 +2,7 @@ import React from "react";
 import { Tile } from "../../index";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import { lighten, animation } from "polished";
+import { lighten } from "polished";
 interface Props {
   header?: string;
   desc?: string;
