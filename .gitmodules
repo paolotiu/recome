@@ -1,0 +1,6 @@
+[submodule "backend"]
+	path = backend
+	url = https://github.com/paolotiu17/test.git
+[submodule "recome-server"]
+	path = recome-server
+	url = https://git.heroku.com/recome-server.git
