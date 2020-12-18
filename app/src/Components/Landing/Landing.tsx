@@ -14,15 +14,12 @@ export const Landing: React.FC<Props> = ({ setToken }) => {
 
   const { current: setUser } = useRef(useUpdateUser());
   localStorage.setItem("token", access_token);
-  const { isLoading, error, data, isFetching } = useQuery("getUser", () =>
-    getUser(access_token)
-  );
+  const { isLoading, data } = useQuery("getUser", () => getUser(access_token), {
+    enabled: !!access_token,
+  });
 
   useEffect(() => {
-    console.log(data);
     if (data) {
-      console.log("setting");
-
       setToken(access_token);
       setUser({
         displayName: data.display_name!,
