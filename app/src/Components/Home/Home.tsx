@@ -4,8 +4,7 @@ import styled from "styled-components";
 import { ReactComponent as Glass } from "../../static/glass.svg";
 import { CenterGrid } from "../index";
 import { HomeTile } from "./HomeTile/HomeTile";
-import { useQuery } from "react-query";
-import { getUser } from "../../functions/api";
+
 interface Props {
   token: string;
 }

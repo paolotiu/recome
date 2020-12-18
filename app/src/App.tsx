@@ -25,8 +25,6 @@ const Protected: React.FC<PropsProtected> = ({
   error,
   ...rest
 }) => {
-  console.log(isLoading ? "loading" : isAuth ? "auth passed" : "redirect");
-
   return (
     <Route
       {...rest}
@@ -48,7 +46,7 @@ function App() {
 
   const { current: user } = useRef(useUser());
   const { current: setUser } = useRef(useUpdateUser());
-  const { isLoading, data } = useQuery(
+  const { isLoading, data, status } = useQuery(
     ["getUser", token],
     () => {
       return getUser(token!);
@@ -70,6 +68,12 @@ function App() {
     }
   }, [data, setUser, isLoading, user, token]);
 
+  // Reomve stale token
+  useEffect(() => {
+    if (status === "error") {
+      localStorage.removeItem("token");
+    }
+  }, [status]);
   return (
     <Theme>
       <div className="App">

@@ -5,9 +5,11 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { UserProvider } from "./UserContext";
 import { QueryClientProvider, QueryClient } from "react-query";
+
 const queryClient = new QueryClient({
-  defaultOptions: { queries: { staleTime: Infinity } },
+  defaultOptions: { queries: { staleTime: Infinity, retry: 0 } },
 });
+
 ReactDOM.render(
   <React.StrictMode>
     <UserProvider>

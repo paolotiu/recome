@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef } from "react";
 import { useQuery } from "react-query";
-import { Redirect, useHistory } from "react-router";
+import { Redirect } from "react-router";
 import { getUser } from "../../functions/api";
 import { useUpdateUser } from "../../UserContext";
 
