@@ -25,7 +25,12 @@ export interface Options {
   duration?: SingleOption;
 }
 
-type SingleOption = TargetOption | MinMaxOptions;
+export interface SingleOption {
+  target: number;
+  min: number;
+  max: number;
+  isAuto: boolean;
+}
 
 export interface TargetOption {
   target: number;
