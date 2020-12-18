@@ -2,15 +2,15 @@ import React from "react";
 import { Redirect } from "react-router";
 import styled from "styled-components";
 import { ReactComponent as Glass } from "../../static/glass.svg";
-
+import { CenterGrid } from "../index";
 import { HomeTile } from "./HomeTile/HomeTile";
+import { useQuery } from "react-query";
+import { getUser } from "../../functions/api";
 interface Props {
   token: string;
 }
 
-const Wrapper = styled.section`
-  display: grid;
-  justify-content: center;
+const Wrapper = styled(CenterGrid)`
   .hometiles-container {
     display: grid;
     padding: 1em;

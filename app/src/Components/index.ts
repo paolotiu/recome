@@ -5,3 +5,4 @@ export { Recommend } from "./Recommend/Recommend";
 
 export { Home } from "./Home/Home";
 export { Header } from "./Header/Header";
+export { Landing } from "./Landing/Landing";
