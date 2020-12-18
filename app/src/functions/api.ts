@@ -12,3 +12,27 @@ export const getUser = async (token: string) => {
 
   return res.data;
 };
+
+// Get top 5 artists
+export const getTopArtists = async (token: string) => {
+  const res = await axios.get(url + "/me/top/artists?limit=5", {
+    headers: {
+      Authorization: "Bearer " + token,
+      "Content-Type": "application/json",
+    },
+  });
+
+  return res.data;
+};
+
+// Get top 5 tracks
+export const getTopTracks = async (token: string) => {
+  const res = await axios.get(url + "/me/top/tracks?limit=5", {
+    headers: {
+      Authorization: "Bearer " + token,
+      "Content-Type": "application/json",
+    },
+  });
+
+  return res.data;
+};
