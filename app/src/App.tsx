@@ -1,6 +1,12 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
-import { Header, Home, Login, Recommend, Wave } from "./Components/index";
-import { getUser } from "./functions/api";
+import React, { useEffect, useRef, useState } from "react";
+import {
+  Header,
+  Home,
+  Landing,
+  Login,
+  Recommend,
+  Wave,
+} from "./Components/index";
 import {
   BrowserRouter as Router,
   Switch,
@@ -8,22 +14,30 @@ import {
   Redirect,
 } from "react-router-dom";
 import { Theme } from "./Theme";
-import { useUpdateUser } from "./UserContext";
+import { useUpdateUser, useUser } from "./UserContext";
+import { useQuery } from "react-query";
+import { getUser } from "./functions/api";
 
 const Protected: React.FC<PropsProtected> = ({
   component: Component,
   isAuth,
   isLoading,
+  error,
   ...rest
 }) => {
-  if (isLoading) {
-    return <> </>;
-  }
+  console.log(isLoading ? "loading" : isAuth ? "auth passed" : "redirect");
+
   return (
     <Route
       {...rest}
       render={(props) =>
-        isAuth ? <Component {...props} /> : <Redirect to="/login" />
+        isLoading ? (
+          <></>
+        ) : isAuth ? (
+          <Component {...props} />
+        ) : (
+          <Redirect to="/login" />
+        )
       }
     />
   );
@@ -31,46 +45,30 @@ const Protected: React.FC<PropsProtected> = ({
 
 function App() {
   const [token, setToken] = useState(localStorage.getItem("token"));
-  const [isLoading, setIsLoading] = useState(true);
-  const [isAuth, setIsAuth] = useState(false);
 
+  const { current: user } = useRef(useUser());
   const { current: setUser } = useRef(useUpdateUser());
-  const params = useMemo(() => new URLSearchParams(window.location.search), []);
-  const access_token = params.get("access_token")!;
-
-  //Check if logged in
-  useEffect(() => {
-    if (!token || token === "null") {
-      if (access_token) {
-        setToken(access_token);
-        logIn();
-        localStorage.setItem("token", access_token);
-      } else {
-        logOut();
-        setIsLoading(false);
-        setToken(null);
-      }
-    } else {
-      setIsLoading(true);
-      getUser(token)
-        .then((res: any) => {
-          setUser({
-            displayName: res.display_name!,
-            product: res.product,
-            url: res.external_urls.spotify,
-            followers: res.followers.total,
-            id: res.id,
-          });
-          logIn();
-          setIsLoading(false);
-        })
-        .catch((err) => {
-          setToken("");
-          setIsLoading(false);
-          localStorage.removeItem("token");
-        });
+  const { isLoading, data } = useQuery(
+    ["getUser", token],
+    () => {
+      return getUser(token!);
+    },
+    {
+      enabled: !!token,
     }
-  }, [token, setToken, params, access_token, setUser]);
+  );
+
+  useEffect(() => {
+    if (!isLoading && Object.keys(user).length && token) {
+      setUser({
+        displayName: data.display_name,
+        product: data.product,
+        url: data.external_urls.spotify,
+        followers: data.followers.total,
+        id: data.id,
+      });
+    }
+  }, [data, setUser, isLoading, user, token]);
 
   return (
     <Theme>
@@ -86,15 +84,18 @@ function App() {
               <Protected
                 isLoading={isLoading}
                 component={() => <Recommend token={token!} />}
-                isAuth={isAuth}
+                isAuth={data ? true : false}
               />
             </Route>
             <Route path="/home">
               <Protected
                 isLoading={isLoading}
                 component={() => <Home token={token!} />}
-                isAuth={isAuth}
+                isAuth={data ? true : false}
               />
+            </Route>
+            <Route path="/landing">
+              <Landing setToken={setToken} />
             </Route>
             <Route path="/">
               <Redirect to="/home" />
@@ -104,14 +105,6 @@ function App() {
       </div>
     </Theme>
   );
-
-  function logIn() {
-    setIsAuth(true);
-  }
-
-  function logOut() {
-    setIsAuth(false);
-  }
 }
 
 interface PropsProtected {

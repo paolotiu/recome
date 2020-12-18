@@ -4,11 +4,16 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { UserProvider } from "./UserContext";
-
+import { QueryClientProvider, QueryClient } from "react-query";
+const queryClient = new QueryClient({
+  defaultOptions: { queries: { staleTime: Infinity } },
+});
 ReactDOM.render(
   <React.StrictMode>
     <UserProvider>
-      <App />
+      <QueryClientProvider client={queryClient}>
+        <App />
+      </QueryClientProvider>
     </UserProvider>
   </React.StrictMode>,
   document.getElementById("root")
