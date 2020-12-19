@@ -20,12 +20,21 @@ const StyledButton = styled.button`
 `;
 
 interface Props {
-  text: string;
+  text?: string;
   link?: string;
   className?: string;
+  onClick?:
+    | ((event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void)
+    | undefined;
 }
 
-export const Button: React.FC<Props> = ({ text, link = "", className }) => {
+export const Button: React.FC<Props> = ({
+  text,
+  link = "",
+  className,
+  onClick,
+  children,
+}) => {
   if (link) {
     return (
       <a href={link} className={className}>
@@ -33,6 +42,11 @@ export const Button: React.FC<Props> = ({ text, link = "", className }) => {
       </a>
     );
   } else {
-    return <StyledButton className={className}>{text}</StyledButton>;
+    return (
+      <StyledButton onClick={onClick} className={className}>
+        {text}
+        {children}
+      </StyledButton>
+    );
   }
 };
