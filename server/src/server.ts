@@ -54,7 +54,7 @@ interface TokenResponse {
 }
 
 // Callback url from Spotify verification
-const baseUrl = "http://localhost:3000";
+const appUrl = process.env.APP_URL || "http://localhost:3000";
 app.get("/callback", (req, res) => {
   const code = req.query.code || null;
   const state = req.query.state || null;
@@ -96,7 +96,7 @@ app.get("/callback", (req, res) => {
 
     const access_token = body.access_token;
     const refresh_token = body.refresh_token;
-    res.redirect(baseUrl + "/?authorized=true&access_token=" + access_token);
+    res.redirect(appUrl + "/?authorized=true&access_token=" + access_token);
   });
 });
 
