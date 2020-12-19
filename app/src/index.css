@@ -73,3 +73,12 @@ code {
   max-width: 200px;
   line-height: 1.3em;
 }
+
+@media screen and (max-width: 768px){
+  .reco-tooltip{
+    width: 1.2em;
+    top: 5px;
+    right: 10px;
+    
+  }
+}

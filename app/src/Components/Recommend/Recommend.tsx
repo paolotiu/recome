@@ -175,7 +175,7 @@ export const Recommend: React.FC<Props> = ({ token }) => {
           <Slider
             min={0}
             max={100}
-            marks={{ 1: <span>1</span>, 100: <span>100</span> }}
+            marks={{ 0: <span>0</span>, 100: <span>100</span> }}
             value={[min, target, max]}
             allowCross={false}
             tipFormatter={(value: any) => `${value}`}

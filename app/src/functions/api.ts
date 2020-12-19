@@ -92,7 +92,7 @@ function cleanOptions(options: Options) {
           cleanedOptions[target] = convert(currentOption.target);
 
           break;
-        case "popularity":
+        case "popularity" || "tempo":
           cleanedOptions[min] = currentOption.min;
           cleanedOptions[max] = currentOption.max;
           cleanedOptions[target] = currentOption.target;
