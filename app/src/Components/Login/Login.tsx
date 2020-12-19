@@ -3,6 +3,12 @@ import { Button } from "../General/index";
 import { ReactComponent as Bird } from "../../static/bird.svg";
 import styled from "styled-components";
 
+let link: string;
+if (process.env.NODE_ENV === "development") {
+  link = "http://localhost:8888/login";
+} else {
+  link = "https://recome-server.herokuapp.com/login";
+}
 const StyledLogin = styled.div`
   main {
     position: absolute;
@@ -77,11 +83,7 @@ export const Login: React.FC = () => {
               <span className="accented">exactly</span> how you want it
             </h1>
           </div>
-          <Button
-            text="Login to Spotify"
-            className="loginbtn"
-            link="https://recome-server.herokuapp.com/login"
-          />
+          <Button text="Login to Spotify" className="loginbtn" link={link} />
         </main>
       </StyledLogin>
     </div>
