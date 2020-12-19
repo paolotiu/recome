@@ -1,40 +1,28 @@
-import React, { useState } from "react";
+import React, { useState, lazy } from "react";
+import { Route } from "react-router";
 import "rc-slider/assets/index.css";
 import { CenterGrid } from "../index";
 import { OptionTile } from "./OptionTile/OptionTile";
 import styled from "styled-components";
 import { useQuery } from "react-query";
+import { ReactComponent as Help } from "../../static/help-circle.svg";
 import {
   getTopArtists,
   getTopTracks,
   getRecommendations,
 } from "../../functions/api";
 import { Options, SeedOptions, SingleOption, TopResult } from "../../types";
-import { defaulSeedOptions, defaultOptions } from "./defaultOptions";
+import {
+  defaulSeedOptions,
+  defaultOptions,
+  CustomModalStyles,
+  helpTip,
+} from "./defaultOptions";
 import toPairsIn from "lodash.topairsin";
 import { Slider } from "../index";
 import Modal from "react-modal";
-
-const CustomModalStyles = {
-  overlay: {
-    backgroundColor: "rgba(255,255,255, 0.2)",
-  },
-  content: {
-    display: "grid",
-    gap: "1.2em",
-    top: "30%",
-    left: "50%",
-    width: "clamp(270px, 30vw, 500px)",
-    right: "auto",
-    bottom: "auto",
-
-    marginRight: "-50%",
-    transform: "translate(-50%, -30%)",
-    backgroundColor: "#393939",
-    border: "none",
-    textTransform: "capitalize",
-  } as React.CSSProperties,
-};
+import { Button } from "../General";
+import ReactTooltip from "react-tooltip";
 
 const Wrapper = styled(CenterGrid)`
   display: flex;
@@ -49,6 +37,11 @@ const Wrapper = styled(CenterGrid)`
     padding: 1em;
     gap: 1em;
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  }
+  button {
+    margin-top: 1em;
+    font-size: 1em;
+    width: 90%;
   }
 
   @media (max-width: 768px) {
@@ -97,6 +90,19 @@ export const Recommend: React.FC<Props> = ({ token }) => {
       });
     },
   });
+
+  const resultsQuery = useQuery(
+    "results",
+    () => getRecommendations(token, seedOptions, options),
+    {
+      enabled: false,
+      onSuccess: (d) => {
+        console.log(d);
+      },
+    }
+  );
+
+  //Wait for query
   if (artistsQuery.isLoading || tracksQuery.isLoading) {
     return <> </>;
   }
@@ -120,117 +126,142 @@ export const Recommend: React.FC<Props> = ({ token }) => {
   }
 
   return (
-    <Wrapper>
-      <div className="option-tiles-container">
-        {optionArray.map((x, index) => (
-          <OptionTile
-            name={x[0]}
-            options={x[1]}
-            index={index}
-            setCurrent={setCurrent}
-            openModal={openModal}
-            key={x[0]}
-          />
-        ))}
-      </div>
+    <>
+      <Wrapper>
+        <div className="option-tiles-container">
+          {optionArray.map((x, index) => (
+            <OptionTile
+              name={x[0]}
+              options={x[1]}
+              index={index}
+              setCurrent={setCurrent}
+              openModal={openModal}
+              key={x[0]}
+            />
+          ))}
+        </div>
 
-      <button onClick={() => getRecommendations(token, seedOptions, options)}>
-        Send
-      </button>
-      <Modal
-        style={CustomModalStyles}
-        isOpen={showModal}
-        onRequestClose={closeModal}
-        onAfterClose={() => {
-          changeOptions(name, min, max, target, isAuto);
-        }}
-      >
-        <h1>{newName}</h1>
+        <Button onClick={() => resultsQuery.refetch()}>
+          Get Recommendations
+        </Button>
 
-        <Slider
-          min={0}
-          max={100}
-          value={[min, target, max]}
-          tabIndex={[2, 3]}
-          allowCross={false}
-          tipFormatter={(value: any) => `${value}`}
-          onChange={(val: any) => {
-            if (isAuto) {
-              setCurrentOption((prev) => {
-                return { ...prev, isAuto: false };
-              });
-            }
-            setCurrentOption((prev) => {
-              return { ...prev, min: val[0], target: val[1], max: val[2] };
-            });
-          }}
-          activeDotStyle={{
-            boxShadow: "none",
-            border: "none",
-            background: "blue",
-          }}
-          pushable={true}
-        />
-        <div className="reco-input-container">
-          <label htmlFor="min">Min: </label>
-          <input
-            disabled={isAuto}
-            type="number"
-            name="min"
-            value={min}
-            onChange={(e) => {
-              setCurrentOption((prev) => {
-                return { ...prev, min: Number(e.target.value) };
-              });
-            }}
-          />
-        </div>
-        <div className="reco-input-container">
-          <label htmlFor="target">Target: </label>
-          <input
-            disabled={isAuto}
-            type="number"
-            name="target"
-            value={target}
-            onChange={(e) => {
-              setCurrentOption((prev) => {
-                return { ...prev, target: Number(e.target.value) };
-              });
-            }}
-          />
-        </div>
-        <div className="reco-input-container">
-          <label htmlFor="max">Max: </label>
-          <input
-            disabled={isAuto}
-            type="number"
-            name="max"
-            value={max}
-            onChange={(e) => {
-              setCurrentOption((prev) => {
-                return { ...prev, max: Number(e.target.value) };
-              });
-            }}
-          />
-        </div>
-        <button
-          style={{
-            border: "none",
-            borderRadius: "24px",
-            backgroundColor: buttonBg,
-            outline: "none",
-            transition: "all .3s ease-in",
-          }}
-          onClick={(e) => {
-            setCurrentOption((prev) => {
-              return { ...prev, isAuto: !prev.isAuto };
-            });
+        <Modal
+          style={CustomModalStyles}
+          isOpen={showModal}
+          onRequestClose={closeModal}
+          onAfterClose={() => {
+            changeOptions(name, min, max, target, isAuto);
           }}
         >
-          Auto
-        </button>
-      </Modal>
-    </Wrapper>
+          <h1>{newName}</h1>
+
+          {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+          <a data-tip="custom show" data-event="click focus">
+            <Help className="reco-tooltip" />
+          </a>
+
+          <ReactTooltip
+            overridePosition={({ left }) => {
+              return { left: left, top: -50 };
+            }}
+            className="reco-tip"
+            place="left"
+            type="dark"
+            effect="float"
+            globalEventOff="click"
+          >
+            {helpTip[name] ? helpTip[name] : "Nada"}
+          </ReactTooltip>
+          <Slider
+            min={0}
+            max={100}
+            marks={{ 1: <span>1</span>, 100: <span>100</span> }}
+            value={[min, target, max]}
+            allowCross={false}
+            tipFormatter={(value: any) => `${value}`}
+            onChange={(val: any) => {
+              if (isAuto) {
+                setCurrentOption((prev) => {
+                  return { ...prev, isAuto: false };
+                });
+              }
+              setCurrentOption((prev) => {
+                return { ...prev, min: val[0], target: val[1], max: val[2] };
+              });
+            }}
+            pushable={true}
+          />
+          <div className="reco-input-container">
+            <label htmlFor="min">Min: </label>
+            <input
+              disabled={isAuto}
+              type="number"
+              name="min"
+              value={min}
+              max={target - 1}
+              min={0}
+              onChange={(e) => {
+                setCurrentOption((prev) => {
+                  return { ...prev, min: Number(e.target.value) };
+                });
+              }}
+            />
+          </div>
+          <div className="reco-input-container">
+            <label htmlFor="target">Target: </label>
+            <input
+              disabled={isAuto}
+              type="number"
+              name="target"
+              value={target}
+              onChange={(e) => {
+                setCurrentOption((prev) => {
+                  return { ...prev, target: Number(e.target.value) };
+                });
+              }}
+            />
+          </div>
+          <div className="reco-input-container">
+            <label htmlFor="max">Max: </label>
+            <input
+              disabled={isAuto}
+              type="number"
+              name="max"
+              min={target + 1}
+              max={100}
+              value={max}
+              onChange={(e) => {
+                setCurrentOption((prev) => {
+                  return { ...prev, max: Number(e.target.value) };
+                });
+              }}
+            />
+          </div>
+          <button
+            style={{
+              border: "none",
+              borderRadius: "24px",
+              color: isAuto ? "white" : "black",
+              backgroundColor: buttonBg,
+              outline: "none",
+              transition: "all .3s ease-in",
+            }}
+            onClick={(e) => {
+              setCurrentOption((prev) => {
+                return { ...prev, isAuto: !prev.isAuto };
+              });
+            }}
+          >
+            Auto
+          </button>
+        </Modal>
+      </Wrapper>
+      {resultsQuery.isSuccess
+        ? resultsQuery.data.map((x: any) => {
+            return <p>{x.name!}</p>;
+          })
+        : ""}
+    </>
   );
 
   function openModal() {

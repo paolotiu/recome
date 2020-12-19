@@ -58,8 +58,8 @@ export const getRecommendations = async (
       },
     }
   );
-  console.log(res);
-  return res.data;
+
+  return res.data.tracks;
 };
 
 function stringifySeedOptions(seedOptions: SeedOptions) {

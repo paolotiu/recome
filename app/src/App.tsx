@@ -1,12 +1,5 @@
-import React, { useEffect, useRef, useState } from "react";
-import {
-  Header,
-  Home,
-  Landing,
-  Login,
-  Recommend,
-  Wave,
-} from "./Components/index";
+import React, { useEffect, useRef, useState, lazy, Suspense } from "react";
+import { Header, Landing, Login, Wave } from "./Components/index";
 import {
   BrowserRouter as Router,
   Switch,
@@ -17,6 +10,9 @@ import { Theme } from "./Theme";
 import { useUpdateUser, useUser } from "./UserContext";
 import { useQuery } from "react-query";
 import { getUser } from "./functions/api";
+
+const Home = lazy(() => import("./Components/Lazy/Home"));
+const Recommend = lazy(() => import("./Components/Lazy/Recommend"));
 
 const Protected: React.FC<PropsProtected> = ({
   component: Component,
@@ -80,31 +76,33 @@ function App() {
         <Router>
           <Wave />
           <Header />
-          <Switch>
-            <Route path="/login" exact>
-              <Login />
-            </Route>
-            <Route path="/recommend">
-              <Protected
-                isLoading={isLoading}
-                component={() => <Recommend token={token!} />}
-                isAuth={data ? true : false}
-              />
-            </Route>
-            <Route path="/home">
-              <Protected
-                isLoading={isLoading}
-                component={() => <Home token={token!} />}
-                isAuth={data ? true : false}
-              />
-            </Route>
-            <Route path="/landing">
-              <Landing setToken={setToken} />
-            </Route>
-            <Route path="/">
-              <Redirect to="/home" />
-            </Route>
-          </Switch>
+          <Suspense fallback={<div></div>}>
+            <Switch>
+              <Route path="/login" exact>
+                <Login />
+              </Route>
+              <Route path="/recommend">
+                <Protected
+                  isLoading={isLoading}
+                  component={() => <Recommend token={token!} />}
+                  isAuth={data ? true : false}
+                />
+              </Route>
+              <Route path="/home">
+                <Protected
+                  isLoading={isLoading}
+                  component={() => <Home token={token!} />}
+                  isAuth={data ? true : false}
+                />
+              </Route>
+              <Route path="/landing">
+                <Landing setToken={setToken} />
+              </Route>
+              <Route path="/">
+                <Redirect to="/home" />
+              </Route>
+            </Switch>
+          </Suspense>
         </Router>
       </div>
     </Theme>
