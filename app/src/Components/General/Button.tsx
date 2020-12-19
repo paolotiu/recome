@@ -20,6 +20,7 @@ const StyledButton = styled.button`
 `;
 
 interface Props {
+  style?: React.CSSProperties;
   text?: string;
   link?: string;
   className?: string;
@@ -34,6 +35,7 @@ export const Button: React.FC<Props> = ({
   className,
   onClick,
   children,
+  style,
 }) => {
   if (link) {
     return (
@@ -43,7 +45,7 @@ export const Button: React.FC<Props> = ({
     );
   } else {
     return (
-      <StyledButton onClick={onClick} className={className}>
+      <StyledButton onClick={onClick} className={className} style={style}>
         {text}
         {children}
       </StyledButton>

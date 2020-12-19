@@ -31,7 +31,9 @@ interface Props {}
 export const Header: React.FC<Props> = () => {
   return (
     <StyledHeader>
-      <Logo className="logo-svg" />
+      <Link to="/home">
+        <Logo className="logo-svg" />
+      </Link>
       <div className="nav-links">
         <Link to="/home">
           <Home />

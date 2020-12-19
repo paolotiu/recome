@@ -1,5 +1,4 @@
-import React, { useState, lazy } from "react";
-import { Route } from "react-router";
+import React, { useState } from "react";
 import "rc-slider/assets/index.css";
 import { CenterGrid } from "../index";
 import { OptionTile } from "./OptionTile/OptionTile";
@@ -42,6 +41,7 @@ const Wrapper = styled(CenterGrid)`
     margin-top: 1em;
     font-size: 1em;
     width: 90%;
+    max-width: 960px;
   }
 
   @media (max-width: 768px) {
