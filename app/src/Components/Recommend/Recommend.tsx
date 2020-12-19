@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import "rc-slider/assets/index.css";
 import { CenterGrid } from "../index";
 import { OptionTile } from "./OptionTile/OptionTile";
@@ -269,51 +269,4 @@ export const Recommend: React.FC<Props> = ({ token }) => {
 
 function optionsToArray(options: Options) {
   return toPairsIn(options);
-}
-
-function optionsToObject(seedOptions: SeedOptions, options: Options) {
-  const x = toPairsIn(seedOptions);
-  let q = "";
-  x.forEach((seed) => {
-    q += seed[0] + "=" + seed[1].join(",");
-    q += "&";
-  });
-  console.log(cleanOptions(options));
-}
-
-function cleanOptions(options: Options) {
-  const cleanedOptions: { [key: string]: number } = {};
-  for (let key in options) {
-    const currentOption = options[key];
-    if (!currentOption.isAuto) {
-      const name = currentOption.name;
-      const min = "min_" + name;
-      const target = "target_" + name;
-      const max = "max_" + name;
-      switch (currentOption.name) {
-        case "loudness":
-          // Conversion to -60 - 100
-          const convert = (x: number) => {
-            return Math.floor(((x - 0) / (100 - 0)) * (0 - -60) + -60);
-          };
-          cleanedOptions[min] = convert(currentOption.min);
-          cleanedOptions[max] = convert(currentOption.max);
-          cleanedOptions[target] = convert(currentOption.target);
-
-          break;
-        case "popularity":
-          cleanedOptions[min] = currentOption.min;
-          cleanedOptions[max] = currentOption.max;
-          cleanedOptions[target] = currentOption.target;
-          break;
-        default:
-          // default 0.0 - 1.0
-          cleanedOptions[min] = currentOption.min / 100;
-          cleanedOptions[max] = currentOption.max / 100;
-          cleanedOptions[target] = currentOption.target / 100;
-          break;
-      }
-    }
-  }
-  return cleanedOptions;
 }

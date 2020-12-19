@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
-import { Options, SingleOption } from "../../../types";
+import { SingleOption } from "../../../types";
 import { Tile } from "../../index";
 import { lighten } from "polished";
 interface StyledProps {
