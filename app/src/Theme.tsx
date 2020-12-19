@@ -7,9 +7,9 @@ const theme = {
   secondary: "#00ADB5",
   lightenedDark: "#444444",
   background: "#393939",
-  light: "#EEEEEE",
+  light: "#EEE",
   buttonBg: "#00ADB5",
-  buttonText: "#EEEEEE",
+  buttonText: "#EEE",
 };
 
 export const Theme: React.FC = ({ children }) => {

@@ -1,4 +1,4 @@
-export { Wave, Tile, Button, CenterGrid } from "./General";
+export { Wave, Tile, Button, CenterGrid, Slider } from "./General";
 
 export { Login } from "./Login/Login";
 export { Recommend } from "./Recommend/Recommend";

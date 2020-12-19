@@ -6,26 +6,27 @@ export interface IUser {
   url: string;
 }
 
-export interface Options {
+export interface SeedOptions {
   seed_tracks: string[];
   seed_genres: string[];
   seed_artists: string[];
-  popularity?: SingleOption;
-  acousticness?: SingleOption;
-  danceability?: SingleOption;
-  tempo?: SingleOption;
-  energy?: SingleOption;
-  instrumentalness?: SingleOption;
-  liveness?: SingleOption;
-  loudness?: SingleOption;
-  mode?: SingleOption;
-  speechiness?: SingleOption;
-  time_signature?: SingleOption;
-  valence?: SingleOption;
-  duration?: SingleOption;
+}
+
+export interface Options {
+  [popularity: string]: SingleOption;
+  acousticness: SingleOption;
+  danceability: SingleOption;
+  tempo: SingleOption;
+  energy: SingleOption;
+  instrumentalness: SingleOption;
+  liveness: SingleOption;
+  loudness: SingleOption;
+  speechiness: SingleOption;
+  valence: SingleOption;
 }
 
 export interface SingleOption {
+  name: string;
   target: number;
   min: number;
   max: number;

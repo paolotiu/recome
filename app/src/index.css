@@ -23,6 +23,9 @@ a{
   color: inherit;
   text-decoration: none;
 }
+input, button{
+  font-family: 'Poppins';
+}
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
@@ -33,4 +36,23 @@ code {
   position: fixed;
   top: 0;
   right: 0;
+}
+
+.reco-input-container>input{
+  width: 50px;
+  padding: 0 .3em;
+  border: none;
+}
+
+.ReactModal__Overlay {
+  opacity: 0;
+  transition: opacity 200ms ease-in;
+}
+
+.ReactModal__Overlay--after-open{
+  opacity: 1;
+}
+
+.ReactModal__Overlay--before-close{
+  opacity: 0;
 }
