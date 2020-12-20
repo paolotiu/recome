@@ -1,8 +1,11 @@
-import Slider, { createSliderWithTooltip } from "rc-slider";
+import Slider, { RangeProps } from "rc-slider";
 import "rc-slider/assets/index.css";
 import styled from "styled-components";
-const Range = createSliderWithTooltip(Slider.Range);
-const StyledSlider = styled(Range)`
+
+const RangeWithFixedPushable = Slider.Range as React.ComponentClass<
+  Omit<RangeProps, "pushable"> & { pushable?: number | boolean }
+>;
+const StyledSlider = styled(RangeWithFixedPushable)`
   margin-bottom: 5px;
   .rc-slider-handle {
     border: none;
