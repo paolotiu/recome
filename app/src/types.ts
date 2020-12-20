@@ -50,3 +50,25 @@ export interface ResultItem {
   genres: string[];
   id: string;
 }
+
+export interface RecoResults {
+  id: string;
+  name: string;
+  popularity: number;
+  preview_url: string;
+  album: {
+    artists: ResultArtist[];
+    images: ResultImage[];
+  };
+}
+
+export interface ResultImage {
+  height: string;
+  url: string;
+}
+
+export interface ResultArtist {
+  id: string;
+  name: string;
+  href: string;
+}
