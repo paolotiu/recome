@@ -8,7 +8,7 @@ interface StyledProps {
   isAuto: boolean;
 }
 
-const StyledOptionTile = styled(Tile)<StyledProps>`
+export const StyledOptionTile = styled(Tile)<StyledProps>`
   cursor: pointer;
   transition: all 0.1s ease-in;
   /* display: ${(props) => (props.show ? "block" : "none")}; */

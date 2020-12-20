@@ -41,7 +41,7 @@ const Wrapper = styled(CenterGrid)`
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
     h1 {
       font-size: 2em;
-      padding-top: 1em 0;
+
       justify-self: start;
       grid-column: 1/-1;
     }
@@ -49,7 +49,7 @@ const Wrapper = styled(CenterGrid)`
   button {
     margin-top: 1em;
     font-size: 1em;
-    width: 90%;
+    width: 100%;
     max-width: 960px;
   }
 
@@ -111,6 +111,12 @@ export const Recommend: React.FC<Props> = ({ token }) => {
     }
   );
 
+  // const genreListQuery = useQuery("genre", () => getGenreList(token), {
+  //   onSuccess: (d) => {
+  //     console.log(d);
+  //   },
+  // });
+
   const { min, max, target, name, isAuto } = currentOption;
 
   //Button color switch
@@ -134,7 +140,7 @@ export const Recommend: React.FC<Props> = ({ token }) => {
       <Wrapper>
         <div className="option-tiles-container">
           <h1>Recommendations</h1>
-          {optionArray.map((x, index) => (
+          {optionArray.sort().map((x, index) => (
             <OptionTile
               name={x[0]}
               options={x[1]}
@@ -144,15 +150,35 @@ export const Recommend: React.FC<Props> = ({ token }) => {
               key={x[0]}
             />
           ))}
+          {/* <StyledOptionTile show={true} isAuto={false}>
+            <h3>Genre (up to 5)</h3>
+            <select name="genres" id="" defaultValue="auto">
+              {genreListQuery.isSuccess
+                ? genreListQuery.data.genres.map((x: string) => (
+                    <option value={x} key={x}>
+                      {x}
+                    </option>
+                  ))
+                : ""}
+            </select>
+          </StyledOptionTile> */}
+          <Button
+            onClick={() => resultsQuery.refetch()}
+            //Disabled white fetching
+            disabled={artistsQuery.isLoading || tracksQuery.isLoading}
+            style={{
+              gridColumnStart: 1,
+              gridColumnEnd: -1,
+            }}
+          >
+            Get Recommendations
+          </Button>
+          {resultsQuery.isSuccess ? (
+            <Results results={resultsQuery.data} />
+          ) : (
+            ""
+          )}
         </div>
-
-        <Button
-          onClick={() => resultsQuery.refetch()}
-          //Disabled white fetching
-          disabled={artistsQuery.isLoading || tracksQuery.isLoading}
-        >
-          Get Recommendations
-        </Button>
 
         <Modal
           shouldCloseOnOverlayClick={true}
@@ -265,7 +291,6 @@ export const Recommend: React.FC<Props> = ({ token }) => {
           </Button>
         </Modal>
       </Wrapper>
-      {resultsQuery.isSuccess ? <Results results={resultsQuery.data} /> : ""}
     </>
   );
 

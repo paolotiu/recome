@@ -7,6 +7,7 @@ const theme = {
   secondary: "#00ADB5",
   lightenedDark: "#444444",
   background: "#393939",
+  darkBg: "#302f2f",
   light: "#EEE",
   buttonBg: "#00ADB5",
   buttonText: "#EEE",

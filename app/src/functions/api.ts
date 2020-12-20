@@ -19,7 +19,7 @@ export const getUser = async (token: string) => {
 
 // Get top 5 artists
 export const getTopArtists = async (token: string) => {
-  const res = await axios.get(url + "/me/top/artists?limit=1&offset=0", {
+  const res = await axios.get(url + "/me/top/artists?limit=2&offset=5", {
     headers: {
       Authorization: "Bearer " + token,
       "Content-Type": "application/json",
@@ -31,13 +31,23 @@ export const getTopArtists = async (token: string) => {
 
 // Get top 5 tracks
 export const getTopTracks = async (token: string) => {
-  const res = await axios.get(url + "/me/top/tracks?limit=3&offset=0", {
+  const res = await axios.get(url + "/me/top/tracks?limit=0&offset=0", {
     headers: {
       Authorization: "Bearer " + token,
       "Content-Type": "application/json",
     },
   });
 
+  return res.data;
+};
+
+export const getGenreList = async (token: string) => {
+  const res = await axios.get(url + "/recommendations/available-genre-seeds", {
+    headers: {
+      Authorization: "Bearer " + token,
+      "Content-Type": "application/json",
+    },
+  });
   return res.data;
 };
 
@@ -66,7 +76,7 @@ function stringifySeedOptions(seedOptions: SeedOptions) {
   const arr = toPairsIn(seedOptions);
   let q = "";
   arr.forEach((seed: any) => {
-    q += seed[0] + "=" + seed[1].join("%2C");
+    q += seed[0] + "=" + seed[1].join(",");
     q += "&";
   });
   return q;
