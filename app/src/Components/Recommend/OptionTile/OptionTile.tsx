@@ -29,14 +29,14 @@ const StyledOptionTile = styled(Tile)<StyledProps>`
     font-size: 0.8em;
     font-weight: thin;
   }
-  @media (min-width: 769px) {
-    &:hover {
-      transform: scale(1.1);
-      background-color: ${(props) =>
-        props.isAuto
-          ? lighten(0.04, props.theme.lightenedDark)
-          : lighten(0.04, props.theme.secondary)};
-    }
+
+  &:hover,
+  &:focus {
+    transform: scale(1.1);
+    background-color: ${(props) =>
+      props.isAuto
+        ? lighten(0.04, props.theme.lightenedDark)
+        : lighten(0.04, props.theme.secondary)};
   }
 
   @media (max-width: 768px) {

@@ -238,6 +238,7 @@ export const Recommend: React.FC<Props> = ({ token }) => {
           />
           <button
             style={{
+              userSelect: "none",
               border: "none",
               borderRadius: "24px",
               color: isAuto ? "white" : "black",
@@ -251,7 +252,7 @@ export const Recommend: React.FC<Props> = ({ token }) => {
               });
             }}
           >
-            Auto
+            <span style={{ userSelect: "none" }}>Auto</span>
           </button>
         </Modal>
       </Wrapper>
