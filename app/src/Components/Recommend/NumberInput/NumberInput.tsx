@@ -30,6 +30,7 @@ interface Props {
   target?: number;
   value: number;
   label: string;
+  max?: number;
   onChange: ((event: React.ChangeEvent<HTMLInputElement>) => void) | undefined;
 }
 
@@ -41,10 +42,11 @@ export const NumberInput: React.FC<Props> = ({
   onChange,
   name,
   type,
+  max,
 }) => {
   return (
     <StyledNumberInput isAuto={isAuto}>
-      <label htmlFor="min">{label} </label>
+      <label htmlFor={name}>{label} </label>
       {target ? (
         <>
           {" "}
@@ -53,7 +55,7 @@ export const NumberInput: React.FC<Props> = ({
             type={type}
             name={name}
             value={value}
-            max={name === "max" ? 100 : target - 1}
+            max={max ? max : name === "max" ? 100 : target - 1}
             min={name === "min" ? 0 : target + 1}
             onChange={onChange}
           />

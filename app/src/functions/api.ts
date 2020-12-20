@@ -92,7 +92,12 @@ function cleanOptions(options: Options) {
           cleanedOptions[target] = convert(currentOption.target);
 
           break;
-        case "popularity" || "tempo":
+        case "popularity":
+          cleanedOptions[min] = currentOption.min;
+          cleanedOptions[max] = currentOption.max;
+          cleanedOptions[target] = currentOption.target;
+          break;
+        case "tempo":
           cleanedOptions[min] = currentOption.min;
           cleanedOptions[max] = currentOption.max;
           cleanedOptions[target] = currentOption.target;
@@ -106,5 +111,6 @@ function cleanOptions(options: Options) {
       }
     }
   }
+  console.log(cleanedOptions);
   return cleanedOptions;
 }

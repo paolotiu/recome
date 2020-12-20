@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { lazy, useState } from "react";
 
 import { CenterGrid } from "../index";
 import { OptionTile } from "./OptionTile/OptionTile";
@@ -23,6 +23,7 @@ import Modal from "react-modal";
 import { Button } from "../General";
 import ReactTooltip from "react-tooltip";
 import { NumberInput } from "./NumberInput/NumberInput";
+const Results = lazy(() => import("./Results/ResultsContainer"));
 
 const Wrapper = styled(CenterGrid)`
   display: flex;
@@ -183,8 +184,12 @@ export const Recommend: React.FC<Props> = ({ token }) => {
           </ReactTooltip>
           <Slider
             min={0}
-            max={100}
-            marks={{ 0: <span>0</span>, 100: <span>100</span> }}
+            max={name === "tempo" ? 300 : 100}
+            marks={{
+              0: <span>0</span>,
+              100: <span>100</span>,
+              140: <span>200</span>,
+            }}
             value={[min, target, max]}
             allowCross={false}
             onChange={(val: any) => {
@@ -227,6 +232,8 @@ export const Recommend: React.FC<Props> = ({ token }) => {
           <NumberInput
             isAuto={isAuto}
             value={max}
+            target={target}
+            max={name === "tempo" ? 300 : 0}
             label="Max:"
             name="max"
             onChange={(e) => {
@@ -236,7 +243,7 @@ export const Recommend: React.FC<Props> = ({ token }) => {
             }}
             type="number"
           />
-          <button
+          <Button
             style={{
               userSelect: "none",
               border: "none",
@@ -245,22 +252,20 @@ export const Recommend: React.FC<Props> = ({ token }) => {
               backgroundColor: buttonBg,
               outline: "none",
               transition: "all .3s ease-in",
+              padding: "0",
+              fontSize: "1.2em",
             }}
-            onClick={(e) => {
+            onClick={() => {
               setCurrentOption((prev) => {
                 return { ...prev, isAuto: !prev.isAuto };
               });
             }}
           >
             <span style={{ userSelect: "none" }}>Auto</span>
-          </button>
+          </Button>
         </Modal>
       </Wrapper>
-      {resultsQuery.isSuccess
-        ? resultsQuery.data.map((x: any) => {
-            return <p>{x.name!}</p>;
-          })
-        : ""}
+      {resultsQuery.isSuccess ? <Results results={resultsQuery.data} /> : ""}
     </>
   );
 

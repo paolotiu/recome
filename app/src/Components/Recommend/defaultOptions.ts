@@ -63,8 +63,8 @@ export const CustomModalStyles = {
     gap: "1.2em",
     top: "30%",
     left: "50%",
-    width: "clamp(270px, 30vw, 500px)",
-    maxWidth: "80vw",
+    width: "clamp(300px, 30vw, 500px)",
+
     right: "auto",
     bottom: "auto",
     borderRadius: "24px",
