@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "rc-slider/assets/index.css";
+
 import { CenterGrid } from "../index";
 import { OptionTile } from "./OptionTile/OptionTile";
 import styled from "styled-components";
@@ -22,11 +22,13 @@ import { Slider } from "../index";
 import Modal from "react-modal";
 import { Button } from "../General";
 import ReactTooltip from "react-tooltip";
+import { NumberInput } from "./NumberInput/NumberInput";
 
 const Wrapper = styled(CenterGrid)`
   display: flex;
   align-items: center;
   flex-direction: column;
+
   .option-tiles-container {
     width: 100%;
     align-items: center;
@@ -36,6 +38,12 @@ const Wrapper = styled(CenterGrid)`
     padding: 1em;
     gap: 1em;
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    h1 {
+      font-size: 2em;
+      padding-top: 1em 0;
+      justify-self: start;
+      grid-column: 1/-1;
+    }
   }
   button {
     margin-top: 1em;
@@ -105,7 +113,7 @@ export const Recommend: React.FC<Props> = ({ token }) => {
   const { min, max, target, name, isAuto } = currentOption;
 
   //Button color switch
-  let buttonBg = "#EEE";
+  let buttonBg = "#CCC";
   if (isAuto) {
     buttonBg = "#00ADB5";
   }
@@ -124,6 +132,7 @@ export const Recommend: React.FC<Props> = ({ token }) => {
     <>
       <Wrapper>
         <div className="option-tiles-container">
+          <h1>Recommendations</h1>
           {optionArray.map((x, index) => (
             <OptionTile
               name={x[0]}
@@ -145,6 +154,7 @@ export const Recommend: React.FC<Props> = ({ token }) => {
         </Button>
 
         <Modal
+          shouldCloseOnOverlayClick={true}
           style={CustomModalStyles}
           isOpen={showModal}
           onRequestClose={closeModal}
@@ -177,7 +187,6 @@ export const Recommend: React.FC<Props> = ({ token }) => {
             marks={{ 0: <span>0</span>, 100: <span>100</span> }}
             value={[min, target, max]}
             allowCross={false}
-            tipFormatter={(value: any) => `${value}`}
             onChange={(val: any) => {
               if (isAuto) {
                 setCurrentOption((prev) => {
@@ -188,54 +197,45 @@ export const Recommend: React.FC<Props> = ({ token }) => {
                 return { ...prev, min: val[0], target: val[1], max: val[2] };
               });
             }}
-            pushable={true}
+            pushable={1}
           />
-          <div className="reco-input-container">
-            <label htmlFor="min">Min: </label>
-            <input
-              disabled={isAuto}
-              type="number"
-              name="min"
-              value={min}
-              max={target - 1}
-              min={0}
-              onChange={(e) => {
-                setCurrentOption((prev) => {
-                  return { ...prev, min: Number(e.target.value) };
-                });
-              }}
-            />
-          </div>
-          <div className="reco-input-container">
-            <label htmlFor="target">Target: </label>
-            <input
-              disabled={isAuto}
-              type="number"
-              name="target"
-              value={target}
-              onChange={(e) => {
-                setCurrentOption((prev) => {
-                  return { ...prev, target: Number(e.target.value) };
-                });
-              }}
-            />
-          </div>
-          <div className="reco-input-container">
-            <label htmlFor="max">Max: </label>
-            <input
-              disabled={isAuto}
-              type="number"
-              name="max"
-              min={target + 1}
-              max={100}
-              value={max}
-              onChange={(e) => {
-                setCurrentOption((prev) => {
-                  return { ...prev, max: Number(e.target.value) };
-                });
-              }}
-            />
-          </div>
+          <NumberInput
+            isAuto={isAuto}
+            value={min}
+            target={target}
+            label="Min:"
+            name="min"
+            onChange={(e) => {
+              setCurrentOption((prev) => {
+                return { ...prev, min: Number(e.target.value) };
+              });
+            }}
+            type="number"
+          />
+          <NumberInput
+            isAuto={isAuto}
+            value={target}
+            label="Target:"
+            name="target"
+            onChange={(e) => {
+              setCurrentOption((prev) => {
+                return { ...prev, target: Number(e.target.value) };
+              });
+            }}
+            type="number"
+          />
+          <NumberInput
+            isAuto={isAuto}
+            value={max}
+            label="Max:"
+            name="max"
+            onChange={(e) => {
+              setCurrentOption((prev) => {
+                return { ...prev, max: Number(e.target.value) };
+              });
+            }}
+            type="number"
+          />
           <button
             style={{
               border: "none",
