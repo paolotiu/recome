@@ -27,6 +27,8 @@ const StyledLogin = styled.div`
     row-gap: 3em;
 
     .bird-svg {
+      max-height: 300px;
+
       grid-area: svg;
       fill: initial;
     }
@@ -49,7 +51,7 @@ const StyledLogin = styled.div`
     }
 
     span {
-      color: ${(props) => props.theme.accent};
+      color: ${(props) => props.theme.secondary};
     }
   }
 

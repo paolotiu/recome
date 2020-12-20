@@ -18,14 +18,13 @@ const StyledHomeTile = styled(Tile)`
   svg {
     stroke: ${(props) => props.theme.light};
     stroke-width: 4px;
+    width: 20%;
+    height: 20%;
     /* fill: ${(props) => props.theme.background}; */
     fill: none;
     transition: fill 4s ease-in;
     path {
     }
-
-    width: 20%;
-    height: 20%;
   }
 
   h2 {
@@ -49,9 +48,11 @@ const StyledHomeTile = styled(Tile)`
     height: auto;
     display: grid;
     grid-template-columns: 1fr 5fr;
+
     align-items: baseline;
     justify-items: left;
     svg {
+      max-height: 30px;
       justify-self: left;
       overflow: visible;
       height: 100%;

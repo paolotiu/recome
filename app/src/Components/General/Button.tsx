@@ -27,6 +27,7 @@ interface Props {
   onClick?:
     | ((event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void)
     | undefined;
+  disabled?: boolean;
 }
 
 export const Button: React.FC<Props> = ({
@@ -36,6 +37,7 @@ export const Button: React.FC<Props> = ({
   onClick,
   children,
   style,
+  disabled,
 }) => {
   if (link) {
     return (
@@ -45,7 +47,12 @@ export const Button: React.FC<Props> = ({
     );
   } else {
     return (
-      <StyledButton onClick={onClick} className={className} style={style}>
+      <StyledButton
+        onClick={onClick}
+        className={className}
+        style={style}
+        disabled={disabled}
+      >
         {text}
         {children}
       </StyledButton>

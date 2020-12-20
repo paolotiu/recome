@@ -102,11 +102,6 @@ export const Recommend: React.FC<Props> = ({ token }) => {
     }
   );
 
-  //Wait for query
-  if (artistsQuery.isLoading || tracksQuery.isLoading) {
-    return <> </>;
-  }
-
   const { min, max, target, name, isAuto } = currentOption;
 
   //Button color switch
@@ -141,7 +136,11 @@ export const Recommend: React.FC<Props> = ({ token }) => {
           ))}
         </div>
 
-        <Button onClick={() => resultsQuery.refetch()}>
+        <Button
+          onClick={() => resultsQuery.refetch()}
+          //Disabled white fetching
+          disabled={artistsQuery.isLoading || tracksQuery.isLoading}
+        >
           Get Recommendations
         </Button>
 

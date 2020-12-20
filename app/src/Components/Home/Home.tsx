@@ -18,7 +18,7 @@ const Wrapper = styled(CenterGrid)`
 
     justify-items: center;
   }
-  > a {
+  & > a {
     animation: none;
     margin: 0.4em;
   }
