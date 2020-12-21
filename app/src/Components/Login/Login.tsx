@@ -3,12 +3,8 @@ import { Button } from "../General/index";
 import { ReactComponent as Bird } from "../../static/bird.svg";
 import styled from "styled-components";
 
-let link: string;
-if (process.env.NODE_ENV === "development") {
-  link = "http://localhost:8888/login";
-} else {
-  link = "https://recome-server.herokuapp.com/login";
-}
+const link = process.env.REACT_APP_LOGIN_URL || "http://localhost:8888/login";
+
 const StyledLogin = styled.div`
   main {
     position: absolute;

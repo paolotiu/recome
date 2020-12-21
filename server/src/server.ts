@@ -9,6 +9,7 @@ const app = express();
 
 dotenv.config();
 app.use(morgan<express.Request>("dev"));
+
 const redirect_uri =
   process.env.REDIRECT_URI || "http://localhost:8888/callback";
 
