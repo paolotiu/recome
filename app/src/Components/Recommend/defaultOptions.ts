@@ -55,6 +55,7 @@ export const defaultOptions: Options = {
 
 export const CustomModalStyles = {
   overlay: {
+    zIndex: 1000,
     backgroundColor: "rgba(170,170,170, 0.2)",
   },
   content: {
