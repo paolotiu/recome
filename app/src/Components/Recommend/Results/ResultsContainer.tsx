@@ -2,6 +2,10 @@ import React, { useEffect } from "react";
 import styled from "styled-components";
 import { RecoResults } from "../../../types";
 import { ResultTile } from "./ResultTile";
+import smoothscroll from "smoothscroll-polyfill";
+
+// kick off the polyfill!
+smoothscroll.polyfill();
 const RecoResultsWrapper = styled.section`
   padding-top: 50px;
   grid-column: 1/-1;
@@ -9,6 +13,11 @@ const RecoResultsWrapper = styled.section`
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1em;
+
+  .no-reco-result {
+    text-align: center;
+    grid-column: 1/-1;
+  }
   @media (max-width: 768px) {
     grid-template-columns: minmax(0, 1fr);
   }
@@ -21,13 +30,20 @@ interface Props {
 const Results: React.FC<Props> = ({ results }) => {
   useEffect(() => {
     const header = document.querySelector("#reco-results");
-    console.log(header);
-    header?.scrollIntoView();
+
+    header?.scrollIntoView({ behavior: "smooth" });
   }, [results]);
 
   if (!results.length) {
-    return <> BRuh</>;
+    return (
+      <RecoResultsWrapper id="reco-results">
+        <div className="no-reco-result">
+          <p>😭</p> No songs found for you
+        </div>
+      </RecoResultsWrapper>
+    );
   }
+
   return (
     <RecoResultsWrapper id="reco-results">
       <h1>Results</h1>

@@ -7,9 +7,9 @@ const def = {
 };
 
 export const defaulSeedOptions: SeedOptions = {
-  seed_artists: ["placeholder"],
-  seed_genres: ["placeholder"],
-  seed_tracks: ["placeholder"],
+  seed_artists: [""],
+  seed_genres: [""],
+  seed_tracks: [""],
 };
 export const defaultOptions: Options = {
   popularity: {

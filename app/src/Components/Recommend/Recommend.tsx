@@ -86,6 +86,7 @@ export const Recommend: React.FC<Props> = ({ token }) => {
         };
       });
     },
+    refetchOnMount: "always",
   });
 
   const tracksQuery = useQuery("tracks", () => getTopTracks(token), {
@@ -98,6 +99,7 @@ export const Recommend: React.FC<Props> = ({ token }) => {
         };
       });
     },
+    refetchOnMount: "always",
   });
 
   const resultsQuery = useQuery(
@@ -176,7 +178,7 @@ export const Recommend: React.FC<Props> = ({ token }) => {
           {resultsQuery.isSuccess ? (
             <Results results={resultsQuery.data} />
           ) : (
-            ""
+            "Hey"
           )}
         </div>
 
@@ -210,11 +212,11 @@ export const Recommend: React.FC<Props> = ({ token }) => {
           </ReactTooltip>
           <Slider
             min={0}
-            max={name === "tempo" ? 300 : 100}
+            max={name === "tempo" ? 200 : 100}
             marks={{
               0: <span>0</span>,
               100: <span>100</span>,
-              140: <span>200</span>,
+              200: <span>200</span>,
             }}
             value={[min, target, max]}
             allowCross={false}
