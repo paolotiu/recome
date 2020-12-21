@@ -19,13 +19,21 @@ const StyledProgressBar = styled.div<{ completed: number }>`
 
   .progress-bar-label {
     padding: 5px;
-    opacity: 0.8;
     font-size: 10px;
     color: ${(props) => props.theme.light};
     font-weight: 100;
     position: absolute;
-    right: -10%;
+    right: -3%;
     top: 50%;
+    @media (max-width: 1024px) {
+      right: -6%;
+    }
+    @media (max-width: 768px) {
+      right: -8%;
+    }
+    @media (max-width: 375px) {
+      right: -10%;
+    }
   }
 `;
 interface Props {
@@ -34,18 +42,7 @@ interface Props {
 }
 
 export const ProgressBar = (props: Props) => {
-  const { bgColor, completed } = props;
-
-  const labelStyles = {
-    padding: 5,
-    opacity: 0.8,
-    fontSize: "10px",
-    color: "white",
-    fontWeight: 100,
-    position: "absolue",
-    right: -2,
-    top: 4,
-  };
+  const { completed } = props;
 
   return (
     <>
