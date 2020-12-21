@@ -56,6 +56,7 @@ export interface RecoResults {
   name: string;
   popularity: number;
   preview_url: string;
+  artists: ResultArtist[];
   album: {
     artists: ResultArtist[];
     images: ResultImage[];

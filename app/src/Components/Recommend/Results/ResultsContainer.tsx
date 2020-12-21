@@ -7,7 +7,7 @@ import Modal from "react-modal";
 import { CustomModalStyles } from "../defaultOptions";
 import { useQuery } from "react-query";
 import { getTrackFeatures } from "../../../functions/api";
-
+import { ProgressBar } from "../../index";
 Modal.setAppElement("#root");
 // kick off the polyfill!
 smoothscroll.polyfill();
@@ -28,6 +28,56 @@ const RecoResultsWrapper = styled.section`
   }
 `;
 
+const ModalContent = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 7fr;
+  gap: 1em;
+  overflow: hidden;
+  .reco-modal-name {
+    width: 100%;
+    h3 {
+      font-size: 1.8em;
+      //Elipsis after 2 lines
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      height: fit-content;
+    }
+    .reco-modal-artists {
+      //Elipsis after 1 line
+      display: -webkit-box;
+      -webkit-line-clamp: 1;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+
+      height: fit-content;
+    }
+  }
+  .reco-modal-img {
+    width: 120px;
+    border-radius: 4px;
+  }
+
+  .reco-modal-stats {
+    grid-column: 1/-1;
+    p {
+      opacity: 0.9;
+      font-weight: 100;
+    }
+  }
+
+  @media (max-width: 768px) {
+    h3 {
+      font-size: 1.2em;
+    }
+    .reco-modal-img {
+      width: 80px;
+      border-radius: 4px;
+    }
+  }
+`;
+
 interface Props {
   results: RecoResults[];
 }
@@ -41,12 +91,12 @@ const Results: React.FC<Props> = ({ results }) => {
     "features",
     () => getTrackFeatures(token!, resultIds),
     {
-      onSuccess: (d) => {
-        console.log(d);
-      },
+      onSuccess: (d) => {},
     }
   );
 
+  const currentFeautre = features.data;
+  console.log(results);
   useEffect(() => {
     const header = document.querySelector("#reco-results");
 
@@ -80,11 +130,41 @@ const Results: React.FC<Props> = ({ results }) => {
       </RecoResultsWrapper>
       <Modal
         isOpen={isModalOpen}
-        style={CustomModalStyles}
+        style={{
+          overlay: {
+            ...CustomModalStyles.overlay,
+          },
+          content: {
+            ...CustomModalStyles.content,
+            width: "clamp(400px, 90vw, 800px)",
+          },
+        }}
         onRequestClose={closeModal}
       >
-        <img src={currentReco.album.images[1].url} alt="" />
-        <h3>{currentReco.name}</h3>
+        <ModalContent>
+          <img
+            className="reco-modal-img"
+            src={currentReco.album.images[1].url}
+            alt=""
+          />
+          <div className="reco-modal-name">
+            <h3>{currentReco.name}</h3>
+            <p className="reco-modal-artists">
+              {currentReco.artists.map((x, i, arr) => {
+                return (
+                  <span key={x.id}>
+                    {x.name}
+                    {arr.length - 1 === i ? "" : ", "}{" "}
+                  </span>
+                );
+              })}
+            </p>
+          </div>
+          <div className="reco-modal-stats">
+            <p className="thin">Popularity</p>
+            <ProgressBar bgColor={"black"} completed={currentReco.popularity} />
+          </div>
+        </ModalContent>
       </Modal>
     </>
   );

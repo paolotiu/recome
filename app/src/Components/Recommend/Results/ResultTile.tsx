@@ -55,7 +55,7 @@ const StyledResultTile = styled(Tile)`
   @media (max-width: 768px) {
     padding-top: 0.8em;
     padding-left: 0.8em;
-    grid-template-columns: minmax(90px, 1fr) 2fr;
+    grid-template-columns: minmax(90px, 1fr) 4.2fr;
 
     img {
       width: 60px;

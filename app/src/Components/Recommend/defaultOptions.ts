@@ -15,7 +15,6 @@ export const defaultOptions: Options = {
   popularity: {
     ...def,
     name: "popularity",
-    isAuto: false,
   },
   acousticness: {
     ...def,
