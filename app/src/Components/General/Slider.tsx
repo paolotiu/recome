@@ -9,7 +9,7 @@ const StyledSlider = styled(RangeWithFixedPushable)`
   margin-bottom: 5px;
   .rc-slider-handle {
     border: none;
-    background-color: ${(props) => props.theme.secondary};
+    background-color: ${(props) => props.theme.light};
   }
 
   .rc-slider-rail {
@@ -17,7 +17,7 @@ const StyledSlider = styled(RangeWithFixedPushable)`
   }
 
   .rc-slider-track {
-    background-color: ${(props) => props.theme.light};
+    background-color: ${(props) => props.theme.secondary};
   }
 
   .rc-slider-handle-dragging.rc-slider-handle-dragging.rc-slider-handle-dragging {
