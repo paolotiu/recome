@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { RecoResults } from "../../../types";
+import { AudioFeature, RecoResults } from "../../../types";
 import { ResultTile } from "./ResultTile";
 import smoothscroll from "smoothscroll-polyfill";
 import Modal from "react-modal";
-import { CustomModalStyles } from "../defaultOptions";
+import { CustomModalStyles, defaultFeature } from "../defaultOptions";
 import { useQuery } from "react-query";
 import { getTrackFeatures } from "../../../functions/api";
 import { ProgressBar } from "../../index";
+import toPairsIn from "lodash.topairsin";
 Modal.setAppElement("#root");
 // kick off the polyfill!
 smoothscroll.polyfill();
@@ -45,6 +46,7 @@ const ModalContent = styled.div`
       height: fit-content;
     }
     .reco-modal-artists {
+      font-weight: 300;
       //Elipsis after 1 line
       display: -webkit-box;
       -webkit-line-clamp: 1;
@@ -61,16 +63,31 @@ const ModalContent = styled.div`
 
   .reco-modal-stats {
     grid-column: 1/-1;
-    p {
-      opacity: 0.9;
-      font-weight: 100;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    @media (max-width: 767px) {
+      grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    }
+    gap: 1em;
+    .reco-bar {
+      display: inline;
+      width: 100%;
+      .reco-bar-label {
+        font-weight: 200;
+        @media (max-width: 768px) {
+          font-size: 0.8em;
+        }
+      }
     }
   }
 
   @media (max-width: 768px) {
-    h3 {
-      font-size: 1.2em;
+    .reco-modal-name {
+      h3 {
+        font-size: 1em;
+      }
     }
+
     .reco-modal-img {
       width: 80px;
       border-radius: 4px;
@@ -86,17 +103,35 @@ const Results: React.FC<Props> = ({ results }) => {
   const token = localStorage.getItem("token");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentReco, setCurrentReco] = useState<RecoResults>(results[0]);
-  const resultIds = results.map((res) => res.id);
-  const features = useQuery(
-    "features",
-    () => getTrackFeatures(token!, resultIds),
-    {
-      onSuccess: (d) => {},
-    }
+  const [currentFeature, setCurrentFeature] = useState<AudioFeature>(
+    defaultFeature
   );
+  const resultIds = results.map((res) => res.id);
+  const features = useQuery("features", () =>
+    getTrackFeatures(token!, resultIds)
+  );
+  useEffect(() => {
+    if (features.isSuccess && features.data.audio_features) {
+      const raw = (features.data.audio_features as AudioFeature[]).find(
+        (x) => x.id === currentReco.id
+      );
 
-  const currentFeautre = features.data;
-  console.log(results);
+      if (raw) {
+        const cleaned: AudioFeature = {
+          id: raw.id,
+          acousticness: multiply100(raw.acousticness),
+          danceability: multiply100(raw.danceability),
+          energy: multiply100(raw.energy),
+          instrumentalness: multiply100(raw.instrumentalness),
+          loudness: convert(raw.loudness),
+          liveness: multiply100(raw.liveness),
+          speechiness: multiply100(raw.speechiness),
+          valence: multiply100(raw.valence),
+        };
+        setCurrentFeature(cleaned);
+      }
+    }
+  }, [currentReco, features]);
   useEffect(() => {
     const header = document.querySelector("#reco-results");
 
@@ -113,6 +148,18 @@ const Results: React.FC<Props> = ({ results }) => {
     );
   }
 
+  // const {
+  //   acousticness,
+  //   danceability,
+  //   energy,
+  //   instrumentalness,
+  //   liveness,
+  //   loudness,
+  //   speechiness,
+  //   tempo,
+  //   valence,
+  // } = currentFeature!;
+  const toPairsCurrentFeature = toPairsIn(currentFeature);
   return (
     <>
       <RecoResultsWrapper id="reco-results">
@@ -128,6 +175,7 @@ const Results: React.FC<Props> = ({ results }) => {
           );
         })}
       </RecoResultsWrapper>
+
       <Modal
         isOpen={isModalOpen}
         style={{
@@ -161,8 +209,22 @@ const Results: React.FC<Props> = ({ results }) => {
             </p>
           </div>
           <div className="reco-modal-stats">
-            <p className="thin">Popularity</p>
-            <ProgressBar bgColor={"black"} completed={currentReco.popularity} />
+            {toPairsCurrentFeature.map((x) => {
+              if (x[0] === "id") {
+                return <> </>;
+              } else {
+                return (
+                  <div className="reco-bar">
+                    <p className="reco-bar-label">{x[0]}</p>
+                    <ProgressBar completed={x[1]} />
+                  </div>
+                );
+              }
+            })}
+            <div className="reco-bar">
+              <p className="reco-bar-label">Popularity</p>
+              <ProgressBar completed={currentReco.popularity} />
+            </div>
           </div>
         </ModalContent>
       </Modal>
@@ -173,7 +235,11 @@ const Results: React.FC<Props> = ({ results }) => {
     setIsModalOpen(true);
   }
 
-  function closeModal() {
+  function closeModal(
+    e: React.MouseEvent<Element, MouseEvent> | React.KeyboardEvent<Element>
+  ) {
+    e.stopPropagation();
+    e.nativeEvent.stopImmediatePropagation();
     setIsModalOpen(false);
   }
 
@@ -183,3 +249,11 @@ const Results: React.FC<Props> = ({ results }) => {
 };
 
 export default Results;
+
+function multiply100(num: number) {
+  return Math.round(num * 100);
+}
+
+function convert(x: number) {
+  return Math.floor(((x - -60) / (0 - -60)) * (100 - 0) + 0);
+}

@@ -39,8 +39,9 @@ const Wrapper = styled(CenterGrid)`
     padding: 1em;
     gap: 1em;
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+
     h1 {
-      font-size: 2em;
+      font-size: 3em;
 
       justify-self: start;
       grid-column: 1/-1;
@@ -55,6 +56,26 @@ const Wrapper = styled(CenterGrid)`
 
   @media (max-width: 768px) {
     .option-tiles-container {
+      h1 {
+        font-size: 3em;
+      }
+    }
+  }
+
+  @media (max-width: 425px) {
+    .option-tiles-container {
+      h1 {
+        font-size: 2.1em;
+      }
+    }
+  }
+  // To prevent vertical all
+  @media (max-width: 350px) {
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    .option-tiles-container {
+      h1 {
+        font-size: 1.8em;
+      }
     }
   }
 `;
@@ -99,6 +120,7 @@ export const Recommend: React.FC<Props> = ({ token }) => {
         };
       });
     },
+
     refetchOnMount: "always",
   });
 
@@ -122,7 +144,7 @@ export const Recommend: React.FC<Props> = ({ token }) => {
   const { min, max, target, name, isAuto } = currentOption;
 
   //Button color switch
-  let buttonBg = "#CCC";
+  let buttonBg = "#EEE";
   if (isAuto) {
     buttonBg = "#00ADB5";
   }
@@ -215,11 +237,18 @@ export const Recommend: React.FC<Props> = ({ token }) => {
           <Slider
             min={0}
             max={name === "tempo" ? 200 : 100}
-            marks={{
-              0: <span>0</span>,
-              100: <span>100</span>,
-              200: <span>200</span>,
-            }}
+            marks={
+              name === "tempo"
+                ? {
+                    0: <span>0</span>,
+                    100: <span>100</span>,
+                    200: <span>200</span>,
+                  }
+                : {
+                    0: <span>0</span>,
+                    100: <span>100</span>,
+                  }
+            }
             value={[min, target, max]}
             allowCross={false}
             onChange={(val: any) => {
@@ -278,7 +307,7 @@ export const Recommend: React.FC<Props> = ({ token }) => {
               userSelect: "none",
               border: "none",
               borderRadius: "24px",
-              color: isAuto ? "white" : "black",
+              color: isAuto ? "#eee" : "#444",
               backgroundColor: buttonBg,
               outline: "none",
               transition: "all .3s ease-in",

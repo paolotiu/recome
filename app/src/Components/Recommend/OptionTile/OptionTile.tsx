@@ -30,17 +30,36 @@ export const StyledOptionTile = styled(Tile)<StyledProps>`
     font-weight: thin;
   }
 
-  &:hover,
-  &:focus {
-    transform: scale(1.1);
-    background-color: ${(props) =>
-      props.isAuto
-        ? lighten(0.04, props.theme.lightenedDark)
-        : lighten(0.04, props.theme.secondary)};
+  @supports (-webkit-touch-callout: none) {
+    /* CSS specific to iOS devices */
+    &:active {
+      transform: scale(1.1);
+      background-color: ${(props) =>
+        props.isAuto
+          ? lighten(0.04, props.theme.lightenedDark)
+          : lighten(0.04, props.theme.secondary)};
+    }
+  }
+
+  @supports not (-webkit-touch-callout: none) {
+    &:hover,
+    &:focus {
+      transform: scale(1.1);
+      background-color: ${(props) =>
+        props.isAuto
+          ? lighten(0.04, props.theme.lightenedDark)
+          : lighten(0.04, props.theme.secondary)};
+    }
   }
 
   @media (max-width: 768px) {
     width: 150px;
+  }
+  @media (max-width: 350px) {
+    width: 100px;
+    h3 {
+      font-size: 100;
+    }
   }
 `;
 

@@ -9,11 +9,12 @@ const StyledResultTile = styled(Tile)`
   background-color: ${(props) => props.theme.darkBg};
   width: 100%;
   z-index: 1;
-  padding-top: 0.8em;
-  padding-left: 0.8em;
+  padding: 0.8em 0.3em 0.8em 0.8em;
+
   grid-template-columns: minmax(130px, 1fr) 2fr;
   height: fit-content;
   cursor: pointer;
+
   img,
   p,
   span {
@@ -53,9 +54,7 @@ const StyledResultTile = styled(Tile)`
   }
 
   @media (max-width: 768px) {
-    padding-top: 0.8em;
-    padding-left: 0.8em;
-    grid-template-columns: minmax(90px, 1fr) 4.2fr;
+    grid-template-columns: minmax(90px, 1fr) 10fr;
 
     img {
       width: 60px;
@@ -82,8 +81,8 @@ const StyledResultTile = styled(Tile)`
       position: absolute;
       top: 0;
       left: 0;
-      width: 90px;
-      height: 90px;
+      width: 87px;
+      height: 87px;
       background-color: ${(props) => props.theme.secondary};
       z-index: 0;
       border-radius: inherit;
@@ -91,9 +90,20 @@ const StyledResultTile = styled(Tile)`
     }
   }
 
-  :hover {
-    background-color: ${(props) => lighten(0.02, props.theme.darkBg)};
-    transform: scale(1.04);
+  @supports (-webkit-touch-callout: none) {
+    /* CSS specific to iOS devices */
+    :active {
+      background-color: ${(props) => lighten(0.02, props.theme.darkBg)};
+      transform: scale(1.04);
+    }
+  }
+
+  @supports not (-webkit-touch-callout: none) {
+    /* CSS for other than iOS devices */
+    :hover {
+      background-color: ${(props) => lighten(0.02, props.theme.darkBg)};
+      transform: scale(1.04);
+    }
   }
 `;
 interface Props {

@@ -27,7 +27,10 @@ const Wrapper = styled(CenterGrid)`
     .hometiles-container {
       display: flex;
       flex-direction: column;
+      gap: 0;
+
       a {
+        margin: 0.5em;
         animation: bottom-in 0.4s ease-in;
       }
     }

@@ -98,3 +98,15 @@ export const helpTip: { [key: string]: string } = {
   valence:
     "	A measure from 0 to 100 describing the musical positiveness conveyed by a track. Tracks with high valence sound more positive",
 };
+
+export const defaultFeature = {
+  acousticness: 38.6,
+  danceability: 91,
+  energy: 81.5,
+  id: "5BOZ4skcMubA0R6RD4zf64",
+  instrumentalness: 0.000634,
+  liveness: 7,
+  loudness: 94,
+  speechiness: 4.95,
+  valence: 57,
+};

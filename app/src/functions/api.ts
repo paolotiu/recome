@@ -75,7 +75,7 @@ export const getRecommendations = async (
 export const getTrackFeatures = async (token: string, ids: string[]) => {
   const joined = ids.join(",");
 
-  const res = await axios.get(url + "/audio-features?" + "ids=" + joined, {
+  const res = await axios.get(url + "/audio-features?ids=" + joined, {
     headers: {
       Authorization: "Bearer " + token,
       "Content-Type": "application/json",
