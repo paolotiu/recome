@@ -72,6 +72,27 @@ export const getRecommendations = async (
   return res.data.tracks;
 };
 
+export const getTrackFeatures = async (
+  token: string,
+  ids: string[] | string
+) => {
+  let joined;
+  if (ids instanceof Array) {
+    joined = ids.join(",");
+  } else {
+    joined = ids;
+  }
+
+  const res = await axios.get(url + "/audio-features?" + "ids=" + joined, {
+    headers: {
+      Authorization: "Bearer " + token,
+      "Content-Type": "application/json",
+    },
+  });
+
+  return res.data;
+};
+
 function stringifySeedOptions(seedOptions: SeedOptions) {
   const arr = toPairsIn(seedOptions);
   let q = "";

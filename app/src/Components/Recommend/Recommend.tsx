@@ -65,7 +65,7 @@ interface Props {
 
 Modal.setAppElement("#root");
 export const Recommend: React.FC<Props> = ({ token }) => {
-  const [showModal, setShowModal] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [seedOptions, setSeedOptions] = useState<SeedOptions>(
     defaulSeedOptions
   );
@@ -187,7 +187,7 @@ export const Recommend: React.FC<Props> = ({ token }) => {
         <Modal
           shouldCloseOnOverlayClick={true}
           style={CustomModalStyles}
-          isOpen={showModal}
+          isOpen={isModalOpen}
           onRequestClose={closeModal}
           onAfterClose={() => {
             changeOptions(name, min, max, target, isAuto);
@@ -299,11 +299,11 @@ export const Recommend: React.FC<Props> = ({ token }) => {
   );
 
   function openModal() {
-    setShowModal(true);
+    setIsModalOpen(true);
   }
 
   function closeModal() {
-    setShowModal(false);
+    setIsModalOpen(false);
   }
 
   function setCurrent(name: string) {

@@ -1,10 +1,12 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { RecoResults } from "../../../types";
 import { ResultTile } from "./ResultTile";
 import smoothscroll from "smoothscroll-polyfill";
 import Modal from "react-modal";
 import { CustomModalStyles } from "../defaultOptions";
+import { useQuery } from "react-query";
+import { getTrackFeatures } from "../../../functions/api";
 
 Modal.setAppElement("#root");
 // kick off the polyfill!
@@ -31,6 +33,20 @@ interface Props {
 }
 
 const Results: React.FC<Props> = ({ results }) => {
+  const token = localStorage.getItem("token");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [currentReco, setCurrentReco] = useState<RecoResults>(results[0]);
+  const resultIds = results.map((res) => res.id);
+  const features = useQuery(
+    "features",
+    () => getTrackFeatures(token!, resultIds),
+    {
+      onSuccess: (d) => {
+        console.log(d);
+      },
+    }
+  );
+
   useEffect(() => {
     const header = document.querySelector("#reco-results");
 
@@ -52,12 +68,38 @@ const Results: React.FC<Props> = ({ results }) => {
       <RecoResultsWrapper id="reco-results">
         <h1>Results</h1>
         {results.map((data) => {
-          return <ResultTile key={data.id} data={data} />;
+          return (
+            <ResultTile
+              key={data.id}
+              data={data}
+              openModal={openModal}
+              setCurrentRecoState={setCurrentRecoState}
+            />
+          );
         })}
       </RecoResultsWrapper>
-      <Modal isOpen={false} style={CustomModalStyles}></Modal>
+      <Modal
+        isOpen={isModalOpen}
+        style={CustomModalStyles}
+        onRequestClose={closeModal}
+      >
+        <img src={currentReco.album.images[1].url} alt="" />
+        <h3>{currentReco.name}</h3>
+      </Modal>
     </>
   );
+
+  function openModal() {
+    setIsModalOpen(true);
+  }
+
+  function closeModal() {
+    setIsModalOpen(false);
+  }
+
+  function setCurrentRecoState(data: RecoResults) {
+    setCurrentReco(data);
+  }
 };
 
 export default Results;

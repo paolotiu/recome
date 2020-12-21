@@ -13,6 +13,7 @@ const StyledResultTile = styled(Tile)`
   padding-left: 0.8em;
   grid-template-columns: minmax(130px, 1fr) 2fr;
   height: fit-content;
+  cursor: pointer;
   img,
   p,
   span {
@@ -97,11 +98,22 @@ const StyledResultTile = styled(Tile)`
 `;
 interface Props {
   data: RecoResults;
+  openModal: () => void;
+  setCurrentRecoState: (data: RecoResults) => void;
 }
 
-export const ResultTile: React.FC<Props> = ({ data }) => {
+export const ResultTile: React.FC<Props> = ({
+  data,
+  openModal,
+  setCurrentRecoState,
+}) => {
   return (
-    <StyledResultTile>
+    <StyledResultTile
+      onClick={() => {
+        setCurrentRecoState(data);
+        openModal();
+      }}
+    >
       <img src={data.album.images[1].url} alt="" />
       <div className="reco-song-names">
         <h3>{data.name}</h3>
