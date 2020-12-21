@@ -1,4 +1,4 @@
-import React, { lazy, useState } from "react";
+import React, { useState } from "react";
 
 import { CenterGrid } from "../index";
 import { OptionTile } from "./OptionTile/OptionTile";
@@ -23,7 +23,7 @@ import Modal from "react-modal";
 import { Button } from "../General";
 import ReactTooltip from "react-tooltip";
 import { NumberInput } from "./NumberInput/NumberInput";
-const Results = lazy(() => import("./Results/ResultsContainer"));
+import Results from "./Results/ResultsContainer";
 
 const Wrapper = styled(CenterGrid)`
   display: flex;
@@ -175,10 +175,12 @@ export const Recommend: React.FC<Props> = ({ token }) => {
           >
             Get Recommendations
           </Button>
+
+          {/* Show results view after fetching */}
           {resultsQuery.isSuccess ? (
             <Results results={resultsQuery.data} />
           ) : (
-            "Hey"
+            ""
           )}
         </div>
 

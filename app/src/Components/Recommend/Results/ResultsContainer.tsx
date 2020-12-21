@@ -3,7 +3,10 @@ import styled from "styled-components";
 import { RecoResults } from "../../../types";
 import { ResultTile } from "./ResultTile";
 import smoothscroll from "smoothscroll-polyfill";
+import Modal from "react-modal";
+import { CustomModalStyles } from "../defaultOptions";
 
+Modal.setAppElement("#root");
 // kick off the polyfill!
 smoothscroll.polyfill();
 const RecoResultsWrapper = styled.section`
@@ -45,17 +48,15 @@ const Results: React.FC<Props> = ({ results }) => {
   }
 
   return (
-    <RecoResultsWrapper id="reco-results">
-      <h1>Results</h1>
-      {results.map((data) => {
-        return <ResultTile key={data.id} data={data} />;
-      })}
-      {/* <Modal
-        isOpen={true}
-        style={CustomModalStyles}
-        shouldCloseOnOverlayClick={true}
-      ></Modal> */}
-    </RecoResultsWrapper>
+    <>
+      <RecoResultsWrapper id="reco-results">
+        <h1>Results</h1>
+        {results.map((data) => {
+          return <ResultTile key={data.id} data={data} />;
+        })}
+      </RecoResultsWrapper>
+      <Modal isOpen={false} style={CustomModalStyles}></Modal>
+    </>
   );
 };
 
