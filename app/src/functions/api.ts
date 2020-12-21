@@ -134,6 +134,6 @@ function cleanOptions(options: Options) {
       }
     }
   }
-  console.log(cleanedOptions);
+
   return cleanedOptions;
 }

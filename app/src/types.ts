@@ -57,6 +57,9 @@ export interface RecoResults {
   popularity: number;
   preview_url: string;
   artists: ResultArtist[];
+  external_urls: {
+    spotify: string;
+  };
   album: {
     artists: ResultArtist[];
     images: ResultImage[];

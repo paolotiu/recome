@@ -9,6 +9,10 @@ import { useQuery } from "react-query";
 import { getTrackFeatures } from "../../../functions/api";
 import { ProgressBar } from "../../index";
 import toPairsIn from "lodash.topairsin";
+import { useHistory } from "react-router";
+// import { ReactComponent as Play } from "../../../static/play.svg";
+// import { ReactComponent as Pause } from "../../../static/pause.svg";
+import { ReactComponent as Spotify } from "../../../static/spotify.svg";
 Modal.setAppElement("#root");
 // kick off the polyfill!
 smoothscroll.polyfill();
@@ -56,10 +60,6 @@ const ModalContent = styled.div`
       height: fit-content;
     }
   }
-  .reco-modal-img {
-    width: 120px;
-    border-radius: 4px;
-  }
 
   .reco-modal-stats {
     grid-column: 1/-1;
@@ -76,6 +76,37 @@ const ModalContent = styled.div`
         font-weight: 200;
         @media (max-width: 768px) {
           font-size: 0.8em;
+        }
+      }
+    }
+
+    .reco-modal-links {
+      display: flex;
+      align-items: center;
+
+      a {
+        height: 30px;
+        #spotify-logo {
+          width: 30px;
+          height: 90%;
+          fill: #1ed760;
+        }
+      }
+
+      .reco-modal-player {
+        width: 40px;
+        height: 40px;
+        padding-top: 0.4em;
+        padding-left: 0.3em;
+        border-radius: 30px;
+        position: relative;
+        background-color: ${(props) => props.theme.light};
+        svg {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          width: 20px;
+          height: 20px;
         }
       }
     }
@@ -103,12 +134,24 @@ const Results: React.FC<Props> = ({ results }) => {
   const token = localStorage.getItem("token");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentReco, setCurrentReco] = useState<RecoResults>(results[0]);
+  // const [isPlaying, setIsPlaying] = useState(false);
   const [currentFeature, setCurrentFeature] = useState<AudioFeature>(
     defaultFeature
   );
+  const history = useHistory();
   const resultIds = results.map((res) => res.id);
-  const features = useQuery("features", () =>
-    getTrackFeatures(token!, resultIds)
+  const features = useQuery(
+    "features",
+    () => getTrackFeatures(token!, resultIds),
+    {
+      onSuccess: (e) => {
+        console.log(e);
+      },
+      onError: (e) => {
+        console.log(e);
+        history.push("/");
+      },
+    }
   );
   useEffect(() => {
     if (features.isSuccess && features.data.audio_features) {
@@ -147,18 +190,7 @@ const Results: React.FC<Props> = ({ results }) => {
       </RecoResultsWrapper>
     );
   }
-
-  // const {
-  //   acousticness,
-  //   danceability,
-  //   energy,
-  //   instrumentalness,
-  //   liveness,
-  //   loudness,
-  //   speechiness,
-  //   tempo,
-  //   valence,
-  // } = currentFeature!;
+  console.log(currentReco);
   const toPairsCurrentFeature = toPairsIn(currentFeature);
   return (
     <>
@@ -225,6 +257,18 @@ const Results: React.FC<Props> = ({ results }) => {
               <p className="reco-bar-label">Popularity</p>
               <ProgressBar completed={currentReco.popularity} />
             </div>
+            <div className="reco-modal-links">
+              <a
+                target="_blank"
+                rel="noopener noreferrer"
+                href={currentReco.external_urls.spotify}
+              >
+                <Spotify id="spotify-logo" />
+              </a>
+              {/* <button onClick={playAudio} className="reco-modal-player">
+                {isPlaying ? <Pause /> : <Play />}
+              </button> */}
+            </div>
           </div>
         </ModalContent>
       </Modal>
@@ -246,6 +290,20 @@ const Results: React.FC<Props> = ({ results }) => {
   function setCurrentRecoState(data: RecoResults) {
     setCurrentReco(data);
   }
+  // function playAudio() {
+  //   const audio: HTMLAudioElement | null = document.querySelector(
+  //     "#reco-modal-preview"
+  //   );
+  //   if (audio) {
+  //     if (isPlaying) {
+  //       audio.pause();
+  //       setIsPlaying(false);
+  //     } else {
+  //       audio.play();
+  //       setIsPlaying(true);
+  //     }
+  //   }
+  // }
 };
 
 export default Results;

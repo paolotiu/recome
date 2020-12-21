@@ -24,6 +24,7 @@ import { Button } from "../General";
 import ReactTooltip from "react-tooltip";
 import { NumberInput } from "./NumberInput/NumberInput";
 import Results from "./Results/ResultsContainer";
+import { useHistory } from "react-router";
 
 const Wrapper = styled(CenterGrid)`
   display: flex;
@@ -91,6 +92,7 @@ export const Recommend: React.FC<Props> = ({ token }) => {
     defaulSeedOptions
   );
 
+  const history = useHistory();
   const [options, setOptions] = useState<Options>(defaultOptions);
   const [currentOption, setCurrentOption] = useState<SingleOption>(
     options.acousticness
@@ -106,6 +108,10 @@ export const Recommend: React.FC<Props> = ({ token }) => {
           seed_genres: data.items.map((item) => item.genres[0]),
         };
       });
+    },
+    onError: () => {
+      history.push("/login");
+      console.log("Heyy");
     },
     refetchOnMount: "always",
   });
@@ -129,17 +135,8 @@ export const Recommend: React.FC<Props> = ({ token }) => {
     () => getRecommendations(token, seedOptions, options),
     {
       enabled: false,
-      onSuccess: (d) => {
-        console.log(d);
-      },
     }
   );
-
-  // const genreListQuery = useQuery("genre", () => getGenreList(token), {
-  //   onSuccess: (d) => {
-  //     console.log(d);
-  //   },
-  // });
 
   const { min, max, target, name, isAuto } = currentOption;
 
