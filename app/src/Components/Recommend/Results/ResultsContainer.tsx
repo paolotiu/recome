@@ -1,6 +1,12 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { AudioFeature, IUser, RecoResults } from "../../../types";
+import {
+  AudioFeature,
+  AudioFeaturesResult,
+  CreatePlaylistResult,
+  IUser,
+  RecoResults,
+} from "../../../types";
 import { ResultTile } from "./ResultTile";
 import smoothscroll from "smoothscroll-polyfill";
 import { CustomModalStyles, defaultFeature } from "../defaultOptions";
@@ -10,6 +16,7 @@ import { useHistory } from "react-router";
 import { Button, Modal } from "../../index";
 import { useUser } from "../../../UserContext";
 import { CurrentRecoModal, CreatingPlaylistModal } from "./ModalContent";
+import { v4 as uuid } from "uuid";
 // kick off the polyfill!
 smoothscroll.polyfill();
 const RecoResultsWrapper = styled.section`
@@ -54,7 +61,7 @@ interface Props {
 const Results: React.FC<Props> = React.memo(({ results }) => {
   const token = localStorage.getItem("token");
   const user = useUser();
-  console.log(user);
+
   const [isCreatingPlaylist, setIsCreatingPlaylist] = useState(false);
   const [playlistName, setPlaylistName] = useState("Recome Recomendations");
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -65,7 +72,7 @@ const Results: React.FC<Props> = React.memo(({ results }) => {
   );
   const history = useHistory();
   const resultIds = results.map((res) => res.id);
-  const featuresQuery = useQuery(
+  const featuresQuery = useQuery<AudioFeaturesResult>(
     "features",
     () => getTrackFeatures(token!, resultIds),
     {
@@ -74,7 +81,7 @@ const Results: React.FC<Props> = React.memo(({ results }) => {
       },
     }
   );
-  const createPlaylistQuery = useQuery(
+  const createPlaylistQuery = useQuery<CreatePlaylistResult>(
     "playlist",
     () =>
       createPlaylist(
@@ -84,13 +91,21 @@ const Results: React.FC<Props> = React.memo(({ results }) => {
         "A playlist of recommendations",
         results.map((x) => x.uri)
       ),
+
     {
+      onError: () => {
+        console.log("erro");
+      },
+      // onSuccess: (d) => {
+      //   console.log(d);
+      // },
+      staleTime: 1,
       enabled: false,
     }
   );
   useEffect(() => {
     if (featuresQuery.isSuccess && featuresQuery.data.audio_features) {
-      const raw = (featuresQuery.data.audio_features as AudioFeature[]).find(
+      const raw = featuresQuery.data.audio_features.find(
         (x) => x.id === currentReco.id
       );
 
@@ -147,7 +162,7 @@ const Results: React.FC<Props> = React.memo(({ results }) => {
         {results.map((data) => {
           return (
             <ResultTile
-              key={data.id}
+              key={uuid()}
               data={data}
               openModal={openCurrentRecoModal}
               setCurrentRecoState={setCurrentRecoState}
@@ -174,6 +189,8 @@ const Results: React.FC<Props> = React.memo(({ results }) => {
             createPlaylist={refetchCreatePlaylistQuery}
             playlistName={playlistName}
             setPlaylistName={setPlaylistName}
+            data={createPlaylistQuery.data}
+            isStale={createPlaylistQuery.isStale}
           />
         ) : (
           <CurrentRecoModal

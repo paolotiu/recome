@@ -19,7 +19,7 @@ export const getUser = async (token: string) => {
 
 // Get top 5 artists
 export const getTopArtists = async (token: string) => {
-  const res = await axios.get(url + "/me/top/artists?limit=2&offset=5", {
+  const res = await axios.get(url + "/me/top/artists?limit=0&offset=5", {
     headers: {
       Authorization: "Bearer " + token,
       "Content-Type": "application/json",
@@ -31,7 +31,7 @@ export const getTopArtists = async (token: string) => {
 
 // Get top 5 tracks
 export const getTopTracks = async (token: string) => {
-  const res = await axios.get(url + "/me/top/tracks?limit=0&offset=0", {
+  const res = await axios.get(url + "/me/top/tracks?limit=5&offset=0", {
     headers: {
       Authorization: "Bearer " + token,
       "Content-Type": "application/json",
@@ -93,34 +93,43 @@ export const createPlaylist = async (
   desc: string,
   uris: string[]
 ) => {
-  const joined = uris.join(",");
+  // const joined = uris.join(",");
 
-  const playlist = await axios.post(
-    url + "/users/" + id + "/playlists",
-    {
-      name: name,
-      description: desc,
-      public: true,
+  // const playlist = await axios.post(
+  //   url + "/users/" + id + "/playlists",
+  //   {
+  //     name: name,
+  //     description: desc,
+  //     public: true,
+  //   },
+  //   {
+  //     headers: {
+  //       Authorization: "Bearer " + token,
+  //       "Content-Type": "application/json",
+  //     },
+  //   }
+  // );
+
+  // const res = await axios.post(
+  //   url + "/playlists/" + playlist.data.id + "/tracks?uris=" + joined,
+  //   {},
+  //   {
+  //     headers: {
+  //       Authorization: "Bearer " + token,
+  //       "Content-Type": "application/json",
+  //     },
+  //   }
+  // );
+
+  // return playlist.data;
+  return {
+    name: "Recome Recommendations",
+    id: "Stin",
+    href: "JIewdjia",
+    external_urls: {
+      spotify: "JIwd",
     },
-    {
-      headers: {
-        Authorization: "Bearer " + token,
-        "Content-Type": "application/json",
-      },
-    }
-  );
-  console.log(playlist);
-  const res = await axios.post(
-    url + "/playlists/" + playlist.data.id + "/tracks?uris=" + joined,
-    {},
-    {
-      headers: {
-        Authorization: "Bearer " + token,
-        "Content-Type": "application/json",
-      },
-    }
-  );
-  return res.data;
+  };
 };
 
 function stringifySeedOptions(seedOptions: SeedOptions) {

@@ -31,6 +31,7 @@ interface Props {
   type?: "button" | "submit" | "reset" | undefined;
   refObj?: React.RefObject<HTMLButtonElement>;
   id?: string;
+  newTab?: boolean;
 }
 
 export const Button: React.FC<Props> = ({
@@ -44,14 +45,32 @@ export const Button: React.FC<Props> = ({
   type = "button",
   refObj,
   id,
+  newTab,
 }) => {
   if (link) {
     return (
-      <a href={link} className={className}>
-        <StyledButton type={type} id={id}>
-          {text}
-        </StyledButton>
-      </a>
+      <>
+        {newTab ? (
+          <a
+            target="_blank"
+            rel="noopener noreferrer"
+            href={link}
+            className={className}
+          >
+            <StyledButton type={type} id={id}>
+              {text}
+              {children}
+            </StyledButton>
+          </a>
+        ) : (
+          <a href={link} className={className}>
+            <StyledButton type={type} id={id}>
+              {text}
+              {children}
+            </StyledButton>
+          </a>
+        )}
+      </>
     );
   } else {
     return (

@@ -78,6 +78,10 @@ export interface ResultArtist {
   href: string;
 }
 
+export interface AudioFeaturesResult {
+  audio_features: AudioFeature[];
+}
+
 export interface AudioFeature {
   acousticness: number;
   analysis_url?: string;
@@ -97,4 +101,13 @@ export interface AudioFeature {
   type?: string;
   uri?: string;
   valence: number;
+}
+
+export interface CreatePlaylistResult {
+  id: string;
+  name: string;
+  href: string;
+  external_urls: {
+    spotify: string;
+  };
 }

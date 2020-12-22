@@ -49,6 +49,7 @@ code {
 .ReactModal__Overlay {
   opacity: 0;
   transition: opacity 200ms ease-in;
+
 }
 
 .ReactModal__Overlay--after-open{
@@ -59,9 +60,52 @@ code {
   opacity: 0;
 }
 
-ReactModal__Content{
+
+.ReactModal__Content{
   max-width: 40vw;
+  
 }
+
+.playlist-preview{
+  animation: go-in 1s ease-in-out;
+  
+}
+
+.opacity-0{
+  opacity: 0;
+}
+
+.go-out{
+  transition: all 1s ease-in;
+  /* animation: go-out 1s ease-in-out; */
+  
+  transform: translateX(110%);
+  opacity: 1;
+}
+
+.go-in{
+  transition: all 1s ease-in;
+  /* animation: go-out 1s ease-in-out; */
+  opacity: 1;
+  animation: go-in 1s ease-in-out;
+}
+
+
+@keyframes go-out {
+  
+  
+}
+
+@keyframes go-in{
+  from{
+    opacity: 0;
+    transform: translateX(-80%);
+  }to{
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 
 .reco-tooltip{
   color: #585858;
