@@ -53,23 +53,19 @@ function App() {
   );
 
   useEffect(() => {
-    if (!isLoading && Object.keys(user).length && token) {
+    if (status === "success") {
       setUser({
         displayName: data.display_name,
-        product: data.product,
-        url: data.external_urls.spotify,
-        followers: data.followers.total,
         id: data.id,
+        product: data.product,
+        followers: data.followers.total,
+        url: data.href,
       });
-    }
-  }, [data, setUser, isLoading, user, token]);
-
-  // Reomve stale token
-  useEffect(() => {
-    if (status === "error") {
+    } else if (status === "error") {
       localStorage.removeItem("token");
     }
-  }, [status]);
+  }, [status, data, setUser]);
+
   return (
     <Theme>
       <div className="App">

@@ -85,6 +85,38 @@ export const getTrackFeatures = async (token: string, ids: string[]) => {
   return res.data;
 };
 
+export const createPlaylist = async (
+  token: string,
+  id: string,
+  name: string,
+  desc: string,
+  uris: string[]
+) => {
+  const joined = uris.join(",");
+
+  const playlist = await axios.get(url + "/users/" + id + "/playlists", {
+    headers: {
+      Authorization: "Bearer " + token,
+      "Content-Type": "application/json",
+    },
+    data: {
+      name: name,
+      description: desc,
+      public: true,
+    },
+  });
+  const res = await axios.get(
+    url + "/playlists/" + playlist.data.id + "/tracks?uris=" + joined,
+    {
+      headers: {
+        Authorization: "Bearer " + token,
+        "Content-Type": "application/json",
+      },
+    }
+  );
+  return res.data;
+};
+
 function stringifySeedOptions(seedOptions: SeedOptions) {
   const arr = toPairsIn(seedOptions);
   let q = "";
@@ -106,9 +138,13 @@ function cleanOptions(options: Options) {
       const max = "max_" + name;
       switch (currentOption.name) {
         case "loudness":
-          // Conversion to -60 - 100
+          // Conversion to -60 - 0
           const convert = (x: number) => {
-            return Math.floor(((x - 0) / (100 - 0)) * (0 - -60) + -60);
+            const oldr = 100;
+            const newr = 0 - -60;
+            const newval = ((x - 0) * newr) / oldr - 60;
+            console.log(newval);
+            return Math.floor(newval);
           };
           cleanedOptions[min] = convert(currentOption.min);
           cleanedOptions[max] = convert(currentOption.max);
