@@ -1,19 +1,15 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { AudioFeature, RecoResults } from "../../../types";
+import { AudioFeature, IUser, RecoResults } from "../../../types";
 import { ResultTile } from "./ResultTile";
 import smoothscroll from "smoothscroll-polyfill";
 import { CustomModalStyles, defaultFeature } from "../defaultOptions";
 import { useQuery } from "react-query";
 import { getTrackFeatures, createPlaylist } from "../../../functions/api";
-import { ProgressBar } from "../../index";
-import toPairsIn from "lodash.topairsin";
 import { useHistory } from "react-router";
-
-import { ReactComponent as Spotify } from "../../../static/spotify.svg";
 import { Button, Modal } from "../../index";
 import { useUser } from "../../../UserContext";
-import { CurrentRecoModal } from "./ModalContent/CurrentRecoModal";
+import { CurrentRecoModal, CreatingPlaylistModal } from "./ModalContent";
 // kick off the polyfill!
 smoothscroll.polyfill();
 const RecoResultsWrapper = styled.section`
@@ -58,7 +54,9 @@ interface Props {
 const Results: React.FC<Props> = React.memo(({ results }) => {
   const token = localStorage.getItem("token");
   const user = useUser();
-
+  console.log(user);
+  const [isCreatingPlaylist, setIsCreatingPlaylist] = useState(false);
+  const [playlistName, setPlaylistName] = useState("Recome Recomendations");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentReco, setCurrentReco] = useState<RecoResults>(results[0]);
   // const [isPlaying, setIsPlaying] = useState(false);
@@ -67,7 +65,7 @@ const Results: React.FC<Props> = React.memo(({ results }) => {
   );
   const history = useHistory();
   const resultIds = results.map((res) => res.id);
-  const features = useQuery(
+  const featuresQuery = useQuery(
     "features",
     () => getTrackFeatures(token!, resultIds),
     {
@@ -76,9 +74,23 @@ const Results: React.FC<Props> = React.memo(({ results }) => {
       },
     }
   );
+  const createPlaylistQuery = useQuery(
+    "playlist",
+    () =>
+      createPlaylist(
+        token!,
+        (user as IUser).id,
+        playlistName,
+        "A playlist of recommendations",
+        results.map((x) => x.uri)
+      ),
+    {
+      enabled: false,
+    }
+  );
   useEffect(() => {
-    if (features.isSuccess && features.data.audio_features) {
-      const raw = (features.data.audio_features as AudioFeature[]).find(
+    if (featuresQuery.isSuccess && featuresQuery.data.audio_features) {
+      const raw = (featuresQuery.data.audio_features as AudioFeature[]).find(
         (x) => x.id === currentReco.id
       );
 
@@ -97,7 +109,7 @@ const Results: React.FC<Props> = React.memo(({ results }) => {
         setCurrentFeature(cleaned);
       }
     }
-  }, [currentReco, features]);
+  }, [currentReco, featuresQuery]);
   useEffect(() => {
     //Smooth scroll results
     const header = document.querySelector("#reco-results");
@@ -122,7 +134,13 @@ const Results: React.FC<Props> = React.memo(({ results }) => {
         <div className="reco-results-header">
           <h1>Results</h1>
           <div className="reco-results-options">
-            <Button className="reco-results-button"> Create Playlist</Button>
+            <Button
+              className="reco-results-button"
+              onClick={openCreatingPlaylistModal}
+            >
+              {" "}
+              Create Playlist
+            </Button>
           </div>
         </div>
 
@@ -131,7 +149,7 @@ const Results: React.FC<Props> = React.memo(({ results }) => {
             <ResultTile
               key={data.id}
               data={data}
-              openModal={openModal}
+              openModal={openCurrentRecoModal}
               setCurrentRecoState={setCurrentRecoState}
             />
           );
@@ -151,14 +169,31 @@ const Results: React.FC<Props> = React.memo(({ results }) => {
         }}
         onRequestClose={closeModal}
       >
-        <CurrentRecoModal
-          currentReco={currentReco}
-          currentFeature={currentFeature}
-        />
+        {isCreatingPlaylist ? (
+          <CreatingPlaylistModal
+            createPlaylist={refetchCreatePlaylistQuery}
+            playlistName={playlistName}
+            setPlaylistName={setPlaylistName}
+          />
+        ) : (
+          <CurrentRecoModal
+            currentReco={currentReco}
+            currentFeature={currentFeature}
+          />
+        )}
       </Modal>
     </>
   );
-
+  function openCreatingPlaylistModal(e: React.SyntheticEvent) {
+    e.preventDefault();
+    setIsCreatingPlaylist(true);
+    setIsModalOpen(true);
+  }
+  function openCurrentRecoModal(e: React.SyntheticEvent) {
+    e.preventDefault();
+    setIsCreatingPlaylist(false);
+    setIsModalOpen(true);
+  }
   function openModal() {
     setIsModalOpen(true);
   }
@@ -173,6 +208,9 @@ const Results: React.FC<Props> = React.memo(({ results }) => {
 
   function setCurrentRecoState(data: RecoResults) {
     setCurrentReco(data);
+  }
+  function refetchCreatePlaylistQuery() {
+    createPlaylistQuery.refetch();
   }
 });
 

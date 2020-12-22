@@ -108,7 +108,7 @@ const StyledResultTile = styled(Tile)`
 `;
 interface Props {
   data: RecoResults;
-  openModal: () => void;
+  openModal: (e: any) => void;
   setCurrentRecoState: (data: RecoResults) => void;
 }
 
@@ -119,9 +119,9 @@ export const ResultTile: React.FC<Props> = ({
 }) => {
   return (
     <StyledResultTile
-      onClick={() => {
+      onClick={(e) => {
         setCurrentRecoState(data);
-        openModal();
+        openModal(e);
       }}
     >
       <img src={data.album.images[1].url} alt="" />

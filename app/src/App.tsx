@@ -40,7 +40,6 @@ const Protected: React.FC<PropsProtected> = ({
 function App() {
   const [token, setToken] = useState(localStorage.getItem("token"));
 
-  const { current: user } = useRef(useUser());
   const { current: setUser } = useRef(useUpdateUser());
   const { isLoading, data, status } = useQuery(
     ["getUser", token],

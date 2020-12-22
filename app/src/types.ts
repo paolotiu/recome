@@ -64,6 +64,7 @@ export interface RecoResults {
     artists: ResultArtist[];
     images: ResultImage[];
   };
+  uri: string;
 }
 
 export interface ResultImage {

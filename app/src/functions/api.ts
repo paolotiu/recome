@@ -85,6 +85,7 @@ export const getTrackFeatures = async (token: string, ids: string[]) => {
   return res.data;
 };
 
+// Create Playlist then add songs
 export const createPlaylist = async (
   token: string,
   id: string,
@@ -94,19 +95,24 @@ export const createPlaylist = async (
 ) => {
   const joined = uris.join(",");
 
-  const playlist = await axios.get(url + "/users/" + id + "/playlists", {
-    headers: {
-      Authorization: "Bearer " + token,
-      "Content-Type": "application/json",
-    },
-    data: {
+  const playlist = await axios.post(
+    url + "/users/" + id + "/playlists",
+    {
       name: name,
       description: desc,
       public: true,
     },
-  });
-  const res = await axios.get(
+    {
+      headers: {
+        Authorization: "Bearer " + token,
+        "Content-Type": "application/json",
+      },
+    }
+  );
+  console.log(playlist);
+  const res = await axios.post(
     url + "/playlists/" + playlist.data.id + "/tracks?uris=" + joined,
+    {},
     {
       headers: {
         Authorization: "Bearer " + token,

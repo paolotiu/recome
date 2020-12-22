@@ -11,12 +11,7 @@ import {
   getRecommendations,
 } from "../../functions/api";
 import { Options, SeedOptions, SingleOption, TopResult } from "../../types";
-import {
-  defaulSeedOptions,
-  defaultOptions,
-  CustomModalStyles,
-  helpTip,
-} from "./defaultOptions";
+import { defaulSeedOptions, defaultOptions, helpTip } from "./defaultOptions";
 import toPairsIn from "lodash.topairsin";
 import { Slider } from "../index";
 import { Button } from "../General";
