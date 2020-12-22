@@ -28,6 +28,7 @@ interface Props {
     | ((event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void)
     | undefined;
   disabled?: boolean;
+  type?: "button" | "submit" | "reset" | undefined;
 }
 
 export const Button: React.FC<Props> = ({
@@ -38,11 +39,12 @@ export const Button: React.FC<Props> = ({
   children,
   style,
   disabled,
+  type = "button",
 }) => {
   if (link) {
     return (
       <a href={link} className={className}>
-        <StyledButton type="button">{text}</StyledButton>
+        <StyledButton type={type}>{text}</StyledButton>
       </a>
     );
   } else {
@@ -52,6 +54,7 @@ export const Button: React.FC<Props> = ({
         className={className}
         style={style}
         disabled={disabled}
+        type={type}
       >
         {text}
         {children}
