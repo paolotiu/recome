@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import { CenterGrid } from "../index";
+import { CenterGrid, Modal } from "../index";
 import { OptionTile } from "./OptionTile/OptionTile";
 import styled from "styled-components";
 import { useQuery } from "react-query";
@@ -19,7 +19,6 @@ import {
 } from "./defaultOptions";
 import toPairsIn from "lodash.topairsin";
 import { Slider } from "../index";
-import Modal from "react-modal";
 import { Button } from "../General";
 import ReactTooltip from "react-tooltip";
 import { NumberInput } from "./NumberInput/NumberInput";
@@ -40,12 +39,12 @@ const Wrapper = styled(CenterGrid)`
     padding: 1em;
     gap: 1em;
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-
+    .option-tiles-header {
+      grid-column: 1/-1;
+    }
     h1 {
       font-size: 3em;
-
       justify-self: start;
-      grid-column: 1/-1;
     }
   }
   button {
@@ -85,7 +84,6 @@ interface Props {
   token: string;
 }
 
-Modal.setAppElement("#root");
 export const Recommend: React.FC<Props> = ({ token }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [seedOptions, setSeedOptions] = useState<SeedOptions>(
@@ -97,6 +95,7 @@ export const Recommend: React.FC<Props> = ({ token }) => {
   const [currentOption, setCurrentOption] = useState<SingleOption>(
     options.acousticness
   );
+
   const optionArray = optionsToArray(options);
   const artistsQuery = useQuery("artists", () => getTopArtists(token), {
     // Set top artists and genres after fetching
@@ -160,7 +159,7 @@ export const Recommend: React.FC<Props> = ({ token }) => {
     <>
       <Wrapper>
         <div className="option-tiles-container">
-          <h1>Recommendations</h1>
+          <h1 className="option-tiles-header">Recommendations</h1>
           {optionArray.sort().map((x, index) => (
             <OptionTile
               name={x[0]}
@@ -205,7 +204,6 @@ export const Recommend: React.FC<Props> = ({ token }) => {
 
         <Modal
           shouldCloseOnOverlayClick={true}
-          style={CustomModalStyles}
           isOpen={isModalOpen}
           onRequestClose={closeModal}
           onAfterClose={() => {

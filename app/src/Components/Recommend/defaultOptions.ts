@@ -70,7 +70,7 @@ export const CustomModalStyles = {
     borderRadius: "24px",
     marginRight: "-50%",
     transform: "translate(-50%, -30%)",
-    backgroundColor: "#393939",
+    backgroundColor: "#302f2f",
     border: "none",
     textTransform: "capitalize",
     overflow: "visible",

@@ -1,4 +1,12 @@
-export { Wave, Tile, Button, CenterGrid, Slider, ProgressBar } from "./General";
+export {
+  Wave,
+  Tile,
+  Button,
+  CenterGrid,
+  Slider,
+  ProgressBar,
+  Modal,
+} from "./General";
 
 export { Login } from "./Login/Login";
 export { Recommend } from "./Recommend/Recommend";

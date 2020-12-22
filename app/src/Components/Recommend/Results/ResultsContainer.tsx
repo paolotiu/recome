@@ -3,17 +3,17 @@ import styled from "styled-components";
 import { AudioFeature, RecoResults } from "../../../types";
 import { ResultTile } from "./ResultTile";
 import smoothscroll from "smoothscroll-polyfill";
-import Modal from "react-modal";
 import { CustomModalStyles, defaultFeature } from "../defaultOptions";
 import { useQuery } from "react-query";
-import { getTrackFeatures } from "../../../functions/api";
+import { getTrackFeatures, createPlaylist } from "../../../functions/api";
 import { ProgressBar } from "../../index";
 import toPairsIn from "lodash.topairsin";
 import { useHistory } from "react-router";
-// import { ReactComponent as Play } from "../../../static/play.svg";
-// import { ReactComponent as Pause } from "../../../static/pause.svg";
+
 import { ReactComponent as Spotify } from "../../../static/spotify.svg";
-Modal.setAppElement("#root");
+import { Button, Modal } from "../../index";
+import { useUser } from "../../../UserContext";
+import { CurrentRecoModal } from "./ModalContent/CurrentRecoModal";
 // kick off the polyfill!
 smoothscroll.polyfill();
 const RecoResultsWrapper = styled.section`
@@ -23,6 +23,24 @@ const RecoResultsWrapper = styled.section`
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1em;
+  .reco-results-header {
+    grid-column: 1/-1;
+    display: grid;
+    grid-template-columns: 1fr 4fr;
+    align-items: center;
+    gap: 1em;
+    .reco-results-options {
+      text-align: right;
+
+      .reco-results-button {
+        width: 100%;
+        max-width: 200px;
+        margin: 0;
+        /* color: ${(props) => props.theme.darkBg}; */
+        background-color: ${(props) => props.theme.buttonBg};
+      }
+    }
+  }
 
   .no-reco-result {
     text-align: center;
@@ -33,105 +51,14 @@ const RecoResultsWrapper = styled.section`
   }
 `;
 
-const ModalContent = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 7fr;
-  gap: 1em;
-  overflow: hidden;
-  .reco-modal-name {
-    width: 100%;
-    h3 {
-      font-size: 1.8em;
-      //Elipsis after 2 lines
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-      height: fit-content;
-    }
-    .reco-modal-artists {
-      font-weight: 300;
-      //Elipsis after 1 line
-      display: -webkit-box;
-      -webkit-line-clamp: 1;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-
-      height: fit-content;
-    }
-  }
-
-  .reco-modal-stats {
-    grid-column: 1/-1;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    @media (max-width: 767px) {
-      grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-    }
-    gap: 1em;
-    .reco-bar {
-      display: inline;
-      width: 100%;
-      .reco-bar-label {
-        font-weight: 200;
-        @media (max-width: 768px) {
-          font-size: 0.8em;
-        }
-      }
-    }
-
-    .reco-modal-links {
-      display: flex;
-      align-items: center;
-
-      a {
-        height: 30px;
-        #spotify-logo {
-          width: 30px;
-          height: 90%;
-          fill: #1ed760;
-        }
-      }
-
-      .reco-modal-player {
-        width: 40px;
-        height: 40px;
-        padding-top: 0.4em;
-        padding-left: 0.3em;
-        border-radius: 30px;
-        position: relative;
-        background-color: ${(props) => props.theme.light};
-        svg {
-          position: absolute;
-          top: 50%;
-          left: 50%;
-          width: 20px;
-          height: 20px;
-        }
-      }
-    }
-  }
-
-  @media (max-width: 768px) {
-    .reco-modal-name {
-      h3 {
-        font-size: 1em;
-      }
-    }
-
-    .reco-modal-img {
-      width: 80px;
-      border-radius: 4px;
-    }
-  }
-`;
-
 interface Props {
   results: RecoResults[];
 }
 
-const Results: React.FC<Props> = ({ results }) => {
+const Results: React.FC<Props> = React.memo(({ results }) => {
   const token = localStorage.getItem("token");
+  const user = useUser();
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentReco, setCurrentReco] = useState<RecoResults>(results[0]);
   // const [isPlaying, setIsPlaying] = useState(false);
@@ -144,11 +71,7 @@ const Results: React.FC<Props> = ({ results }) => {
     "features",
     () => getTrackFeatures(token!, resultIds),
     {
-      onSuccess: (e) => {
-        console.log(e);
-      },
-      onError: (e) => {
-        console.log(e);
+      onError: () => {
         history.push("/");
       },
     }
@@ -176,9 +99,11 @@ const Results: React.FC<Props> = ({ results }) => {
     }
   }, [currentReco, features]);
   useEffect(() => {
+    //Smooth scroll results
     const header = document.querySelector("#reco-results");
-
-    header?.scrollIntoView({ behavior: "smooth" });
+    setTimeout(() => {
+      header?.scrollIntoView({ behavior: "smooth" });
+    }, 0);
   }, [results]);
 
   if (!results.length) {
@@ -190,12 +115,17 @@ const Results: React.FC<Props> = ({ results }) => {
       </RecoResultsWrapper>
     );
   }
-  console.log(currentReco);
-  const toPairsCurrentFeature = toPairsIn(currentFeature);
+
   return (
     <>
       <RecoResultsWrapper id="reco-results">
-        <h1>Results</h1>
+        <div className="reco-results-header">
+          <h1>Results</h1>
+          <div className="reco-results-options">
+            <Button className="reco-results-button"> Create Playlist</Button>
+          </div>
+        </div>
+
         {results.map((data) => {
           return (
             <ResultTile
@@ -221,56 +151,10 @@ const Results: React.FC<Props> = ({ results }) => {
         }}
         onRequestClose={closeModal}
       >
-        <ModalContent>
-          <img
-            className="reco-modal-img"
-            src={currentReco.album.images[1].url}
-            alt=""
-          />
-          <div className="reco-modal-name">
-            <h3>{currentReco.name}</h3>
-            <p className="reco-modal-artists">
-              {currentReco.artists.map((x, i, arr) => {
-                return (
-                  <span key={x.id}>
-                    {x.name}
-                    {arr.length - 1 === i ? "" : ", "}{" "}
-                  </span>
-                );
-              })}
-            </p>
-          </div>
-          <div className="reco-modal-stats">
-            {toPairsCurrentFeature.map((x) => {
-              if (x[0] === "id") {
-                return <> </>;
-              } else {
-                return (
-                  <div className="reco-bar">
-                    <p className="reco-bar-label">{x[0]}</p>
-                    <ProgressBar completed={x[1]} />
-                  </div>
-                );
-              }
-            })}
-            <div className="reco-bar">
-              <p className="reco-bar-label">Popularity</p>
-              <ProgressBar completed={currentReco.popularity} />
-            </div>
-            <div className="reco-modal-links">
-              <a
-                target="_blank"
-                rel="noopener noreferrer"
-                href={currentReco.external_urls.spotify}
-              >
-                <Spotify id="spotify-logo" />
-              </a>
-              {/* <button onClick={playAudio} className="reco-modal-player">
-                {isPlaying ? <Pause /> : <Play />}
-              </button> */}
-            </div>
-          </div>
-        </ModalContent>
+        <CurrentRecoModal
+          currentReco={currentReco}
+          currentFeature={currentFeature}
+        />
       </Modal>
     </>
   );
@@ -290,21 +174,7 @@ const Results: React.FC<Props> = ({ results }) => {
   function setCurrentRecoState(data: RecoResults) {
     setCurrentReco(data);
   }
-  // function playAudio() {
-  //   const audio: HTMLAudioElement | null = document.querySelector(
-  //     "#reco-modal-preview"
-  //   );
-  //   if (audio) {
-  //     if (isPlaying) {
-  //       audio.pause();
-  //       setIsPlaying(false);
-  //     } else {
-  //       audio.play();
-  //       setIsPlaying(true);
-  //     }
-  //   }
-  // }
-};
+});
 
 export default Results;
 
@@ -313,5 +183,8 @@ function multiply100(num: number) {
 }
 
 function convert(x: number) {
-  return Math.floor(((x - -60) / (0 - -60)) * (100 - 0) + 0);
+  const oldr = 0 - -60;
+  const newr = 100;
+  const newval = ((x - -60) * newr) / oldr - 0;
+  return Math.floor(newval);
 }

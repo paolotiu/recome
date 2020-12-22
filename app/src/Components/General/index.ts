@@ -4,3 +4,4 @@ export { CenterGrid } from "./CenterGrid";
 export { Tile } from "./Tile";
 export { Slider } from "./Slider";
 export { ProgressBar } from "./ProgressBar";
+export { Modal } from "./Modal";
