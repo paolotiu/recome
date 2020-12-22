@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import {
   AudioFeature,
@@ -56,6 +56,7 @@ const RecoResultsWrapper = styled.section`
 
 interface Props {
   results: RecoResults[];
+  status?: string;
 }
 
 const Results: React.FC<Props> = React.memo(({ results }) => {
@@ -81,6 +82,17 @@ const Results: React.FC<Props> = React.memo(({ results }) => {
       },
     }
   );
+
+  const { current: refecthFeatures } = useRef(() => {
+    featuresQuery.refetch();
+  });
+
+  //Refetch everytime results change
+  useEffect(() => {
+    refecthFeatures();
+  }, [results, refecthFeatures]);
+
+  //Query to make a playlist
   const createPlaylistQuery = useQuery<CreatePlaylistResult>(
     "playlist",
     () =>
@@ -103,8 +115,15 @@ const Results: React.FC<Props> = React.memo(({ results }) => {
       enabled: false,
     }
   );
+
+  //Filter featuresquery data
   useEffect(() => {
-    if (featuresQuery.isSuccess && featuresQuery.data.audio_features) {
+    console.log(featuresQuery.isSuccess, featuresQuery.data);
+    if (
+      featuresQuery.isSuccess &&
+      featuresQuery.data.audio_features[0] &&
+      currentReco
+    ) {
       const raw = featuresQuery.data.audio_features.find(
         (x) => x.id === currentReco.id
       );
