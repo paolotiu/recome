@@ -29,6 +29,8 @@ interface Props {
     | undefined;
   disabled?: boolean;
   type?: "button" | "submit" | "reset" | undefined;
+  refObj?: React.RefObject<HTMLButtonElement>;
+  id?: string;
 }
 
 export const Button: React.FC<Props> = ({
@@ -40,21 +42,27 @@ export const Button: React.FC<Props> = ({
   style,
   disabled,
   type = "button",
+  refObj,
+  id,
 }) => {
   if (link) {
     return (
       <a href={link} className={className}>
-        <StyledButton type={type}>{text}</StyledButton>
+        <StyledButton type={type} id={id}>
+          {text}
+        </StyledButton>
       </a>
     );
   } else {
     return (
       <StyledButton
+        ref={refObj}
         onClick={onClick}
         className={className}
         style={style}
         disabled={disabled}
         type={type}
+        id={id}
       >
         {text}
         {children}

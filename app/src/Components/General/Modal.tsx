@@ -9,12 +9,14 @@ const CustomModalStyles = {
   },
   content: {
     display: "grid",
-    position: "relative",
+    position: "absolute",
     gap: "1.2em",
+
     top: "30%",
     left: "50%",
-    width: "clamp(300px, 30vw, 500px)",
 
+    width: "clamp(300px, 30vw, 500px)",
+    transition: "all 1s",
     right: "auto",
     bottom: "auto",
     borderRadius: "24px",
