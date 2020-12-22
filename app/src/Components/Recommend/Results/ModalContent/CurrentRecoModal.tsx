@@ -140,16 +140,6 @@ export const CurrentRecoModal: React.FC<Props> = ({
           <ProgressBar completed={currentReco.popularity} />
         </div>
         <div className="reco-modal-links">
-          {currentReco.preview_url ? (
-            <audio
-              className="reco-modal-preview"
-              src={currentReco.preview_url}
-              controls
-            />
-          ) : (
-            ""
-          )}
-
           <a
             target="_blank"
             rel="noopener noreferrer"

@@ -1,22 +1,25 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import CountUp from "react-countup";
+import { transparentize } from "polished";
 const StyledProgressBar = styled.div<{ completed: number }>`
   height: 0.6em;
   width: 100%;
-  border: 1px solid ${(props) => props.theme.light};
+  border: 1px solid ${(props) => transparentize(0.5, props.theme.light)};
   background-color: transparent;
   border-radius: 50px;
   margin-bottom: 12px;
   z-index: 3;
   .progress-bar-filler {
     height: 100%;
-    width: ${(props) => props.completed}%;
     transform: translateZ(0);
+    width: ${(props) => props.completed}%;
+
     background-color: ${(props) => props.theme.secondary};
     border-radius: 100px;
     text-align: right;
     position: relative;
+
     transition: width 3s ease-in-out;
   }
 
