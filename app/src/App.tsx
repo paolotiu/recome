@@ -7,10 +7,10 @@ import {
   Redirect,
 } from "react-router-dom";
 import { Theme } from "./Theme";
-import { useUpdateUser, useUser } from "./UserContext";
+import { useUpdateUser } from "./UserContext";
 import { useQuery } from "react-query";
 import { getUser } from "./functions/api";
-
+import { Toaster } from "react-hot-toast";
 const Home = lazy(() => import("./Components/Lazy/Home"));
 const Recommend = lazy(() => import("./Components/Lazy/Recommend"));
 
@@ -71,6 +71,11 @@ function App() {
         <Router>
           <Wave />
           <Header />
+          <Toaster
+            toastOptions={{
+              style: { backgroundColor: "rgb(48, 47, 47)", color: "#EEE" },
+            }}
+          />
           <Suspense fallback={<div></div>}>
             <Switch>
               <Route path="/login" exact>

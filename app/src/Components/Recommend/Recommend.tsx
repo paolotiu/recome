@@ -104,8 +104,8 @@ export const Recommend: React.FC<Props> = ({ token }) => {
       });
     },
     onError: () => {
+      localStorage.removeItem("token");
       history.push("/login");
-      console.log("Heyy");
     },
     refetchOnMount: "always",
   });
@@ -119,6 +119,10 @@ export const Recommend: React.FC<Props> = ({ token }) => {
           seed_tracks: data.items.map((item) => item.id),
         };
       });
+    },
+    onError: () => {
+      localStorage.removeItem("token");
+      history.push("/login");
     },
 
     refetchOnMount: "always",

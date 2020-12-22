@@ -2,6 +2,8 @@ import React, { useEffect } from "react";
 import styled from "styled-components";
 import { CreatePlaylistResult } from "../../../../types";
 import { Button } from "../../../General";
+import { ReactComponent as Spotify } from "../../../../static/spotify.svg";
+
 const ModalContent = styled.div`
   transition: all 0.4s ease-in;
   width: 100%;
@@ -47,8 +49,20 @@ const ModalContent = styled.div`
       font-size: 1.6em;
     }
     button {
+      color: ${(props) => props.theme.light};
+      background-color: ${(props) => props.theme.spotify};
       height: 60px;
       font-size: 1.4em;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      #spotify-logo {
+        fill: ${(props) => props.theme.light};
+        position: relative;
+        left: -10px;
+        height: 100%;
+        width: 30px;
+      }
     }
   }
 
@@ -126,6 +140,7 @@ export const CreatingPlaylistModal: React.FC<Props> = ({
         <div className="playlist-preview-after hidden">
           <h3>{data?.name}</h3>
           <Button newTab={true} link={data?.external_urls.spotify}>
+            <Spotify id="spotify-logo" />
             Listen on Spotify
           </Button>
         </div>

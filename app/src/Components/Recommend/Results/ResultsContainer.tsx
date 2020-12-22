@@ -9,7 +9,7 @@ import {
 } from "../../../types";
 import { ResultTile } from "./ResultTile";
 import smoothscroll from "smoothscroll-polyfill";
-import { CustomModalStyles, defaultFeature } from "../defaultOptions";
+import { defaultFeature } from "../defaultOptions";
 import { useQuery } from "react-query";
 import { getTrackFeatures, createPlaylist } from "../../../functions/api";
 import { useHistory } from "react-router";
@@ -105,12 +105,6 @@ const Results: React.FC<Props> = React.memo(({ results }) => {
       ),
 
     {
-      onError: () => {
-        console.log("erro");
-      },
-      // onSuccess: (d) => {
-      //   console.log(d);
-      // },
       staleTime: 1,
       enabled: false,
     }
@@ -118,7 +112,6 @@ const Results: React.FC<Props> = React.memo(({ results }) => {
 
   //Filter featuresquery data
   useEffect(() => {
-    console.log(featuresQuery.isSuccess, featuresQuery.data);
     if (
       featuresQuery.isSuccess &&
       featuresQuery.data.audio_features[0] &&
@@ -192,15 +185,15 @@ const Results: React.FC<Props> = React.memo(({ results }) => {
 
       <Modal
         isOpen={isModalOpen}
-        style={{
-          overlay: {
-            ...CustomModalStyles.overlay,
-          },
-          content: {
-            ...CustomModalStyles.content,
-            width: "clamp(400px, 90vw, 800px)",
-          },
-        }}
+        // style={{
+        //   overlay: {
+        //     ...CustomModalStyles.overlay,
+        //   },
+        //   content: {
+        //     ...CustomModalStyles.content,
+        //     width: "clamp(400px, 90vw, 800px)",
+        //   },
+        // }}
         onRequestClose={closeModal}
       >
         {isCreatingPlaylist ? (
@@ -228,9 +221,6 @@ const Results: React.FC<Props> = React.memo(({ results }) => {
   function openCurrentRecoModal(e: React.SyntheticEvent) {
     e.preventDefault();
     setIsCreatingPlaylist(false);
-    setIsModalOpen(true);
-  }
-  function openModal() {
     setIsModalOpen(true);
   }
 

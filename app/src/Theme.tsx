@@ -11,6 +11,7 @@ const theme = {
   light: "#EEE",
   buttonBg: "#00ADB5",
   buttonText: "#EEE",
+  spotify: "#1ed760",
 };
 
 export const Theme: React.FC = ({ children }) => {

@@ -93,45 +93,62 @@ export const createPlaylist = async (
   desc: string,
   uris: string[]
 ) => {
-  // const joined = uris.join(",");
+  const joined = uris.join(",");
 
-  // const playlist = await axios.post(
-  //   url + "/users/" + id + "/playlists",
-  //   {
-  //     name: name,
-  //     description: desc,
-  //     public: true,
-  //   },
-  //   {
-  //     headers: {
-  //       Authorization: "Bearer " + token,
-  //       "Content-Type": "application/json",
-  //     },
-  //   }
-  // );
-
-  // const res = await axios.post(
-  //   url + "/playlists/" + playlist.data.id + "/tracks?uris=" + joined,
-  //   {},
-  //   {
-  //     headers: {
-  //       Authorization: "Bearer " + token,
-  //       "Content-Type": "application/json",
-  //     },
-  //   }
-  // );
-
-  // return playlist.data;
-  return {
-    name: "Recome Recommendations",
-    id: "Stin",
-    href: "JIewdjia",
-    external_urls: {
-      spotify: "JIwd",
+  const playlist = await axios.post(
+    url + "/users/" + id + "/playlists",
+    {
+      name: name,
+      description: desc,
+      public: true,
     },
-  };
+    {
+      headers: {
+        Authorization: "Bearer " + token,
+        "Content-Type": "application/json",
+      },
+    }
+  );
+
+  await axios.post(
+    url + "/playlists/" + playlist.data.id + "/tracks?uris=" + joined,
+    {},
+    {
+      headers: {
+        Authorization: "Bearer " + token,
+        "Content-Type": "application/json",
+      },
+    }
+  );
+
+  return playlist.data;
 };
 
+export const saveOneTrack = async (token: string, id: string) => {
+  const res = await axios.put(
+    url + "/me/tracks?ids=" + id,
+    {},
+    {
+      headers: {
+        Authorization: "Bearer " + token,
+        "Content-Type": "application/json",
+      },
+    }
+  );
+
+  return res.data;
+};
+
+export const deleteOneTrack = async (token: string, id: string) => {
+  const res = await axios.delete(url + "/me/tracks?ids=" + id, {
+    headers: {
+      Authorization: "Bearer " + token,
+      "Content-Type": "application/json",
+    },
+  });
+
+  return res.data;
+};
 function stringifySeedOptions(seedOptions: SeedOptions) {
   const arr = toPairsIn(seedOptions);
   let q = "";

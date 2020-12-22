@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import ReactModal from "react-modal";
 interface Props extends ReactModal.Props {}
 
@@ -9,23 +9,24 @@ const CustomModalStyles = {
   },
   content: {
     display: "grid",
-    position: "absolute",
+    position: "relative",
     gap: "1.2em",
 
     top: "30%",
     left: "50%",
 
-    width: "clamp(300px, 30vw, 500px)",
-    transition: "all 1s",
+    transition: "all 1s ease-in",
     right: "auto",
     bottom: "auto",
     borderRadius: "24px",
     marginRight: "-50%",
-    transform: "translate(-50%, -30%)",
+    transform: "translate(-50%, -40%)",
     backgroundColor: "#302f2f",
     border: "none",
     textTransform: "capitalize",
     overflow: "visible",
+
+    width: "clamp(400px, 90vw, 800px)",
   } as React.CSSProperties,
 };
 
@@ -38,6 +39,13 @@ export const Modal: React.FC<Props> = ({
   shouldCloseOnOverlayClick,
   onAfterClose,
 }) => {
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+  }, [isOpen]);
   return (
     <ReactModal
       isOpen={isOpen}
