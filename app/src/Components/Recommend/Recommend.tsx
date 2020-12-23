@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 
 import { CenterGrid, Modal } from "../index";
 import { OptionTile } from "./OptionTile/OptionTile";
@@ -92,7 +92,11 @@ export const Recommend: React.FC<Props> = () => {
   const [currentOption, setCurrentOption] = useState<SingleOption>(
     options.acousticness
   );
-
+  const openModal = useCallback(() => setIsModalOpen(true), []);
+  const setCurrent = useCallback(
+    (item: string) => setCurrentOption(options[item]),
+    [options]
+  );
   const optionArray = optionsToArray(options);
   const artistsQuery = useQuery("artists", () => getTopArtists(token!), {
     // Set top artists and genres after fetching
@@ -333,16 +337,8 @@ export const Recommend: React.FC<Props> = () => {
     </>
   );
 
-  function openModal() {
-    setIsModalOpen(true);
-  }
-
   function closeModal() {
     setIsModalOpen(false);
-  }
-
-  function setCurrent(name: string) {
-    setCurrentOption(options[name]);
   }
 
   function changeOptions(

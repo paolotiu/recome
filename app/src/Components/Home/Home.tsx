@@ -81,14 +81,14 @@ export const Home: React.FC<Props> = () => {
       staleTime: Infinity,
     }
   );
-  const artistsQueryFirst = useQuery<{ items: ResultArtist[] }>(
+  useQuery<{ items: ResultArtist[] }>(
     "artists",
     () => getTopArtists(token, 50),
     {
       staleTime: Infinity,
     }
   );
-  const artistsQuerySecond = useQuery<{ items: ResultArtist[] }>(
+  useQuery<{ items: ResultArtist[] }>(
     "artists2nd",
     () => getTopArtists(token, 50, 49),
     {

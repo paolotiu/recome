@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { RecoResults } from "../../../types";
 import { ResultTile as RT } from "../../index";
-import { Fade } from "react-awesome-reveal";
+// import { Fade } from "react-awesome-reveal";
 import Mic from "../../../static/mic.png";
 
 const StyledResultTile = styled(RT)`
@@ -76,18 +76,15 @@ interface Props {
   setCurrentRecoState: (data: RecoResults) => void;
 }
 
-export const RecoResultTile: React.FC<Props> = ({
-  data,
-  openModal,
-  setCurrentRecoState,
-}) => {
-  return (
-    <Fade
-      style={{ width: "100%" }}
-      triggerOnce={true}
-      direction="left"
-      cascade={true}
-    >
+export const RecoResultTile: React.FC<Props> = React.memo(
+  ({ data, openModal, setCurrentRecoState }) => {
+    return (
+      // <Fade
+      //   className="width-100-percent"
+      //   triggerOnce={true}
+      //   direction="left"
+      //   cascade={true}
+      // >
       <StyledResultTile
         onClick={(e) => {
           setCurrentRecoState(data);
@@ -98,11 +95,13 @@ export const RecoResultTile: React.FC<Props> = ({
           src={data.album.images[1] ? data.album.images[1].url : Mic}
           alt=""
         />
+
         <div className="reco-song-names">
           <h3>{data.name}</h3>
           <p>{data.album.artists[0].name}</p>
         </div>
       </StyledResultTile>
-    </Fade>
-  );
-};
+      // </Fade>
+    );
+  }
+);

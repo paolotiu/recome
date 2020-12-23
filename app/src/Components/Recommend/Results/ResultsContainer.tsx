@@ -1,4 +1,10 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, {
+  useMemo,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import styled from "styled-components";
 import {
   AudioFeature,
@@ -63,7 +69,7 @@ interface Props {
 const Results: React.FC<Props> = React.memo(({ results }) => {
   const token = localStorage.getItem("token");
   const user = useUser();
-
+  const d = useMemo(() => results, [results]);
   const [isCreatingPlaylist, setIsCreatingPlaylist] = useState(false);
   const [playlistName, setPlaylistName] = useState("Recome Recomendations");
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -72,6 +78,17 @@ const Results: React.FC<Props> = React.memo(({ results }) => {
   const [currentFeature, setCurrentFeature] = useState<AudioFeature>(
     defaultFeature
   );
+
+  const setCurrentRecoState = useCallback(
+    (data: RecoResults) => setCurrentReco(data),
+    []
+  );
+
+  const openCurrentRecoModal = useCallback((e: React.SyntheticEvent) => {
+    e.preventDefault();
+    setIsCreatingPlaylist(false);
+    setIsModalOpen(true);
+  }, []);
   const history = useHistory();
   const resultIds = results.map((res) => res.id);
   const featuresQuery = useQuery<AudioFeaturesResult>(
@@ -173,7 +190,7 @@ const Results: React.FC<Props> = React.memo(({ results }) => {
           </div>
         </div>
 
-        {results.map((data) => {
+        {d.map((data) => {
           return (
             <RecoResultTile
               key={uuid()}
@@ -185,19 +202,7 @@ const Results: React.FC<Props> = React.memo(({ results }) => {
         })}
       </RecoResultsWrapper>
 
-      <Modal
-        isOpen={isModalOpen}
-        // style={{
-        //   overlay: {
-        //     ...CustomModalStyles.overlay,
-        //   },
-        //   content: {
-        //     ...CustomModalStyles.content,
-        //     width: "clamp(400px, 90vw, 800px)",
-        //   },
-        // }}
-        onRequestClose={closeModal}
-      >
+      <Modal isOpen={isModalOpen} onRequestClose={closeModal}>
         {isCreatingPlaylist ? (
           <CreatingPlaylistModal
             createPlaylist={refetchCreatePlaylistQuery}
@@ -220,11 +225,6 @@ const Results: React.FC<Props> = React.memo(({ results }) => {
     setIsCreatingPlaylist(true);
     setIsModalOpen(true);
   }
-  function openCurrentRecoModal(e: React.SyntheticEvent) {
-    e.preventDefault();
-    setIsCreatingPlaylist(false);
-    setIsModalOpen(true);
-  }
 
   function closeModal(
     e: React.MouseEvent<Element, MouseEvent> | React.KeyboardEvent<Element>
@@ -234,9 +234,6 @@ const Results: React.FC<Props> = React.memo(({ results }) => {
     setIsModalOpen(false);
   }
 
-  function setCurrentRecoState(data: RecoResults) {
-    setCurrentReco(data);
-  }
   function refetchCreatePlaylistQuery() {
     createPlaylistQuery.refetch();
   }

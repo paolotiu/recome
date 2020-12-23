@@ -90,6 +90,15 @@ export const ArtistTile: React.FC<Props> = ({ data, children, place }) => {
       </Fade>
     );
   } else {
-    return <StyledArtistTile>{children}</StyledArtistTile>;
+    return (
+      <Fade
+        className="whole-row"
+        direction="up"
+        cascade={true}
+        triggerOnce={true}
+      >
+        <StyledArtistTile>{children}</StyledArtistTile>
+      </Fade>
+    );
   }
 };

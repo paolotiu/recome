@@ -96,6 +96,14 @@ code {
   animation: bottom-in 0.3s ease-in;
 }
 
+.width-100-percent{
+  width: 100%;
+}
+.whole-row{
+  
+  grid-column: 1/-1;
+}
+
 
 @keyframes go-out {
   

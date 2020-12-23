@@ -68,7 +68,14 @@ export const TrackTile: React.FC<Props> = ({
           </StyledTrackTile>
         </Fade>
       ) : (
-        <StyledTrackTile className={className}> {children}</StyledTrackTile>
+        <Fade
+          className="whole-row"
+          direction="up"
+          cascade={true}
+          triggerOnce={true}
+        >
+          <StyledTrackTile className={className}> {children}</StyledTrackTile>
+        </Fade>
       )}
     </>
   );
