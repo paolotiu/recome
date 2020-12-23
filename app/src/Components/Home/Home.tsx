@@ -4,10 +4,10 @@ import styled from "styled-components";
 import { ReactComponent as Glass } from "../../static/glass.svg";
 import { CenterGrid } from "../index";
 import { HomeTile } from "./HomeTile/HomeTile";
-
-interface Props {
-  token: string;
-}
+import { ReactComponent as Heart } from "../../static/heart.svg";
+import { v4 as uuid } from "uuid";
+import Recommend from "../Lazy/Recommend";
+interface Props {}
 
 const Wrapper = styled(CenterGrid)`
   .hometiles-container {
@@ -146,23 +146,30 @@ const Wrapper = styled(CenterGrid)`
   }
 `;
 
-export const Home: React.FC<Props> = ({ token }) => {
+export const Home: React.FC<Props> = ({}) => {
+  const token = localStorage.getItem("token");
   if (!token) {
     return <Redirect to="/login" />;
   }
   return (
     <Wrapper>
       <div className="hometiles-container">
-        {[1, 2, 3, 4, 5, 6].map((x) => (
-          <HomeTile
-            header="Recommend"
-            desc="Get recommandations based on metrics tuned to your liking. "
-            icon={() => <Glass />}
-            path="/recommend"
-            key={x}
-            id={"hometile-" + x}
-          />
-        ))}
+        <HomeTile
+          header="Recommend"
+          desc="Get recommandations based on metrics tuned to your liking. "
+          icon={() => <Glass />}
+          path="/recommend"
+          key={uuid()}
+          id={"hometile-" + 1}
+        />
+        <HomeTile
+          header="Favorites"
+          desc="See your top tracks and artists from  different time ranges. "
+          icon={() => <Heart id="heart" />}
+          path="/favorites"
+          key={uuid()}
+          id={"hometile-" + 2}
+        />
       </div>
     </Wrapper>
   );

@@ -30,16 +30,12 @@ const Wrapper = styled(CenterGrid)`
     align-items: center;
     justify-items: center;
     display: grid;
-    max-width: 1000px;
+    max-width: ${(props) => props.theme.maxContentWidth};
     padding: 1em;
     gap: 1em;
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
     .option-tiles-header {
       grid-column: 1/-1;
-    }
-    h1 {
-      font-size: 3em;
-      justify-self: start;
     }
   }
   button {

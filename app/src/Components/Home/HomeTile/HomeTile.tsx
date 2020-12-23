@@ -21,10 +21,14 @@ const StyledHomeTile = styled(Tile)`
     width: 20%;
     height: 20%;
     /* fill: ${(props) => props.theme.background}; */
-    fill: none;
+    overflow: visible;
     transition: fill 4s ease-in;
     path {
+      fill: none;
     }
+  }
+  #heart {
+    stroke-width: 2px;
   }
 
   h2 {

@@ -11,6 +11,7 @@ import { useUpdateUser } from "./UserContext";
 import { useQuery } from "react-query";
 import { getUser } from "./functions/api";
 import { Toaster } from "react-hot-toast";
+import { Favorites } from "./Components/Favorites/Favorites";
 const Home = lazy(() => import("./Components/Lazy/Home"));
 const Recommend = lazy(() => import("./Components/Lazy/Recommend"));
 
@@ -91,9 +92,12 @@ function App() {
               <Route path="/home">
                 <Protected
                   isLoading={isLoading}
-                  component={() => <Home token={token!} />}
+                  component={() => <Home />}
                   isAuth={data ? true : false}
                 />
+              </Route>
+              <Route path="/favorites">
+                <Favorites />
               </Route>
               <Route path="/landing">
                 <Landing setToken={setToken} />

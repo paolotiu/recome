@@ -12,6 +12,7 @@ const theme = {
   buttonBg: "#00ADB5",
   buttonText: "#EEE",
   spotify: "#1ed760",
+  maxContentWidth: "1000px",
 };
 
 export const Theme: React.FC = ({ children }) => {
