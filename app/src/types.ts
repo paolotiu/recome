@@ -76,8 +76,31 @@ export interface ResultArtist {
   id: string;
   name: string;
   href: string;
+  popularity: number;
 }
 
+export interface ResultTrack {
+  id: string;
+  name: string;
+  href: string;
+  external_urls: {
+    spotify: string;
+  };
+  album: {
+    artists: ResultArtist[];
+    images: ResultImage[];
+  };
+  artist: Array<{
+    external_urls: {
+      spotify: string;
+    };
+    id: string;
+    name: string;
+  }>;
+
+  popularity: number;
+  preview_url: string;
+}
 export interface AudioFeaturesResult {
   audio_features: AudioFeature[];
 }
