@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { SingleOption } from "../../../types";
 import { Tile } from "../../index";
 import { lighten } from "polished";
+import { Fade } from "react-awesome-reveal";
 interface StyledProps {
   show: boolean;
   isAuto: boolean;
@@ -17,7 +18,6 @@ export const StyledOptionTile = styled(Tile)<StyledProps>`
   width: 100%;
   height: auto;
   outline: none;
-  animation: bottom-in 0.3s ease-in;
   h3 {
     font-size: 1em;
     white-space: nowrap;
@@ -89,25 +89,32 @@ export const OptionTile: React.FC<Props> = ({
     newName = name;
   }
   return (
-    <StyledOptionTile
-      isAuto={isAuto}
-      show={index < 6}
-      onClick={() => {
-        setCurrent(name);
-        openModal();
-      }}
+    <Fade
+      style={{ width: "100%" }}
+      triggerOnce={true}
+      direction="up"
+      cascade={true}
     >
-      <h3>{newName}</h3>
-      {isAuto ? (
-        <p className="auto">Auto</p>
-      ) : (
-        <div>
-          <p>Min: {min}</p>
-          <p>Target: {target}</p>
+      <StyledOptionTile
+        isAuto={isAuto}
+        show={index < 6}
+        onClick={() => {
+          setCurrent(name);
+          openModal();
+        }}
+      >
+        <h3>{newName}</h3>
+        {isAuto ? (
+          <p className="auto">Auto</p>
+        ) : (
+          <div>
+            <p>Min: {min}</p>
+            <p>Target: {target}</p>
 
-          <p>Max: {max}</p>
-        </div>
-      )}
-    </StyledOptionTile>
+            <p>Max: {max}</p>
+          </div>
+        )}
+      </StyledOptionTile>
+    </Fade>
   );
 };

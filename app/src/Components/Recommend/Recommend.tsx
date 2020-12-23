@@ -26,13 +26,12 @@ import { NumberInput } from "./NumberInput/NumberInput";
 import Results from "./Results/ResultsContainer";
 import { useHistory } from "react-router";
 import { toast } from "react-hot-toast";
+import { Fade } from "react-awesome-reveal";
 const Wrapper = styled(CenterGrid)`
   display: flex;
   align-items: center;
   flex-direction: column;
-  h1 {
-    animation: bottom-in 0.3s ease-in;
-  }
+
   .option-tiles-container {
     width: 100%;
     align-items: center;
@@ -47,7 +46,6 @@ const Wrapper = styled(CenterGrid)`
     }
   }
   button {
-    animation: bottom-in 0.3s ease-in;
     margin-top: 1em;
     font-size: 1em;
     width: 100%;
@@ -162,7 +160,14 @@ export const Recommend: React.FC<Props> = () => {
     <>
       <Wrapper>
         <div className="option-tiles-container">
-          <h1 className="option-tiles-header">Recommendations</h1>
+          <Fade
+            style={{ width: "100%", gridColumnStart: 1, gridColumnEnd: -1 }}
+            triggerOnce={true}
+            direction="up"
+            cascade={true}
+          >
+            <h1 className="option-tiles-header">Recommendations</h1>
+          </Fade>
           {optionArray.sort().map((x, index) => (
             <OptionTile
               name={x[0]}
@@ -173,30 +178,32 @@ export const Recommend: React.FC<Props> = () => {
               key={x[0]}
             />
           ))}
-
-          <Button
-            onClick={() => {
-              toast.promise(
-                resultsQuery.refetch(),
-                {
-                  loading: "Loading",
-                  success: (res) => {
-                    return "Got it!";
-                  },
-                  error: (err) => `This just happened: ${err.toString()}`,
-                },
-                {}
-              );
-            }}
-            //Disabled white fetching
-            disabled={artistsQuery.isLoading || tracksQuery.isLoading}
-            style={{
-              gridColumnStart: 1,
-              gridColumnEnd: -1,
-            }}
+          <Fade
+            style={{ width: "100%", gridColumnStart: 1, gridColumnEnd: -1 }}
+            triggerOnce={true}
+            direction="up"
+            cascade={true}
           >
-            Get Recommendations
-          </Button>
+            <Button
+              onClick={() => {
+                toast.promise(
+                  resultsQuery.refetch(),
+                  {
+                    loading: "Loading",
+                    success: (res) => {
+                      return "Got it!";
+                    },
+                    error: (err) => `This just happened: ${err.toString()}`,
+                  },
+                  {}
+                );
+              }}
+              //Disabled white fetching
+              disabled={artistsQuery.isLoading || tracksQuery.isLoading}
+            >
+              Get Recommendations
+            </Button>
+          </Fade>
 
           {/* Show results view after fetching */}
           {resultsQuery.isSuccess ? (

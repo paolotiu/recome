@@ -142,7 +142,7 @@ const Results: React.FC<Props> = React.memo(({ results }) => {
     //Smooth scroll results
     const header = document.querySelector("#reco-results");
     setTimeout(() => {
-      header?.scrollIntoView({ behavior: "smooth" });
+      header?.scrollIntoView();
     }, 0);
   }, [results]);
 
@@ -158,7 +158,8 @@ const Results: React.FC<Props> = React.memo(({ results }) => {
 
   return (
     <>
-      <RecoResultsWrapper id="reco-results">
+      <RecoResultsWrapper>
+        <span id="reco-results"></span>
         <div className="reco-results-header">
           <h1>Results</h1>
           <div className="reco-results-options">

@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { RecoResults } from "../../../types";
 import { ResultTile as RT } from "../../index";
+import { Fade } from "react-awesome-reveal";
 import Mic from "../../../static/mic.png";
 
 const StyledResultTile = styled(RT)`
@@ -81,17 +82,27 @@ export const RecoResultTile: React.FC<Props> = ({
   setCurrentRecoState,
 }) => {
   return (
-    <StyledResultTile
-      onClick={(e) => {
-        setCurrentRecoState(data);
-        openModal(e);
-      }}
+    <Fade
+      style={{ width: "100%" }}
+      triggerOnce={true}
+      direction="left"
+      cascade={true}
     >
-      <img src={data.album.images[1] ? data.album.images[1].url : Mic} alt="" />
-      <div className="reco-song-names">
-        <h3>{data.name}</h3>
-        <p>{data.album.artists[0].name}</p>
-      </div>
-    </StyledResultTile>
+      <StyledResultTile
+        onClick={(e) => {
+          setCurrentRecoState(data);
+          openModal(e);
+        }}
+      >
+        <img
+          src={data.album.images[1] ? data.album.images[1].url : Mic}
+          alt=""
+        />
+        <div className="reco-song-names">
+          <h3>{data.name}</h3>
+          <p>{data.album.artists[0].name}</p>
+        </div>
+      </StyledResultTile>
+    </Fade>
   );
 };
