@@ -2,9 +2,11 @@ import React from "react";
 import styled from "styled-components";
 import { ResultArtist } from "../../../types";
 import { Tile } from "../../index";
+import { Fade } from "react-awesome-reveal";
+import Mic from "../../../static/mic.png";
+
 const StyledArtistTile = styled(Tile)`
   overflow: hidden;
-  animation: bottom-in 0.3s ease-in;
   justify-content: space-between;
   align-items: center;
   position: relative;
@@ -69,13 +71,23 @@ interface Props {
 export const ArtistTile: React.FC<Props> = ({ data, children, place }) => {
   if (data && place) {
     return (
-      <StyledArtistTile>
-        <h3 className="place"> {place}</h3>
-        <div className="artist-image-container">
-          <img src={data.images[1].url} alt="" />
-        </div>
-        <h3>{data.name}</h3>
-      </StyledArtistTile>
+      <Fade
+        style={{ width: "100%" }}
+        triggerOnce={true}
+        direction="up"
+        cascade={true}
+      >
+        <StyledArtistTile>
+          <h3 className="place">{place}</h3>
+          <div className="artist-image-container">
+            <img
+              src={data.images[1] ? data.images[1].url : Mic}
+              alt={`${data.name}`}
+            />
+          </div>
+          <h3>{data.name}</h3>
+        </StyledArtistTile>
+      </Fade>
     );
   } else {
     return <StyledArtistTile>{children}</StyledArtistTile>;

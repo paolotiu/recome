@@ -3,7 +3,7 @@ import { useQuery } from "react-query";
 import styled from "styled-components";
 import { getTopArtists, getTopTracks } from "../../functions/api";
 import { ResultArtist, ResultTrack } from "../../types";
-import { CenterGrid, ResultTile, Tile } from "../General";
+import { CenterGrid } from "../General";
 import { v4 as uuid } from "uuid";
 import { TrackTile } from "./Tiles/TrackTile";
 import { ArtistTile } from "./Tiles/ArtistTile";
@@ -14,6 +14,7 @@ const SwitchBtn = styled.button<{ isActive: boolean }>`
   font-weight: 700;
   color: ${(props) =>
     props.isActive ? props.theme.secondary : props.theme.darkBg};
+
   background-color: transparent;
 `;
 const Wrapper = styled(CenterGrid)`
@@ -34,7 +35,6 @@ const Wrapper = styled(CenterGrid)`
   header {
     h1 {
       max-width: 700px;
-      animation: bottom-in 0.3s ease-in-out;
     }
   }
 
@@ -171,6 +171,13 @@ export const Favorites = (props: Props) => {
           {artistsQueryFirst.data?.items.map((x, i) => (
             <ArtistTile data={x} place={i + 1} key={uuid()} />
           ))}
+          {artistsQuerySecond.data?.items.map((x, i) => {
+            if (i === 0) {
+              return "";
+            } else {
+              return <ArtistTile data={x} place={i + 49} key={uuid()} />;
+            }
+          })}
         </div>
       )}
     </Wrapper>

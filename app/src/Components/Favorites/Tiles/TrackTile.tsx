@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { ResultTrack } from "../../../types";
 import { ResultTile } from "../../index";
-
+import { Fade } from "react-awesome-reveal";
 const StyledTrackTile = styled(ResultTile)`
   display: grid;
   align-items: center;
@@ -12,7 +12,6 @@ const StyledTrackTile = styled(ResultTile)`
   grid-template-columns: 1fr 1fr 10fr;
   max-height: 200px;
   background-color: ${(props) => props.theme.darkBg};
-  animation: bottom-in 0.3s ease-in;
   max-width: 700px;
   h3 {
     justify-self: auto;
@@ -56,14 +55,21 @@ export const TrackTile: React.FC<Props> = ({
   return (
     <>
       {data && place ? (
-        <StyledTrackTile>
-          <h3>{place}</h3>
-          <img src={data.album.images[1].url} alt="" />
-          <div className="fave-song-names">
-            <h3>{data.name}</h3>
-            <p>{data.album.artists[0].name}</p>
-          </div>
-        </StyledTrackTile>
+        <Fade
+          style={{ width: "100%" }}
+          direction="up"
+          cascade={true}
+          triggerOnce={true}
+        >
+          <StyledTrackTile>
+            <h3>{place}</h3>
+            <img src={data.album.images[1].url} alt="" />
+            <div className="fave-song-names">
+              <h3>{data.name}</h3>
+              <p>{data.album.artists[0].name}</p>
+            </div>
+          </StyledTrackTile>
+        </Fade>
       ) : (
         <StyledTrackTile className={className}> {children}</StyledTrackTile>
       )}
