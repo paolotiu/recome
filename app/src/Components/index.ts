@@ -6,6 +6,7 @@ export {
   Slider,
   ProgressBar,
   Modal,
+  ResultTile,
 } from "./General";
 
 export { Login } from "./Login/Login";
