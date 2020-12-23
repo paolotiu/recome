@@ -6,7 +6,6 @@ import { CenterGrid } from "../index";
 import { HomeTile } from "./HomeTile/HomeTile";
 import { ReactComponent as Heart } from "../../static/heart.svg";
 import { v4 as uuid } from "uuid";
-import Recommend from "../Lazy/Recommend";
 interface Props {}
 
 const Wrapper = styled(CenterGrid)`
@@ -146,7 +145,7 @@ const Wrapper = styled(CenterGrid)`
   }
 `;
 
-export const Home: React.FC<Props> = ({}) => {
+export const Home: React.FC<Props> = () => {
   const token = localStorage.getItem("token");
   if (!token) {
     return <Redirect to="/login" />;
