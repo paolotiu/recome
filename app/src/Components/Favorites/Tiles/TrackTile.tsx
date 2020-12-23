@@ -29,9 +29,6 @@ const StyledTrackTile = styled(ResultTile)`
     width: 100%;
     h3 {
       font-size: 1.3em;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
     }
     p {
       font-weight: 200;
