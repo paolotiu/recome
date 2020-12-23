@@ -39,13 +39,22 @@ export const getTopArtists = async (
 };
 
 // Get top 5 tracks
-export const getTopTracks = async (token: string) => {
-  const res = await axios.get(url + "/me/top/tracks?limit=5&offset=0", {
-    headers: {
-      Authorization: "Bearer " + token,
-      "Content-Type": "application/json",
-    },
-  });
+export const getTopTracks = async (
+  token: string,
+  limit: number = 5,
+  offset: number = 0,
+  time_range: "long_term" | "medium_term" | "short_term" = "long_term"
+) => {
+  const res = await axios.get(
+    url +
+      `/me/top/tracks?limit=${limit}&offset=${offset}&time_range=${time_range}`,
+    {
+      headers: {
+        Authorization: "Bearer " + token,
+        "Content-Type": "application/json",
+      },
+    }
+  );
 
   return res.data;
 };
