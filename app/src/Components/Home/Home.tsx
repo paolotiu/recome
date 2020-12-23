@@ -6,6 +6,9 @@ import { CenterGrid } from "../index";
 import { HomeTile } from "./HomeTile/HomeTile";
 import { ReactComponent as Heart } from "../../static/heart.svg";
 import { v4 as uuid } from "uuid";
+import { getTopArtists, getTopTracks } from "../../functions/api";
+import { ResultArtist, ResultTrack } from "../../types";
+import { useQuery } from "react-query";
 interface Props {}
 
 const Wrapper = styled(CenterGrid)`
@@ -62,7 +65,39 @@ const Wrapper = styled(CenterGrid)`
 `;
 
 export const Home: React.FC<Props> = () => {
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem("token")!;
+
+  const tracksQueryFirst = useQuery<{ items: ResultTrack[] }>(
+    "tracks",
+    () => getTopTracks(token, 50),
+    {
+      staleTime: Infinity,
+    }
+  );
+  const tracksQuerySecond = useQuery<{ items: ResultTrack[] }>(
+    "tracks2nd",
+    () => getTopTracks(token, 50, 49),
+    {
+      staleTime: Infinity,
+    }
+  );
+  const artistsQueryFirst = useQuery<{ items: ResultArtist[] }>(
+    "artists",
+    () => getTopArtists(token, 50),
+    {
+      staleTime: Infinity,
+    }
+  );
+  const artistsQuerySecond = useQuery<{ items: ResultArtist[] }>(
+    "artists2nd",
+    () => getTopArtists(token, 50, 49),
+    {
+      staleTime: Infinity,
+    }
+  );
+  if (tracksQueryFirst.isLoading || tracksQuerySecond.isLoading) {
+    return <> </>;
+  }
   if (!token) {
     return <Redirect to="/login" />;
   }

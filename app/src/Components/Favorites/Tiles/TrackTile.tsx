@@ -12,6 +12,8 @@ const StyledTrackTile = styled(ResultTile)`
   grid-template-columns: 1fr 1fr 10fr;
   max-height: 200px;
   background-color: ${(props) => props.theme.darkBg};
+  animation: bottom-in 0.3s ease-in;
+  max-width: 700px;
   h3 {
     justify-self: auto;
     font-size: 1.8em;
@@ -42,9 +44,15 @@ const StyledTrackTile = styled(ResultTile)`
 interface Props {
   data?: ResultTrack;
   place?: number;
+  className?: string;
 }
 
-export const TrackTile: React.FC<Props> = ({ data, place, children }) => {
+export const TrackTile: React.FC<Props> = ({
+  data,
+  place,
+  children,
+  className,
+}) => {
   return (
     <>
       {data && place ? (
@@ -57,7 +65,7 @@ export const TrackTile: React.FC<Props> = ({ data, place, children }) => {
           </div>
         </StyledTrackTile>
       ) : (
-        <StyledTrackTile> {children}</StyledTrackTile>
+        <StyledTrackTile className={className}> {children}</StyledTrackTile>
       )}
     </>
   );

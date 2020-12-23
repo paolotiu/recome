@@ -11,9 +11,9 @@ import { useUpdateUser } from "./UserContext";
 import { useQuery } from "react-query";
 import { getUser } from "./functions/api";
 import { Toaster } from "react-hot-toast";
-import { Favorites } from "./Components/Favorites/Favorites";
 const Home = lazy(() => import("./Components/Lazy/Home"));
 const Recommend = lazy(() => import("./Components/Lazy/Recommend"));
+const Favorites = lazy(() => import("./Components/Lazy/Favorites"));
 
 const Protected: React.FC<PropsProtected> = ({
   component: Component,
@@ -49,6 +49,8 @@ function App() {
     },
     {
       enabled: !!token,
+
+      refetchOnMount: "always",
     }
   );
 

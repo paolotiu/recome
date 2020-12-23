@@ -77,6 +77,7 @@ export interface ResultArtist {
   name: string;
   href: string;
   popularity: number;
+  images: ResultImage[];
 }
 
 export interface ResultTrack {

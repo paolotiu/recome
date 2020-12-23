@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { useQuery } from "react-query";
 import styled from "styled-components";
 import { getTopArtists, getTopTracks } from "../../functions/api";
@@ -6,18 +6,60 @@ import { ResultArtist, ResultTrack } from "../../types";
 import { CenterGrid, ResultTile, Tile } from "../General";
 import { v4 as uuid } from "uuid";
 import { TrackTile } from "./Tiles/TrackTile";
+import { ArtistTile } from "./Tiles/ArtistTile";
+
+const SwitchBtn = styled.button<{ isActive: boolean }>`
+  border: none;
+  font-size: 1.6em;
+  font-weight: 700;
+  color: ${(props) =>
+    props.isActive ? props.theme.secondary : props.theme.darkBg};
+  background-color: transparent;
+`;
 const Wrapper = styled(CenterGrid)`
   padding: 1em;
+  width: 100%;
+  justify-content: center;
   justify-items: center;
+  align-items: center;
   gap: 2em;
-  h1 {
-    width: 70vw;
+
+  .fave-switch-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    width: 80vw;
+
+    gap: 1em;
   }
-  .favorites-container {
+  header {
+    h1 {
+      max-width: 700px;
+      animation: bottom-in 0.3s ease-in-out;
+    }
+  }
+
+  .top-tracks-container {
     display: grid;
     gap: 0.8em;
     padding: 0 1em;
     max-width: 700px;
+  }
+
+  .top-artists-container {
+    display: grid;
+
+    grid-template-columns: 1fr 1fr 1fr;
+    justify-items: center;
+    align-items: center;
+    gap: 1em;
+    max-width: 800px;
+    .popularity {
+      grid-column: 1/-1;
+      max-width: 100%;
+    }
+    @media (max-width: 565px) {
+      grid-template-columns: 1fr 1fr;
+    }
   }
 `;
 interface Props {}
@@ -25,70 +67,112 @@ interface Props {}
 export const Favorites = (props: Props) => {
   const token = localStorage.getItem("token")!;
   const [isTracks, setIsTracks] = useState(true);
+
   const tracksQueryFirst = useQuery<{ items: ResultTrack[] }>(
     "tracks",
     () => getTopTracks(token, 50),
     {
-      retry: 3,
+      staleTime: Infinity,
     }
   );
   const tracksQuerySecond = useQuery<{ items: ResultTrack[] }>(
     "tracks2nd",
-    () => getTopTracks(token, 50, 49)
+    () => getTopTracks(token, 50, 49),
+    {
+      staleTime: Infinity,
+    }
   );
-  const artistsQueryFirst = useQuery<{ items: ResultArtist[] }>("artists", () =>
-    getTopArtists(token, 50)
+  const artistsQueryFirst = useQuery<{ items: ResultArtist[] }>(
+    "artists",
+    () => getTopArtists(token, 50),
+    {
+      staleTime: Infinity,
+    }
   );
   const artistsQuerySecond = useQuery<{ items: ResultArtist[] }>(
     "artists2nd",
-    () => getTopArtists(token, 50, 49)
+    () => getTopArtists(token, 50, 49),
+    {
+      staleTime: Infinity,
+    }
   );
 
-  if (
-    !tracksQueryFirst.data ||
-    !tracksQuerySecond.data ||
-    !artistsQueryFirst.data ||
-    !artistsQuerySecond.data
-  ) {
+  const tracksPopularity = useMemo(() => {
+    if (tracksQueryFirst.data && tracksQuerySecond.data) {
+      return getAveragePopularity([
+        ...tracksQueryFirst.data?.items,
+        ...tracksQuerySecond.data?.items,
+      ]);
+    }
+  }, [tracksQueryFirst, tracksQuerySecond]);
+
+  const artistsPopularity = useMemo(() => {
+    if (artistsQueryFirst.data && artistsQuerySecond.data) {
+      return getAveragePopularity([
+        ...artistsQueryFirst.data?.items,
+        ...artistsQuerySecond.data?.items,
+      ]);
+    }
+  }, [artistsQueryFirst, artistsQuerySecond]);
+
+  if (tracksQueryFirst.isLoading || tracksQuerySecond.isLoading) {
     return <> </>;
   }
 
-  const tracksData = [
-    ...tracksQueryFirst.data.items,
-    ...tracksQuerySecond.data.items,
-  ];
   return (
     <Wrapper>
-      <div>
-        <button onClick={() => setIsTracks(true)}>Tracks</button>
-        <button onClick={() => setIsTracks(false)}>Artists</button>
+      <div className="fave-switch-container">
+        <SwitchBtn
+          className="fave-switch"
+          isActive={isTracks}
+          onClick={() => setIsTracks(true)}
+        >
+          Tracks
+        </SwitchBtn>
+        <SwitchBtn
+          isActive={!isTracks}
+          className="fave-switch"
+          onClick={() => {
+            setIsTracks(false);
+          }}
+        >
+          Artists
+        </SwitchBtn>
       </div>
-      <h1>Top {isTracks ? "Tracks" : "Artists"}</h1>
-      <div className="favorites-container">
-        <TrackTile>
-          <div></div>
-          <h3>Popularity: </h3>
-          <h3>{getAveragePopularity(tracksData)}</h3>
-        </TrackTile>
-        {isTracks ? (
-          <>
-            {tracksQueryFirst.data?.items.map((x, i) => (
-              <TrackTile data={x} place={i + 1} key={uuid()} />
-            ))}
-            {tracksQuerySecond.data?.items.map((x, i) => (
-              <>
-                {i !== 0 ? (
-                  <TrackTile data={x} place={i + 50} key={uuid()} />
-                ) : (
-                  ""
-                )}
-              </>
-            ))}
-          </>
-        ) : (
-          <></>
-        )}
-      </div>
+      <header>
+        <h1>Top {isTracks ? "Tracks" : "Artists"}</h1>
+      </header>
+
+      {isTracks ? (
+        <div className="top-tracks-container">
+          <TrackTile>
+            <div></div>
+            <h3>Popularity: </h3>
+            <h3>{tracksPopularity}</h3>
+          </TrackTile>
+          {tracksQueryFirst.data?.items.map((x, i) => (
+            <TrackTile data={x} place={i + 1} key={uuid()} />
+          ))}
+          {tracksQuerySecond.data?.items.map((x, i) => {
+            if (i === 0) {
+              return "";
+            } else {
+              return <TrackTile key={uuid()} data={x} place={i + 49} />;
+            }
+          })}
+        </div>
+      ) : (
+        <div className="top-artists-container">
+          <TrackTile className="popularity">
+            <div></div>
+            <h3>Popularity: </h3>
+            <h3>{artistsPopularity}</h3>
+          </TrackTile>
+          {artistsQueryFirst.data?.items.map((x, i) => (
+            <ArtistTile data={x} place={i + 1} key={uuid()} />
+          ))}
+        </div>
+      )}
     </Wrapper>
   );
 };
@@ -98,5 +182,6 @@ function getAveragePopularity(arr: Array<ResultArtist | ResultTrack>) {
     (prev: number, curr: ResultTrack | ResultArtist) => prev + curr.popularity,
     0
   );
+
   return Math.floor(total / arr.length);
 }
