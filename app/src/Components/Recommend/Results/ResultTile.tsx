@@ -1,33 +1,11 @@
 import React from "react";
 import styled from "styled-components";
 import { RecoResults } from "../../../types";
-import { Tile } from "../../index";
-import { lighten } from "polished";
-const StyledResultTile = styled(Tile)`
-  display: grid;
-  position: relative;
-  background-color: ${(props) => props.theme.darkBg};
-  width: 100%;
-  z-index: 1;
-  padding: 0.8em 0.3em 0.8em 0.8em;
+import { ResultTile as RT } from "../../index";
+import Mic from "../../../static/mic.png";
 
-  grid-template-columns: minmax(130px, 1fr) 2fr;
-  height: fit-content;
-  cursor: pointer;
-
-  img,
-  p,
-  span {
-    z-index: inherit;
-  }
-  img {
-    width: 100px;
-    position: relative;
-    top: 0;
-    left: 0;
-    border-radius: 4px;
-  }
-
+const StyledResultTile = styled(RT)`
+  padding-right: 0.8em;
   .reco-song-names {
     display: flex;
     flex-direction: column;
@@ -47,7 +25,7 @@ const StyledResultTile = styled(Tile)`
     left: 0;
     width: 130px;
     height: 130px;
-    background-color: ${(props) => props.theme.secondary};
+    background-color: ${(props) => props.theme.imageBg};
     z-index: 0;
     border-radius: inherit;
     content: "";
@@ -89,22 +67,6 @@ const StyledResultTile = styled(Tile)`
       content: "";
     }
   }
-
-  @supports (-webkit-touch-callout: none) {
-    /* CSS specific to iOS devices */
-    :active {
-      background-color: ${(props) => lighten(0.02, props.theme.darkBg)};
-      transform: scale(1.04);
-    }
-  }
-
-  @supports not (-webkit-touch-callout: none) {
-    /* CSS for other than iOS devices */
-    :hover {
-      background-color: ${(props) => lighten(0.02, props.theme.darkBg)};
-      transform: scale(1.04);
-    }
-  }
 `;
 interface Props {
   data: RecoResults;
@@ -112,7 +74,7 @@ interface Props {
   setCurrentRecoState: (data: RecoResults) => void;
 }
 
-export const ResultTile: React.FC<Props> = ({
+export const RecoResultTile: React.FC<Props> = ({
   data,
   openModal,
   setCurrentRecoState,
@@ -124,7 +86,7 @@ export const ResultTile: React.FC<Props> = ({
         openModal(e);
       }}
     >
-      <img src={data.album.images[1].url} alt="" />
+      <img src={data.album.images[1] ? data.album.images[1].url : Mic} alt="" />
       <div className="reco-song-names">
         <h3>{data.name}</h3>
         <p>{data.album.artists[0].name}</p>

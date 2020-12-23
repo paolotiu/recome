@@ -7,7 +7,7 @@ import {
   IUser,
   RecoResults,
 } from "../../../types";
-import { ResultTile } from "./ResultTile";
+import { RecoResultTile } from "./ResultTile";
 import smoothscroll from "smoothscroll-polyfill";
 import { defaultFeature } from "../defaultOptions";
 import { useQuery } from "react-query";
@@ -173,7 +173,7 @@ const Results: React.FC<Props> = React.memo(({ results }) => {
 
         {results.map((data) => {
           return (
-            <ResultTile
+            <RecoResultTile
               key={uuid()}
               data={data}
               openModal={openCurrentRecoModal}
