@@ -129,20 +129,6 @@ const Wrapper = styled(CenterGrid)`
       opacity: 0.2;
     }
   }
-
-  @keyframes bottom-in {
-    0% {
-      opacity: 0.1;
-      transform: translateY(20%);
-    }
-    30% {
-      opacity: 0.2;
-    }
-    100% {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
 `;
 
 export const Home: React.FC<Props> = () => {
