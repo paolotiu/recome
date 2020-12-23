@@ -5,9 +5,9 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { UserProvider } from "./UserContext";
 import { QueryClientProvider, QueryClient } from "react-query";
-
+import { ReactQueryDevtools } from "react-query/devtools";
 const queryClient = new QueryClient({
-  defaultOptions: { queries: { staleTime: Infinity, retry: 0 } },
+  defaultOptions: { queries: { retry: 0 } },
 });
 
 ReactDOM.render(
@@ -15,6 +15,7 @@ ReactDOM.render(
     <UserProvider>
       <QueryClientProvider client={queryClient}>
         <App />
+        <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>
     </UserProvider>
   </React.StrictMode>,

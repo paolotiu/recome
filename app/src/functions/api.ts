@@ -18,13 +18,22 @@ export const getUser = async (token: string) => {
 };
 
 // Get top 5 artists
-export const getTopArtists = async (token: string) => {
-  const res = await axios.get(url + "/me/top/artists?limit=0&offset=5", {
-    headers: {
-      Authorization: "Bearer " + token,
-      "Content-Type": "application/json",
-    },
-  });
+export const getTopArtists = async (
+  token: string,
+  limit: number = 0,
+  offset: number = 0,
+  time_range: "long_term" | "medium_term" | "short_term" = "long_term"
+) => {
+  const res = await axios.get(
+    url +
+      `/me/top/artists?limit=${limit}&offset=${offset}&time_range=${time_range}`,
+    {
+      headers: {
+        Authorization: "Bearer " + token,
+        "Content-Type": "application/json",
+      },
+    }
+  );
 
   return res.data;
 };
@@ -60,7 +69,10 @@ export const getRecommendations = async (
   const stringifiedOptions = queryString.stringify(cleanOptions(options));
 
   const res = await axios.get(
-    url + "/recommendations?" + stringifiedSeedOptions + stringifiedOptions,
+    url +
+      "/recommendations?limit=50&" +
+      stringifiedSeedOptions +
+      stringifiedOptions,
     {
       headers: {
         Authorization: "Bearer " + token,

@@ -43,7 +43,7 @@ function App() {
 
   const { current: setUser } = useRef(useUpdateUser());
   const { isLoading, data, status } = useQuery(
-    ["getUser", token],
+    "getUser",
     () => {
       return getUser(token!);
     },
@@ -85,7 +85,7 @@ function App() {
               <Route path="/recommend">
                 <Protected
                   isLoading={isLoading}
-                  component={() => <Recommend token={token!} />}
+                  component={() => <Recommend />}
                   isAuth={data ? true : false}
                 />
               </Route>

@@ -10,7 +10,13 @@ import {
   getTopTracks,
   getRecommendations,
 } from "../../functions/api";
-import { Options, SeedOptions, SingleOption, TopResult } from "../../types";
+import {
+  Options,
+  RecoResults,
+  SeedOptions,
+  SingleOption,
+  TopResult,
+} from "../../types";
 import { defaulSeedOptions, defaultOptions, helpTip } from "./defaultOptions";
 import toPairsIn from "lodash.topairsin";
 import { Slider } from "../index";
@@ -19,7 +25,7 @@ import ReactTooltip from "react-tooltip";
 import { NumberInput } from "./NumberInput/NumberInput";
 import Results from "./Results/ResultsContainer";
 import { useHistory } from "react-router";
-
+import { toast } from "react-hot-toast";
 const Wrapper = styled(CenterGrid)`
   display: flex;
   align-items: center;
@@ -71,11 +77,10 @@ const Wrapper = styled(CenterGrid)`
   }
 `;
 
-interface Props {
-  token: string;
-}
+interface Props {}
 
-export const Recommend: React.FC<Props> = ({ token }) => {
+export const Recommend: React.FC<Props> = () => {
+  const token = localStorage.getItem("token");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [seedOptions, setSeedOptions] = useState<SeedOptions>(
     defaulSeedOptions
@@ -88,7 +93,7 @@ export const Recommend: React.FC<Props> = ({ token }) => {
   );
 
   const optionArray = optionsToArray(options);
-  const artistsQuery = useQuery("artists", () => getTopArtists(token), {
+  const artistsQuery = useQuery("artists", () => getTopArtists(token!), {
     // Set top artists and genres after fetching
     onSuccess: (data: TopResult) => {
       setSeedOptions((prev) => {
@@ -106,7 +111,7 @@ export const Recommend: React.FC<Props> = ({ token }) => {
     refetchOnMount: "always",
   });
 
-  const tracksQuery = useQuery("tracks", () => getTopTracks(token), {
+  const tracksQuery = useQuery("tracks", () => getTopTracks(token!), {
     onSuccess: (data: TopResult) => {
       // Set top tracks after fetching
       setSeedOptions((prev) => {
@@ -124,9 +129,9 @@ export const Recommend: React.FC<Props> = ({ token }) => {
     refetchOnMount: "always",
   });
 
-  const resultsQuery = useQuery(
+  const resultsQuery = useQuery<RecoResults[]>(
     "results",
-    () => getRecommendations(token, seedOptions, options),
+    () => getRecommendations(token!, seedOptions, options),
     {
       enabled: false,
     }
@@ -165,20 +170,21 @@ export const Recommend: React.FC<Props> = ({ token }) => {
               key={x[0]}
             />
           ))}
-          {/* <StyledOptionTile show={true} isAuto={false}>
-            <h3>Genre (up to 5)</h3>
-            <select name="genres" id="" defaultValue="auto">
-              {genreListQuery.isSuccess
-                ? genreListQuery.data.genres.map((x: string) => (
-                    <option value={x} key={x}>
-                      {x}
-                    </option>
-                  ))
-                : ""}
-            </select>
-          </StyledOptionTile> */}
+
           <Button
-            onClick={() => resultsQuery.refetch()}
+            onClick={() => {
+              toast.promise(
+                resultsQuery.refetch(),
+                {
+                  loading: "Loading",
+                  success: (res) => {
+                    return "Got it!";
+                  },
+                  error: (err) => `This just happened: ${err.toString()}`,
+                },
+                {}
+              );
+            }}
             //Disabled white fetching
             disabled={artistsQuery.isLoading || tracksQuery.isLoading}
             style={{
