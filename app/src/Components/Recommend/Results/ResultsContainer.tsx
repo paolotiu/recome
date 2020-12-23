@@ -20,6 +20,7 @@ import { v4 as uuid } from "uuid";
 // kick off the polyfill!
 smoothscroll.polyfill();
 const RecoResultsWrapper = styled.section`
+  will-change: transform;
   padding-top: 50px;
   grid-column: 1/-1;
   width: 100%;

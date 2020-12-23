@@ -3,6 +3,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  
 }
 
 html, body{
@@ -106,19 +107,8 @@ code {
   }
 }
 
-@keyframes bottom-in {
-  0% {
-    opacity: 0.1;
-    transform: translateY(20%);
-  }
-  30% {
-    opacity: 0.2;
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
+
+
 
 
 .reco-tooltip{
@@ -147,5 +137,87 @@ code {
 
   .ReactModal__Content{
     max-width: 80vw;
+  }
+}
+
+@keyframes left-in {
+  0% {
+    opacity: 0.1;
+    transform: translateX(-20%);
+  }
+  30% {
+    opacity: 0.2;
+  }
+  100% {
+  }
+}
+
+@keyframes top-left-in {
+  0% {
+    opacity: 0.1;
+    transform: translate(-20%, -20%);
+  }
+  30% {
+    opacity: 0.2;
+  }
+  100% {
+  }
+}
+
+@keyframes top-right-in {
+  0% {
+    opacity: 0.1;
+    transform: translate(20%, -20%);
+  }
+  30% {
+    opacity: 0.2;
+  }
+  100% {
+  }
+}
+
+@keyframes bottom-left-in {
+  0% {
+    opacity: 0.1;
+    transform: translate(-20%, 20%);
+  }
+  30% {
+    opacity: 0.2;
+  }
+  100% {
+  }
+}
+
+@keyframes bottom-right-in {
+  0% {
+    opacity: 0.1;
+    transform: translate(20%, 20%);
+  }
+  30% {
+    opacity: 0.2;
+  }
+  100% {
+  }
+}
+
+@keyframes top-in {
+  0% {
+    opacity: 0.1;
+    transform: translateY(-20%);
+  }
+  30% {
+    opacity: 0.2;
+  }
+  100% {
+  }
+}
+
+@keyframes bottom-in {
+  0% {
+    opacity: 0.1;
+    transform: translateY(20%);
+  }
+  30% {
+    opacity: 0.2;
   }
 }

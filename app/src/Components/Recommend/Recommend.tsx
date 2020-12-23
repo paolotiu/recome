@@ -30,7 +30,9 @@ const Wrapper = styled(CenterGrid)`
   display: flex;
   align-items: center;
   flex-direction: column;
-
+  h1 {
+    animation: bottom-in 0.3s ease-in;
+  }
   .option-tiles-container {
     width: 100%;
     align-items: center;
@@ -45,6 +47,7 @@ const Wrapper = styled(CenterGrid)`
     }
   }
   button {
+    animation: bottom-in 0.3s ease-in;
     margin-top: 1em;
     font-size: 1em;
     width: 100%;

@@ -17,6 +17,7 @@ export const StyledOptionTile = styled(Tile)<StyledProps>`
   width: 100%;
   height: auto;
   outline: none;
+  animation: bottom-in 0.3s ease-in;
   h3 {
     font-size: 1em;
     white-space: nowrap;

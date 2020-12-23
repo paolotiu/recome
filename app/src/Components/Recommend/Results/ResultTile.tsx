@@ -5,6 +5,7 @@ import { ResultTile as RT } from "../../index";
 import Mic from "../../../static/mic.png";
 
 const StyledResultTile = styled(RT)`
+  transform: translateZ(0);
   padding-right: 0.8em;
   .reco-song-names {
     display: flex;
