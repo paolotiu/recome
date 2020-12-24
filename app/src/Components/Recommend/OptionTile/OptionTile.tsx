@@ -15,9 +15,11 @@ export const StyledOptionTile = styled(Tile)<StyledProps>`
   /* display: ${(props) => (props.show ? "block" : "none")}; */
   background-color: ${(props) =>
     props.isAuto ? props.theme.lightenedDark : props.theme.secondary};
+  color: ${(props) => (props.isAuto ? "grey" : props.theme.light)};
   width: 100%;
   height: auto;
   outline: none;
+
   h3 {
     font-size: 1em;
     white-space: nowrap;
@@ -90,7 +92,8 @@ export const OptionTile: React.FC<Props> = ({
   }
   return (
     <Fade
-      style={{ width: "100%" }}
+      className="width-100-percent"
+      style={{ display: "flex", justifyContent: "center" }}
       triggerOnce={true}
       direction="up"
       cascade={true}

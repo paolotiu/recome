@@ -5,6 +5,7 @@ import { ReactComponent as Glass } from "../../static/glass.svg";
 import { CenterGrid } from "../index";
 import { HomeTile } from "./HomeTile/HomeTile";
 import { ReactComponent as Heart } from "../../static/heart.svg";
+import { ReactComponent as Gears } from "../../static/gears.svg";
 import { v4 as uuid } from "uuid";
 import { getTopArtists, getTopTracks } from "../../functions/api";
 import { ResultArtist, ResultTrack } from "../../types";
@@ -116,6 +117,14 @@ export const Home: React.FC<Props> = () => {
           header="Favorites"
           desc="See your top tracks and artists from  different time ranges. "
           icon={() => <Heart id="heart" />}
+          path="/favorites"
+          key={uuid()}
+          id={"hometile-" + 2}
+        />
+        <HomeTile
+          header="Generate"
+          desc="Generate a photo of your top tracks and artists."
+          icon={() => <Gears id="gears" />}
           path="/favorites"
           key={uuid()}
           id={"hometile-" + 2}

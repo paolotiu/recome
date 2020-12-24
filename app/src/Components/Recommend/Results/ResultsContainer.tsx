@@ -1,7 +1,7 @@
 import React, {
-  useMemo,
   useCallback,
   useEffect,
+  useMemo,
   useRef,
   useState,
 } from "react";
@@ -69,7 +69,6 @@ interface Props {
 const Results: React.FC<Props> = React.memo(({ results }) => {
   const token = localStorage.getItem("token");
   const user = useUser();
-  const d = useMemo(() => results, [results]);
   const [isCreatingPlaylist, setIsCreatingPlaylist] = useState(false);
   const [playlistName, setPlaylistName] = useState("Recome Recomendations");
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -163,6 +162,20 @@ const Results: React.FC<Props> = React.memo(({ results }) => {
     }, 0);
   }, [results]);
 
+  const resultTiles = useMemo(
+    () =>
+      results.map((data) => {
+        return (
+          <RecoResultTile
+            key={uuid()}
+            data={data}
+            openModal={openCurrentRecoModal}
+            setCurrentRecoState={setCurrentRecoState}
+          />
+        );
+      }),
+    [results, openCurrentRecoModal, setCurrentRecoState]
+  );
   if (!results.length) {
     return (
       <RecoResultsWrapper id="reco-results">
@@ -190,16 +203,7 @@ const Results: React.FC<Props> = React.memo(({ results }) => {
           </div>
         </div>
 
-        {d.map((data) => {
-          return (
-            <RecoResultTile
-              key={uuid()}
-              data={data}
-              openModal={openCurrentRecoModal}
-              setCurrentRecoState={setCurrentRecoState}
-            />
-          );
-        })}
+        {resultTiles}
       </RecoResultsWrapper>
 
       <Modal isOpen={isModalOpen} onRequestClose={closeModal}>
