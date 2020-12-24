@@ -69,7 +69,7 @@ export const Favorites = (props: Props) => {
   const [isTracks, setIsTracks] = useState(true);
 
   const tracksQueryFirst = useQuery<{ items: ResultTrack[] }>(
-    "tracks",
+    "tracks1st",
     () => getTopTracks(token, 50),
     {
       staleTime: Infinity,
@@ -83,7 +83,7 @@ export const Favorites = (props: Props) => {
     }
   );
   const artistsQueryFirst = useQuery<{ items: ResultArtist[] }>(
-    "artists",
+    "artists1st",
     () => getTopArtists(token, 50),
     {
       staleTime: Infinity,

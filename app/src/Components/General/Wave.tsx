@@ -7,6 +7,8 @@ const StyledWave = styled.div`
   top: 0;
   right: 0;
   width: max(400px, 40vw);
+  touch-action: none;
+  overflow: visible;
   svg {
   }
   .z {
