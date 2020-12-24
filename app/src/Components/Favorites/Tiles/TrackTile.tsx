@@ -65,7 +65,7 @@ export const TrackTile: React.FC<Props> = ({
         >
           <StyledTrackTile>
             <h3>{place}</h3>
-            <img src={data.album.images[1].url} alt="" />
+            <img src={data.album.images[2].url} alt=" " width="60px" />
             <div className="fave-song-names">
               <h3>{data.name}</h3>
               <p>{data.album.artists[0].name}</p>
