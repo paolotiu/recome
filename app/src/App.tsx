@@ -14,7 +14,7 @@ import { Toaster } from "react-hot-toast";
 const Home = lazy(() => import("./Components/Lazy/Home"));
 const Recommend = lazy(() => import("./Components/Lazy/Recommend"));
 const Favorites = lazy(() => import("./Components/Lazy/Favorites"));
-
+const Generate = lazy(() => import("./Components/Lazy/Generate"));
 const Protected: React.FC<PropsProtected> = ({
   component: Component,
   isAuth,
@@ -101,9 +101,13 @@ function App() {
               <Route path="/favorites">
                 <Favorites />
               </Route>
+              <Route path="/generate">
+                <Generate />
+              </Route>
               <Route path="/landing">
                 <Landing setToken={setToken} />
               </Route>
+
               <Route path="/">
                 <Redirect to="/home" />
               </Route>

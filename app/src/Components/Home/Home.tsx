@@ -125,7 +125,7 @@ export const Home: React.FC<Props> = () => {
           header="Generate"
           desc="Generate a photo of your top tracks and artists."
           icon={() => <Gears id="gears" />}
-          path="/favorites"
+          path="/generate"
           key={uuid()}
           id={"hometile-" + 2}
         />
