@@ -30,6 +30,9 @@ const StyledHomeTile = styled(Tile)`
   #heart {
     stroke-width: 2px;
   }
+  #gears {
+    stroke-width: 10px;
+  }
 
   h2 {
     margin-top: 1.4em;

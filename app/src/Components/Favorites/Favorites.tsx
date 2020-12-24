@@ -157,7 +157,7 @@ export const Favorites = (props: Props) => {
             if (i === 0) {
               return "";
             } else {
-              return <TrackTile key={uuid()} data={x} place={i + 49} />;
+              return <TrackTile key={uuid()} data={x} place={i + 50} />;
             }
           })}
         </div>
@@ -175,7 +175,7 @@ export const Favorites = (props: Props) => {
             if (i === 0) {
               return "";
             } else {
-              return <ArtistTile data={x} place={i + 49} key={uuid()} />;
+              return <ArtistTile data={x} place={i + 50} key={uuid()} />;
             }
           })}
         </div>

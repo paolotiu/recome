@@ -27,6 +27,11 @@ const StyledTrackTile = styled(ResultTile)`
     display: flex;
     flex-direction: column;
     width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
     h3 {
       font-size: 1.3em;
     }
