@@ -31,6 +31,7 @@ const Wrapper = styled(CenterGrid)`
     border: none;
     color: ${(props) => props.theme.darkBg};
     font-weight: bold;
+    font-size: 1.2em;
   }
   .fave-switch-container {
     display: grid;
