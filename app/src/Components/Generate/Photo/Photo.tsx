@@ -158,7 +158,7 @@ export const Photo: React.FC<Props> = ({
           </ol>
         </>
       )}
-      <span className="watermark">recome.net</span>
+      <span className="watermark">recome.site</span>
     </StyledPhoto>
   );
 };
