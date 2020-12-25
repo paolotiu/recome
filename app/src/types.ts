@@ -91,7 +91,7 @@ export interface ResultTrack {
     artists: ResultArtist[];
     images: ResultImage[];
   };
-  artist: Array<{
+  artists: Array<{
     external_urls: {
       spotify: string;
     };
