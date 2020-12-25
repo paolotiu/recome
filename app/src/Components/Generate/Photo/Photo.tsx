@@ -36,7 +36,7 @@ const StyledPhoto = styled.div`
       h3 {
         width: fit-content;
         overflow-wrap: break-word;
-        font-size: clamp(10px, 2vw, 20px);
+        font-size: clamp(14px, 2vw, 20px);
         color: ${(props) => props.theme.light};
       }
       p {
