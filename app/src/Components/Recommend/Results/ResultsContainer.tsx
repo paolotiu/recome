@@ -97,6 +97,7 @@ const Results: React.FC<Props> = React.memo(({ results }) => {
       onError: () => {
         history.push("/");
       },
+      staleTime: 50000,
     }
   );
 

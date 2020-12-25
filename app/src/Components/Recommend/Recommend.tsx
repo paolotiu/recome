@@ -113,7 +113,7 @@ export const Recommend: React.FC<Props> = () => {
       localStorage.removeItem("token");
       history.push("/login");
     },
-    refetchOnMount: "always",
+    staleTime: 50000,
   });
 
   const tracksQuery = useQuery("tracks", () => getTopTracks(token!), {
@@ -130,8 +130,7 @@ export const Recommend: React.FC<Props> = () => {
       localStorage.removeItem("token");
       history.push("/login");
     },
-
-    refetchOnMount: "always",
+    staleTime: 50000,
   });
 
   const resultsQuery = useQuery<RecoResults[]>(

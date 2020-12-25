@@ -21,7 +21,7 @@ const CustomModalStyles = {
     borderRadius: "24px",
     marginRight: "-50%",
     transform: "translate(-50%, -40%)",
-    backgroundColor: "#302f2f",
+    backgroundColor: "#222",
     border: "none",
     textTransform: "capitalize",
     overflow: "visible",

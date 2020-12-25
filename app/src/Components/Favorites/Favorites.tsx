@@ -139,7 +139,7 @@ export const Favorites = (props: Props) => {
     <Wrapper>
       <select
         className="time-range"
-        defaultValue="medium_term"
+        value={timeRange}
         onChange={(e) => {
           const val = e.target.value as
             | "medium_term"

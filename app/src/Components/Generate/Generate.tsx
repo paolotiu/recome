@@ -115,7 +115,7 @@ export const Generate = (props: Props) => {
 
           if (node) {
             const options = {
-              quality: 0.99,
+              quality: 1,
               width: node.clientWidth * 2,
               height: node.clientHeight * 2,
               style: {
@@ -123,19 +123,9 @@ export const Generate = (props: Props) => {
                 transformOrigin: "top left",
               },
             };
-            domtoimage
-              .toBlob(node, {
-                quality: 0.99,
-                width: node.clientWidth * 2,
-                height: node.clientHeight * 2,
-                style: {
-                  transform: "scale(" + scale + ")",
-                  transformOrigin: "top left",
-                },
-              })
-              .then((blob) => {
-                saveAs(blob, "recome");
-              });
+            domtoimage.toBlob(node, options).then((blob) => {
+              saveAs(blob, "recome");
+            });
           }
         }}
       >

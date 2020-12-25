@@ -51,6 +51,7 @@ function App() {
       enabled: !!token,
 
       refetchOnMount: "always",
+      staleTime: Infinity,
     }
   );
 
