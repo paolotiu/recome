@@ -11,6 +11,9 @@ import { useUpdateUser } from "./UserContext";
 import { useQuery } from "react-query";
 import { getUser } from "./functions/api";
 import { Toaster } from "react-hot-toast";
+import ReactGA from "react-ga";
+ReactGA.initialize(process.env.REACT_APP_GA_TAG as string);
+
 const Home = lazy(() => import("./Components/Lazy/Home"));
 const Recommend = lazy(() => import("./Components/Lazy/Recommend"));
 const Favorites = lazy(() => import("./Components/Lazy/Favorites"));
@@ -85,27 +88,27 @@ function App() {
               <Route path="/login" exact>
                 <Login />
               </Route>
-              <Route path="/recommend">
+              <Route path="/recommend" exact>
                 <Protected
                   isLoading={isLoading}
                   component={() => <Recommend />}
                   isAuth={data ? true : false}
                 />
               </Route>
-              <Route path="/home">
+              <Route path="/home" exact>
                 <Protected
                   isLoading={isLoading}
                   component={() => <Home />}
                   isAuth={data ? true : false}
                 />
               </Route>
-              <Route path="/favorites">
+              <Route path="/favorites" exact>
                 <Favorites />
               </Route>
-              <Route path="/generate">
+              <Route path="/generate" exact>
                 <Generate />
               </Route>
-              <Route path="/landing">
+              <Route path="/landing" exact>
                 <Landing setToken={setToken} />
               </Route>
 

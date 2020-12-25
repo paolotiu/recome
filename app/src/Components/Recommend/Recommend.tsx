@@ -27,6 +27,8 @@ import Results from "./Results/ResultsContainer";
 import { useHistory } from "react-router";
 import { toast } from "react-hot-toast";
 import { Fade } from "react-awesome-reveal";
+import ReactGA from "react-ga";
+ReactGA.pageview("/recommend");
 const Wrapper = styled(CenterGrid)`
   display: flex;
   align-items: center;

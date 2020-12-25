@@ -2,7 +2,8 @@ import React from "react";
 import { Button } from "../General/index";
 import { ReactComponent as Bird } from "../../static/bird.svg";
 import styled from "styled-components";
-
+import ReactGA from "react-ga";
+ReactGA.pageview("/login");
 const link = process.env.REACT_APP_LOGIN_URL || "http://localhost:8888/login";
 
 const StyledLogin = styled.div`

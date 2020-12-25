@@ -7,6 +7,8 @@ import styled from "styled-components";
 import { ResultArtist, ResultTrack } from "../../types";
 import { Photo } from "./Photo/Photo";
 import { saveAs } from "file-saver";
+import ReactGA from "react-ga";
+ReactGA.pageview("/generate");
 interface Props {}
 
 const SwitchBtn = styled.button<{ isActive: boolean }>`

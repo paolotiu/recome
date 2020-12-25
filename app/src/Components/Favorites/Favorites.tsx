@@ -7,7 +7,8 @@ import { CenterGrid } from "../General";
 import { v4 as uuid } from "uuid";
 import { TrackTile } from "./Tiles/TrackTile";
 import { ArtistTile } from "./Tiles/ArtistTile";
-
+import ReactGA from "react-ga";
+ReactGA.pageview("/favorites");
 const SwitchBtn = styled.button<{ isActive: boolean }>`
   border: none;
   font-size: 1.6em;

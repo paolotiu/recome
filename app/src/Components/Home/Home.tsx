@@ -8,10 +8,15 @@ import { ReactComponent as Heart } from "../../static/heart.svg";
 import { ReactComponent as Gears } from "../../static/gears.svg";
 import { v4 as uuid } from "uuid";
 import { getTopArtists, getTopTracks } from "../../functions/api";
-import { ResultArtist, ResultTrack } from "../../types";
-import { useQuery } from "react-query";
+import { useQueryClient } from "react-query";
+import ReactGA from "react-ga";
+ReactGA.pageview("/home");
 interface Props {}
-
+const time_ranges: ["short_term", "medium_term", "long_term"] = [
+  "short_term",
+  "medium_term",
+  "long_term",
+];
 const Wrapper = styled(CenterGrid)`
   .hometiles-container {
     display: grid;
@@ -67,38 +72,45 @@ const Wrapper = styled(CenterGrid)`
 
 export const Home: React.FC<Props> = () => {
   const token = localStorage.getItem("token")!;
+  const queryClient = useQueryClient();
 
-  const tracksQueryFirst = useQuery<{ items: ResultTrack[] }>(
-    ["tracks", "medium_term"],
-    () => getTopTracks(token, 50, 0, "medium_term"),
-    {
-      staleTime: Infinity,
-    }
-  );
-  const tracksQuerySecond = useQuery<{ items: ResultTrack[] }>(
-    ["tracks", 49, "medium_term"],
-    () => getTopTracks(token, 50, 49),
-    {
-      staleTime: Infinity,
-    }
-  );
-  useQuery<{ items: ResultArtist[] }>(
-    ["artists", "medium_term"],
-    () => getTopArtists(token, 50, 0, "medium_term"),
-    {
-      staleTime: Infinity,
-    }
-  );
-  useQuery<{ items: ResultArtist[] }>(
-    ["artists", 49, "medium_term"],
-    () => getTopArtists(token, 50, 49),
-    {
-      staleTime: Infinity,
-    }
-  );
-  if (tracksQueryFirst.isLoading || tracksQuerySecond.isLoading) {
-    return <> </>;
-  }
+  const prefetchTop = async () => {
+    time_ranges.forEach((range) => {
+      queryClient.prefetchQuery(
+        ["tracks", range],
+        () => getTopTracks(token, 50, 0, range),
+        {
+          staleTime: Infinity,
+        }
+      );
+
+      queryClient.prefetchQuery(
+        ["tracks", 49, range],
+        () => getTopTracks(token, 50, 49, range),
+        {
+          staleTime: Infinity,
+        }
+      );
+
+      queryClient.prefetchQuery(
+        ["artists", range],
+        () => getTopArtists(token, 50, 0, range),
+        {
+          staleTime: Infinity,
+        }
+      );
+
+      queryClient.prefetchQuery(
+        ["artists", 49, range],
+        () => getTopArtists(token, 50, 49),
+        {
+          staleTime: Infinity,
+        }
+      );
+    });
+  };
+  prefetchTop();
+
   if (!token) {
     return <Redirect to="/login" />;
   }
