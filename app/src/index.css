@@ -23,7 +23,7 @@ a{
   color: inherit;
   text-decoration: none;
 }
-input, button{
+input, button, select, option{
   font-family: 'Poppins';
 }
 

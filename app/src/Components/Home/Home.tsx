@@ -69,28 +69,28 @@ export const Home: React.FC<Props> = () => {
   const token = localStorage.getItem("token")!;
 
   const tracksQueryFirst = useQuery<{ items: ResultTrack[] }>(
-    "tracks1st",
-    () => getTopTracks(token, 50),
+    ["tracks", "medium_term"],
+    () => getTopTracks(token, 50, 0, "medium_term"),
     {
       staleTime: Infinity,
     }
   );
   const tracksQuerySecond = useQuery<{ items: ResultTrack[] }>(
-    "tracks2nd",
+    ["tracks", 49, "medium_term"],
     () => getTopTracks(token, 50, 49),
     {
       staleTime: Infinity,
     }
   );
   useQuery<{ items: ResultArtist[] }>(
-    "artists1st",
-    () => getTopArtists(token, 50),
+    ["artists", "medium_term"],
+    () => getTopArtists(token, 50, 0, "medium_term"),
     {
       staleTime: Infinity,
     }
   );
   useQuery<{ items: ResultArtist[] }>(
-    "artists2nd",
+    ["artists", 49, "medium_term"],
     () => getTopArtists(token, 50, 49),
     {
       staleTime: Infinity,

@@ -24,15 +24,27 @@ const Wrapper = styled(CenterGrid)`
   justify-items: center;
   align-items: center;
   gap: 2em;
-
+  select {
+    padding: 0;
+    height: fit-content;
+    background-color: transparent;
+    border: none;
+    color: ${(props) => props.theme.darkBg};
+    font-weight: bold;
+  }
   .fave-switch-container {
     display: grid;
     grid-template-columns: 1fr 1fr;
+    align-items: center;
     width: 80vw;
-
     gap: 1em;
   }
   header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+
     h1 {
       max-width: 700px;
     }
@@ -68,30 +80,33 @@ export const Favorites = (props: Props) => {
   const token = localStorage.getItem("token")!;
   const [isTracks, setIsTracks] = useState(true);
 
+  const [timeRange, setTimeRange] = useState<
+    "medium_term" | "short_term" | "long_term"
+  >("medium_term");
   const tracksQueryFirst = useQuery<{ items: ResultTrack[] }>(
-    "tracks1st",
-    () => getTopTracks(token, 50),
+    ["tracks", timeRange],
+    () => getTopTracks(token, 50, 0, timeRange),
     {
       staleTime: Infinity,
     }
   );
   const tracksQuerySecond = useQuery<{ items: ResultTrack[] }>(
-    "tracks2nd",
-    () => getTopTracks(token, 50, 49),
+    ["tracks", 49, timeRange],
+    () => getTopTracks(token, 50, 49, timeRange),
     {
       staleTime: Infinity,
     }
   );
   const artistsQueryFirst = useQuery<{ items: ResultArtist[] }>(
-    "artists1st",
-    () => getTopArtists(token, 50),
+    ["artists", timeRange],
+    () => getTopArtists(token, 50, 0, timeRange),
     {
       staleTime: Infinity,
     }
   );
   const artistsQuerySecond = useQuery<{ items: ResultArtist[] }>(
-    "artists2nd",
-    () => getTopArtists(token, 50, 49),
+    ["artists", 49, timeRange],
+    () => getTopArtists(token, 50, 49, timeRange),
     {
       staleTime: Infinity,
     }
@@ -121,6 +136,25 @@ export const Favorites = (props: Props) => {
 
   return (
     <Wrapper>
+      <select
+        className="time-range"
+        defaultValue="medium_term"
+        onChange={(e) => {
+          const val = e.target.value as
+            | "medium_term"
+            | "short_term"
+            | "long_term";
+          setTimeRange(val);
+        }}
+      >
+        <option value="short_term">4 weeks</option>
+        <option value="medium_term">6 months</option>
+        <option value="long_term">All time</option>
+      </select>
+
+      <header>
+        <h1>Top {isTracks ? "Tracks" : "Artists"}</h1>
+      </header>
       <div className="fave-switch-container">
         <SwitchBtn
           className="fave-switch"
@@ -129,6 +163,7 @@ export const Favorites = (props: Props) => {
         >
           Tracks
         </SwitchBtn>
+
         <SwitchBtn
           isActive={!isTracks}
           className="fave-switch"
@@ -139,10 +174,6 @@ export const Favorites = (props: Props) => {
           Artists
         </SwitchBtn>
       </div>
-      <header>
-        <h1>Top {isTracks ? "Tracks" : "Artists"}</h1>
-      </header>
-
       {isTracks ? (
         <div className="top-tracks-container">
           <TrackTile>
@@ -182,6 +213,10 @@ export const Favorites = (props: Props) => {
       )}
     </Wrapper>
   );
+
+  // function reFetch(params:type) {
+
+  // }
 };
 
 function getAveragePopularity(arr: Array<ResultArtist | ResultTrack>) {
