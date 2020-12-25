@@ -11,7 +11,7 @@ interface Props {}
 
 const SwitchBtn = styled.button<{ isActive: boolean }>`
   border: none;
-  font-size: clamp(20px, 2vw, 50px);
+  font-size: clamp(20px, 2vw, 30px);
   font-weight: 700;
   white-space: nowrap;
   color: ${(props) =>
