@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import styled from "styled-components";
 import { ResultArtist, ResultTrack } from "../../../types";
 import { v4 as uuid } from "uuid";
