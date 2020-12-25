@@ -23,6 +23,7 @@ export const StyledOptionTile = styled(Tile)<StyledProps>`
   h3 {
     font-size: 1em;
     white-space: nowrap;
+    color: ${(props) => props.theme.light};
     overflow: hidden;
     text-overflow: ellipsis;
     text-transform: capitalize;
