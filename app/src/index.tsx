@@ -7,7 +7,15 @@ import { UserProvider } from "./UserContext";
 import { QueryClientProvider, QueryClient } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
 const queryClient = new QueryClient({
-  defaultOptions: { queries: { retry: 0 } },
+  defaultOptions: {
+    queries: {
+      retry: 0,
+      onError: () => {
+        localStorage.removeItem("token");
+        window.location.assign(window.location.hostname);
+      },
+    },
+  },
 });
 
 ReactDOM.render(
