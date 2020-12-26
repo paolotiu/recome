@@ -106,6 +106,29 @@ export const getTrackFeatures = async (token: string, ids: string[]) => {
   return res.data;
 };
 
+export const getAllSavedTracks = async (token: string) => {
+  const initial = await axios.get(url + "/me/tracks?limit=50", {
+    headers: {
+      Authorization: "Bearer " + token,
+      "Content-Type": "application/json",
+    },
+  });
+
+  let next = initial.data.next;
+  const data = [];
+  while (next) {
+    const res = await axios.get(next, {
+      headers: {
+        Authorization: "Bearer " + token,
+        "Content-Type": "application/json",
+      },
+    });
+    data.push(...res.data.items);
+    next = res.data.next;
+  }
+
+  return data;
+};
 // Create Playlist then add songs
 export const createPlaylist = async (
   token: string,
