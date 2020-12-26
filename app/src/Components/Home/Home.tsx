@@ -6,6 +6,7 @@ import { CenterGrid } from "../index";
 import { HomeTile } from "./HomeTile/HomeTile";
 import { ReactComponent as Heart } from "../../static/heart.svg";
 import { ReactComponent as Gears } from "../../static/gears.svg";
+import { ReactComponent as Chart } from "../../static/chart.svg";
 import { v4 as uuid } from "uuid";
 import {
   // getAllSavedTracks,
@@ -146,7 +147,15 @@ export const Home: React.FC = () => {
           icon={() => <Gears id="gears" />}
           path="/generate"
           key={uuid()}
-          id={"hometile-" + 2}
+          id={"hometile-" + 3}
+        />
+        <HomeTile
+          header="Analyze"
+          desc="Look at charts and graphs made from your saved songs."
+          icon={() => <Chart id="chart" />}
+          path="/analyze"
+          key={uuid()}
+          id={"hometile-" + 4}
         />
       </div>
     </Wrapper>

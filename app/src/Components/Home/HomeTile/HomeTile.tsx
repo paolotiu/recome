@@ -33,6 +33,9 @@ const StyledHomeTile = styled(Tile)`
   #gears {
     stroke-width: 10px;
   }
+  #chart {
+    stroke-width: 12px;
+  }
 
   h2 {
     margin-top: 1.4em;

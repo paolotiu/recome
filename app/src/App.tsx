@@ -16,6 +16,7 @@ const Home = lazy(() => import("./Components/Lazy/Home"));
 const Recommend = lazy(() => import("./Components/Lazy/Recommend"));
 const Favorites = lazy(() => import("./Components/Lazy/Favorites"));
 const Generate = lazy(() => import("./Components/Lazy/Generate"));
+const Analyze = lazy(() => import("./Components/Lazy/Analyze"));
 
 const Protected: React.FC<PropsProtected> = ({
   component: Component,
@@ -107,6 +108,7 @@ function App() {
               <Route path="/generate" exact>
                 <Generate />
               </Route>
+              <Route path="/analyze" component={Analyze} exact />
 
               <Route path="/landing" exact>
                 <Landing setToken={setToken} />
