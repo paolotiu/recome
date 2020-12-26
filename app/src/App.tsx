@@ -16,7 +16,6 @@ const Home = lazy(() => import("./Components/Lazy/Home"));
 const Recommend = lazy(() => import("./Components/Lazy/Recommend"));
 const Favorites = lazy(() => import("./Components/Lazy/Favorites"));
 const Generate = lazy(() => import("./Components/Lazy/Generate"));
-const Analyze = lazy(() => import("./Components/Lazy/Analyze"));
 
 const Protected: React.FC<PropsProtected> = ({
   component: Component,
