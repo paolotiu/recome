@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useState, useEffect } from "react";
 
 import { CenterGrid, Modal } from "../index";
 import { OptionTile } from "./OptionTile/OptionTile";
@@ -28,7 +28,7 @@ import { useHistory } from "react-router";
 import { toast } from "react-hot-toast";
 import { Fade } from "react-awesome-reveal";
 import ReactGA from "react-ga";
-ReactGA.pageview("/recommend");
+
 const Wrapper = styled(CenterGrid)`
   display: flex;
   align-items: center;
@@ -83,6 +83,9 @@ const Wrapper = styled(CenterGrid)`
 interface Props {}
 
 export const Recommend: React.FC<Props> = () => {
+  useEffect(() => {
+    ReactGA.pageview("/recommend");
+  }, []);
   const token = localStorage.getItem("token");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [seedOptions, setSeedOptions] = useState<SeedOptions>(

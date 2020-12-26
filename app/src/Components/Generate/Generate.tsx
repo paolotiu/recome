@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import domtoimage from "dom-to-image";
 import { useQuery } from "react-query";
 import { getTopArtists, getTopTracks } from "../../functions/api";
@@ -8,8 +8,6 @@ import { ResultArtist, ResultTrack } from "../../types";
 import { Photo } from "./Photo/Photo";
 import { saveAs } from "file-saver";
 import ReactGA from "react-ga";
-ReactGA.pageview("/generate");
-interface Props {}
 
 const SwitchBtn = styled.button<{ isActive: boolean }>`
   border: none;
@@ -42,8 +40,11 @@ const Wrapper = styled(CenterGrid)`
     }
   }
 `;
-export const Generate = (props: Props) => {
+export const Generate = () => {
   const token = localStorage.getItem("token")!;
+  useEffect(() => {
+    ReactGA.pageview("/generate");
+  }, []);
   const [isTracks, setIsTracks] = useState(true);
   const [timeRange, setTimeRange] = useState<
     "medium_term" | "short_term" | "long_term"

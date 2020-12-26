@@ -6,6 +6,8 @@ import reportWebVitals from "./reportWebVitals";
 import { UserProvider } from "./UserContext";
 import { QueryClientProvider, QueryClient } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
+import ReactGA from "react-ga";
+ReactGA.initialize(process.env.REACT_APP_GA_TAG as string);
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {

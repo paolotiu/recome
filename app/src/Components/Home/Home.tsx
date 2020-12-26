@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Redirect } from "react-router";
 import styled from "styled-components";
 import { ReactComponent as Glass } from "../../static/glass.svg";
@@ -7,11 +7,13 @@ import { HomeTile } from "./HomeTile/HomeTile";
 import { ReactComponent as Heart } from "../../static/heart.svg";
 import { ReactComponent as Gears } from "../../static/gears.svg";
 import { v4 as uuid } from "uuid";
-import { getTopArtists, getTopTracks } from "../../functions/api";
+import {
+  getAllSavedTracks,
+  getTopArtists,
+  getTopTracks,
+} from "../../functions/api";
 import { useQueryClient } from "react-query";
 import ReactGA from "react-ga";
-ReactGA.pageview("/home");
-interface Props {}
 const time_ranges: ["short_term", "medium_term", "long_term"] = [
   "short_term",
   "medium_term",
@@ -70,11 +72,16 @@ const Wrapper = styled(CenterGrid)`
   }
 `;
 
-export const Home: React.FC<Props> = () => {
+export const Home: React.FC = () => {
   const token = localStorage.getItem("token")!;
   const queryClient = useQueryClient();
-
+  useEffect(() => {
+    ReactGA.pageview("/home");
+  }, []);
   const prefetchTop = async () => {
+    queryClient.prefetchQuery("allTracks", () => getAllSavedTracks(token), {
+      staleTime: Infinity,
+    });
     time_ranges.forEach((range) => {
       queryClient.prefetchQuery(
         ["tracks", range],

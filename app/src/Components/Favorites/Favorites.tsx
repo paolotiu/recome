@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import { useQuery } from "react-query";
 import styled from "styled-components";
 import { getTopArtists, getTopTracks } from "../../functions/api";
@@ -8,7 +8,6 @@ import { v4 as uuid } from "uuid";
 import { TrackTile } from "./Tiles/TrackTile";
 import { ArtistTile } from "./Tiles/ArtistTile";
 import ReactGA from "react-ga";
-ReactGA.pageview("/favorites");
 const SwitchBtn = styled.button<{ isActive: boolean }>`
   border: none;
   font-size: 1.6em;
@@ -81,7 +80,9 @@ interface Props {}
 export const Favorites = (props: Props) => {
   const token = localStorage.getItem("token")!;
   const [isTracks, setIsTracks] = useState(true);
-
+  useEffect(() => {
+    ReactGA.pageview("/favorites");
+  }, []);
   const [timeRange, setTimeRange] = useState<
     "medium_term" | "short_term" | "long_term"
   >("medium_term");
