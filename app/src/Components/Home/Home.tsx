@@ -8,7 +8,7 @@ import { ReactComponent as Heart } from "../../static/heart.svg";
 import { ReactComponent as Gears } from "../../static/gears.svg";
 import { v4 as uuid } from "uuid";
 import {
-  getAllSavedTracks,
+  // getAllSavedTracks,
   getTopArtists,
   getTopTracks,
 } from "../../functions/api";
@@ -79,9 +79,9 @@ export const Home: React.FC = () => {
     ReactGA.pageview("/home");
   }, []);
   const prefetchTop = async () => {
-    queryClient.prefetchQuery("allTracks", () => getAllSavedTracks(token), {
-      staleTime: Infinity,
-    });
+    // queryClient.prefetchQuery("allTracks", () => getAllSavedTracks(token), {
+    //   staleTime: Infinity,
+    // });
     time_ranges.forEach((range) => {
       queryClient.prefetchQuery(
         ["tracks", range],
