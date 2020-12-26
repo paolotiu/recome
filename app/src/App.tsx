@@ -107,7 +107,6 @@ function App() {
               <Route path="/generate" exact>
                 <Generate />
               </Route>
-              <Route path="/generate" component={Analyze} exact />
 
               <Route path="/landing" exact>
                 <Landing setToken={setToken} />
