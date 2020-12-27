@@ -110,7 +110,7 @@ export const Home: React.FC = () => {
 
       queryClient.prefetchQuery(
         ["artists", 49, range],
-        () => getTopArtists(token, 50, 49),
+        () => getTopArtists(token, 50, 49, range),
         {
           staleTime: Infinity,
         }
