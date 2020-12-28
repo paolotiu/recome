@@ -26,3 +26,4 @@ yarn-error.log*
 server/.gitignore
 .eslintcache
 Procfile
+testing

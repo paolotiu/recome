@@ -135,3 +135,8 @@ export interface CreatePlaylistResult {
     spotify: string;
   };
 }
+
+export interface Artist {
+  id: string;
+  genre: string[];
+}

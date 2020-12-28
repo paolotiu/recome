@@ -116,6 +116,7 @@ export const getAllSavedTracks = async (token: string) => {
 
   let next = initial.data.next;
   const data = [];
+  let count = 0;
   while (next) {
     const res = await axios.get(next, {
       headers: {
@@ -123,12 +124,45 @@ export const getAllSavedTracks = async (token: string) => {
         "Content-Type": "application/json",
       },
     });
-    data.push(...res.data.items);
+    count++;
+    const temp = res.data.items.map((item: any) => {
+      return {
+        id: item.track.id,
+        name: item.track.name,
+        popularity: item.track.popularity,
+        artistID: item.track.artists[0].id,
+      };
+    });
+    data.push(...temp);
     next = res.data.next;
   }
 
   return data;
 };
+
+//get an artist
+export const getGenresofArtists = async (
+  token: string,
+  artistArray: string[]
+) => {
+  const iterationNum = Math.ceil(artistArray.length / 50);
+  const genres: string[] = [];
+  for (let i = 1; i < iterationNum + 1; i++) {
+    const start = (i - 1) * 50;
+    const end = i * 50;
+    const temp = artistArray.slice(start, end);
+    const res = await axios.get(url + "/artists?ids=" + temp.join(","), {
+      headers: {
+        Authorization: "Bearer " + token,
+        "Content-Type": "application/json",
+      },
+    });
+    res.data.artists.forEach((x: any) => genres.push(...x.genres));
+  }
+
+  return genres;
+};
+
 // Create Playlist then add songs
 export const createPlaylist = async (
   token: string,
@@ -219,7 +253,6 @@ function cleanOptions(options: Options) {
             const oldr = 100;
             const newr = 0 - -60;
             const newval = ((x - 0) * newr) / oldr - 60;
-            console.log(newval);
             return Math.floor(newval);
           };
           cleanedOptions[min] = convert(currentOption.min);
