@@ -116,7 +116,7 @@ export const getAllSavedTracks = async (token: string) => {
 
   let next = initial.data.next;
   const data = [];
-  let count = 0;
+
   while (next) {
     const res = await axios.get(next, {
       headers: {
@@ -124,7 +124,6 @@ export const getAllSavedTracks = async (token: string) => {
         "Content-Type": "application/json",
       },
     });
-    count++;
     const temp = res.data.items.map((item: any) => {
       return {
         id: item.track.id,
