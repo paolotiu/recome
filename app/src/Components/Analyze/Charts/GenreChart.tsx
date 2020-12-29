@@ -53,7 +53,7 @@ export const GenreChart: React.FC<Props> = ({ artistIDs, className }) => {
       renderChart(top5);
       let windowWidth = window.innerWidth;
       const render = () => {
-        if (window.innerWidth != windowWidth) {
+        if (window.innerWidth !== windowWidth) {
           windowWidth = window.innerWidth;
           renderChart(top5);
         }
