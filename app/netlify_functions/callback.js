@@ -1,20 +1,47 @@
+const axios = require("axios");
 const querystring = require("querystring");
-
 exports.handler = async function (event, context) {
+  const code = event.queryStringParameters.code;
+
+  /* state helps mitigate CSRF attacks & Restore the previous state of your app */
+  const state = event.queryStringParameters.state;
   const redirect_uri =
-    process.env.REDIRECT_URI || "http://localhost:8888/callback";
-  return {
-    statusCode: 302,
+    process.env.REDIRECT_URI ||
+    "http://" + event.headers.host + "/.netlify/functions/callback";
+  const appUrl = process.env.APP_URL || "http://localhost:8888/landing";
+  const authOptions = {
+    method: "post",
+    url: "https://accounts.spotify.com/api/token",
+    data: querystring.stringify({
+      code: code,
+      redirect_uri,
+      grant_type: "authorization_code",
+    }),
     headers: {
-      Location:
-        "https://accounts.spotify.com/authorize?" +
-        querystring.stringify({
-          response_type: "code",
-          client_id: 1234,
-          scope:
-            "user-library-modify user-read-private user-read-email user-library-read user-top-read playlist-modify-public playlist-modify-private",
-          redirect_uri,
-        }),
+      Authorization:
+        "Basic " +
+        Buffer.from(
+          process.env.SPOTIFY_CLIENT_ID +
+            ":" +
+            process.env.SPOTIFY_CLIENT_SECRET
+        ).toString("base64"),
+      "Content-Type": "application/x-www-form-urlencoded;charset=utf-8",
     },
   };
+
+  const res = await axios(authOptions);
+  if (!res.data) {
+    return {
+      statusCode: 400,
+      body: "Error",
+    };
+  } else {
+    return {
+      statusCode: 302,
+      headers: {
+        Location:
+          appUrl + "/?authorized=true&access_token=" + res.data.access_token,
+      },
+    };
+  }
 };

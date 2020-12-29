@@ -5,8 +5,8 @@
   "dependencies": {
     "@reduxjs/toolkit": "^1.5.0",
     "@types/d3": "^6.2.0",
-    "@types/lodash.countby": "^4.6.6",
     "axios": "^0.21.0",
+    "babel-loader": "8.1.0",
     "d3": "^6.3.1",
     "dom-to-image": "^2.6.0",
     "file-saver": "^2.0.5",
@@ -15,6 +15,7 @@
     "lodash.uniq": "^4.5.0",
     "polished": "^4.0.5",
     "query-string": "^6.13.7",
+    "querystring": "^0.2.0",
     "rc-slider": "^9.7.1",
     "react": "^17.0.1",
     "react-awesome-reveal": "3.4.0",
@@ -30,6 +31,8 @@
     "react-spinners": "^0.9.0",
     "react-tooltip": "^4.2.11",
     "redux": "^4.0.5",
+    "request": "^2.88.2",
+    "simple-oauth2": "^4.2.0",
     "smoothscroll-polyfill": "^0.4.4",
     "source-map-explorer": "^2.5.1",
     "styled-components": "^5.2.1",
@@ -40,7 +43,9 @@
   "scripts": {
     "analyze": "source-map-explorer 'build/static/js/*.js'",
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "run-p build:**",
+    "build:app": "react-scripts build",
+    "build:lambda": "netlify-lambda build netlify_functions",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
@@ -69,6 +74,7 @@
     "@types/dom-to-image": "^2.6.2",
     "@types/file-saver": "^2.0.1",
     "@types/jest": "^26.0.15",
+    "@types/lodash.countby": "^4.6.6",
     "@types/lodash.topairsin": "^4.3.6",
     "@types/lodash.uniq": "^4.5.6",
     "@types/node": "^12.0.0",
@@ -81,6 +87,8 @@
     "@types/smoothscroll-polyfill": "^0.3.1",
     "@types/styled-components": "^5.1.5",
     "@types/uuid": "^8.3.0",
+    "netlify-lambda": "^2.0.2",
+    "npm-run-all": "^4.1.5",
     "typescript-plugin-styled-components": "^1.4.4"
   }
 }
