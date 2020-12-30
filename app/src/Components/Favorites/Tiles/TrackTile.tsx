@@ -54,7 +54,6 @@ export const TrackTile: React.FC<Props> = ({
   children,
   className,
 }) => {
-  console.log("rebder");
   return (
     <>
       {data && place ? (
