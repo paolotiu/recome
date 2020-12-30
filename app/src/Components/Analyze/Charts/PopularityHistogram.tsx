@@ -138,62 +138,73 @@ function renderChart(data: number[], container: HTMLDivElement) {
     .attr("height", function (d) {
       return height - yScale(d.length);
     })
-    .on("touchstart mouseenter", function (e, d) {
-      if (e.cancelable) {
-        e.preventDefault();
-      }
-      if (e.type === "touchstart") {
-        const touch = e.changedTouches[0];
-        const elem = document.elementFromPoint(touch.clientX, touch.clientY);
-        document.querySelectorAll(".pop .bar").forEach((x) => {
-          if (x !== elem) {
+    .on(
+      "touchstart mouseenter",
+      function (e, d) {
+        if (e.cancelable) {
+          e.preventDefault();
+        }
+        if (e.type === "touchstart") {
+          const touch = e.changedTouches[0];
+          const elem = document.elementFromPoint(touch.clientX, touch.clientY);
+          document.querySelectorAll(".pop .bar").forEach((x) => {
+            if (x !== elem) {
+              x.classList.remove("on");
+            }
+          });
+          if (elem?.tagName === "rect") {
+            elem.classList.add("on");
+          }
+          showTooltip(e, d);
+        } else {
+          showTooltip(e, d);
+          this.classList.add("on");
+        }
+      },
+      { passive: true }
+    )
+    .on(
+      "touchmove mousemove",
+      function (e, d) {
+        if (e.cancelable) {
+          e.preventDefault();
+        }
+        if (e.type === "touchmove") {
+          const touch = e.changedTouches[0];
+          const elem = document.elementFromPoint(touch.clientX, touch.clientY);
+          if (elem) {
+            const data = d3.select(elem).data()[0] as d3.Bin<number, number>;
+            if (data && Array.isArray(data)) {
+              showRange(e, data);
+            }
+          }
+          document.querySelectorAll(".pop .bar").forEach((x) => {
+            if (x !== elem) {
+              x.classList.remove("on");
+            }
+          });
+          if (elem?.tagName === "rect") {
+            elem.classList.add("on");
+          }
+        } else {
+          showRange(e, d);
+        }
+      },
+      { passive: true }
+    )
+    .on(
+      "touchend mouseout",
+      function (e, d) {
+        if (e.type === "touchend") {
+          document.querySelectorAll(".pop .bar").forEach((x) => {
             x.classList.remove("on");
-          }
-        });
-        if (elem?.tagName === "rect") {
-          elem.classList.add("on");
+          });
         }
-        showTooltip(e, d);
-      } else {
-        showTooltip(e, d);
-        this.classList.add("on");
-      }
-    })
-    .on("touchmove mousemove", function (e, d) {
-      if (e.cancelable) {
-        e.preventDefault();
-      }
-      if (e.type === "touchmove") {
-        const touch = e.changedTouches[0];
-        const elem = document.elementFromPoint(touch.clientX, touch.clientY);
-        if (elem) {
-          const data = d3.select(elem).data()[0] as d3.Bin<number, number>;
-          if (data && Array.isArray(data)) {
-            showRange(e, data);
-          }
-        }
-        document.querySelectorAll(".pop .bar").forEach((x) => {
-          if (x !== elem) {
-            x.classList.remove("on");
-          }
-        });
-        if (elem?.tagName === "rect") {
-          elem.classList.add("on");
-        }
-      } else {
-        showRange(e, d);
-      }
-    })
-    .on("touchend mouseout", function (e, d) {
-      e.preventDefault();
-      if (e.type === "touchend") {
-        document.querySelectorAll(".pop .bar").forEach((x) => {
-          x.classList.remove("on");
-        });
-      }
-      this.classList.remove("on");
-      hideTooltip();
-    });
+        this.classList.remove("on");
+        hideTooltip();
+      },
+      { passive: true }
+    );
 
   // .on("touchmove", function (e: MouseEvent, d) {
   //   e.preventDefault();
