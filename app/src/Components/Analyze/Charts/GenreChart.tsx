@@ -1,6 +1,6 @@
 import * as d3 from "d3";
 import countBy from "lodash.countby";
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { useQuery } from "react-query";
 import styled from "styled-components";
 import { getGenresofArtists } from "../../../functions/api";
@@ -31,9 +31,16 @@ const StyledChart = styled.div`
 interface Props {
   artistIDs: string[];
   className?: string;
+  uid?: string;
+  id?: string;
 }
 
-export const GenreChart: React.FC<Props> = ({ artistIDs, className }) => {
+export const GenreChart: React.FC<Props> = ({
+  artistIDs,
+  className,
+  uid,
+  id,
+}) => {
   const token = localStorage.getItem("token")!;
   const { data: genres, isLoading } = useQuery(
     "artistsGenres",
@@ -44,18 +51,20 @@ export const GenreChart: React.FC<Props> = ({ artistIDs, className }) => {
     }
   );
 
+  const containerRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
-    if (genres) {
+    if (genres && containerRef.current) {
       const counted = countBy<string[]>(genres);
       const genreArray = toObjArray(counted);
       const top5 = getTopFive(genreArray);
       console.log("rendering");
-      renderChart(top5);
+      renderChart(top5, containerRef.current);
       let windowWidth = window.innerWidth;
       const render = () => {
-        if (window.innerWidth !== windowWidth) {
+        if (window.innerWidth !== windowWidth && containerRef.current) {
           windowWidth = window.innerWidth;
-          renderChart(top5);
+          renderChart(top5, containerRef.current);
         }
       };
       window.addEventListener("resize", render);
@@ -68,10 +77,19 @@ export const GenreChart: React.FC<Props> = ({ artistIDs, className }) => {
     return <div style={{ height: "500px", width: "80vw" }}></div>;
   }
 
-  return <StyledChart id="genreChart" className={className}></StyledChart>;
+  return (
+    <StyledChart
+      id={uid ? (id ? uid + id : uid) : id}
+      className={className}
+      ref={containerRef}
+    ></StyledChart>
+  );
 };
 
-function renderChart(data: { key: string; value: number }[]) {
+function renderChart(
+  data: { key: string; value: number }[],
+  container: HTMLDivElement
+) {
   const margin = { top: 10, bottom: 40, left: 80, right: 60 };
 
   // For responsiveness
@@ -88,9 +106,9 @@ function renderChart(data: { key: string; value: number }[]) {
 
   const animTime = 2000;
   const ease = d3.easeSinIn;
-  d3.select("#genreChart").selectAll("svg").remove();
+  d3.select(container).selectAll("svg").remove();
   const svg = d3
-    .select("#genreChart")
+    .select(container)
     .append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)

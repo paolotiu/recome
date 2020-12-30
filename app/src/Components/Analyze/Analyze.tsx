@@ -8,13 +8,15 @@ import { GenreChart } from "./Charts/GenreChart";
 import uniq from "lodash.uniq";
 import { transparentize } from "polished";
 import {} from "module";
+import { AllTracksData } from "../../types";
+import { PopularityHistogram } from "./Charts/PopularityHistogram";
 interface Props {}
 
 const Wrapper = styled(CenterGrid)`
   display: block;
   flex-direction: column;
   align-items: center;
-  padding: 0 1em;
+  padding: 0 2em;
   .spinner-container {
     margin-top: 100px;
     display: flex;
@@ -40,13 +42,16 @@ const Wrapper = styled(CenterGrid)`
     background-color: ${transparentize(0.7, "#000")};
     border-radius: 24px;
     max-width: 1000px;
-    margin: 0 auto;
+    margin: 50px auto;
     display: grid;
     justify-items: center;
     overflow: hidden;
     grid-template-columns: minmax(0, 1fr);
     padding: 1em;
     gap: 2em;
+    :first-child {
+      margin-top: 0;
+    }
     .chart-text {
       small {
         color: #777;
@@ -64,7 +69,7 @@ const Wrapper = styled(CenterGrid)`
 export const Analyze = (props: Props) => {
   const token = localStorage.getItem("token")!;
 
-  const { data: allTracks, isLoading } = useQuery(
+  const { data: allTracks, isLoading } = useQuery<AllTracksData[]>(
     "allTracks",
     () => getAllSavedTracks(token),
     {
@@ -73,6 +78,7 @@ export const Analyze = (props: Props) => {
   );
 
   const artistIDs = uniq(allTracks?.map((x) => x.artistID as string));
+  const poplarityNums = allTracks?.map((x) => x.popularity);
 
   if (isLoading) {
     return (
@@ -92,7 +98,18 @@ export const Analyze = (props: Props) => {
           <h1>Top Genres</h1>
           <small>* Based on the artists you listen to</small>
         </div>
-        <GenreChart artistIDs={artistIDs!} className="chart-content" />
+        <GenreChart
+          artistIDs={artistIDs!}
+          className="chart-content"
+          uid="genreChart"
+        />
+      </div>
+      <div className="chart-section">
+        <div className="chart-text first">
+          <h1>Popularity</h1>
+          <small>* Based on the tracks you saved</small>
+        </div>
+        <PopularityHistogram popularityNums={poplarityNums!} uid="popchart" />
       </div>
     </Wrapper>
   );
