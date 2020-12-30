@@ -3,7 +3,7 @@ import { useQuery } from "react-query";
 import styled from "styled-components";
 import { getTopArtists, getTopTracks } from "../../functions/api";
 import { ResultArtist, ResultTrack } from "../../types";
-import { CenterGrid } from "../General";
+import { Button, CenterGrid } from "../General";
 import { v4 as uuid } from "uuid";
 import { TrackTile } from "./Tiles/TrackTile";
 import { ArtistTile } from "./Tiles/ArtistTile";
@@ -16,6 +16,14 @@ const SwitchBtn = styled.button<{ isActive: boolean }>`
     props.isActive ? props.theme.secondary : props.theme.darkBg};
 
   background-color: transparent;
+`;
+
+const CreateButton = styled(Button)`
+  position: fixed;
+  width: clamp(100px, 40vw, 400px);
+  font-size: 1em;
+  bottom: 20px;
+  right: 20px;
 `;
 const Wrapper = styled(CenterGrid)`
   padding: 1em;
@@ -214,6 +222,7 @@ export const Favorites = (props: Props) => {
           })}
         </div>
       )}
+      {isTracks ? <CreateButton>Create Playlist</CreateButton> : ""}
     </Wrapper>
   );
 
