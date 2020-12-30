@@ -158,7 +158,7 @@ export const Favorites = (props: Props) => {
         token,
         (user as IUser).id,
         playlistName,
-        "A playlist of recommendations",
+        "Top 99 songs!",
         allTracks!.map((x) => x.uri)
       ),
 
