@@ -98,6 +98,7 @@ export interface ResultTrack {
     id: string;
     name: string;
   }>;
+  uri: string;
 
   popularity: number;
   preview_url: string;

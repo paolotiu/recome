@@ -1,13 +1,24 @@
 import React, { useMemo, useState, useEffect } from "react";
 import { useQuery } from "react-query";
 import styled from "styled-components";
-import { getTopArtists, getTopTracks } from "../../functions/api";
-import { ResultArtist, ResultTrack } from "../../types";
+import {
+  createPlaylist,
+  getTopArtists,
+  getTopTracks,
+} from "../../functions/api";
+import {
+  CreatePlaylistResult,
+  IUser,
+  ResultArtist,
+  ResultTrack,
+} from "../../types";
 import { Button, CenterGrid } from "../General";
 import { v4 as uuid } from "uuid";
 import { TrackTile } from "./Tiles/TrackTile";
 import { ArtistTile } from "./Tiles/ArtistTile";
+import { Modal, CreatePlaylistModal } from "../index";
 import ReactGA from "react-ga";
+import { useUser } from "../../UserContext";
 const SwitchBtn = styled.button<{ isActive: boolean }>`
   border: none;
   font-size: 1.6em;
@@ -87,13 +98,18 @@ interface Props {}
 
 export const Favorites = (props: Props) => {
   const token = localStorage.getItem("token")!;
+  const user = useUser();
   const [isTracks, setIsTracks] = useState(true);
-  useEffect(() => {
-    ReactGA.pageview("/favorites");
-  }, []);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [timeRange, setTimeRange] = useState<
     "medium_term" | "short_term" | "long_term"
   >("medium_term");
+  const [playlistName, setPlaylistName] = useState("Top Tracks");
+
+  useEffect(() => {
+    ReactGA.pageview("/favorites");
+  }, []);
+
   const tracksQueryFirst = useQuery<{ items: ResultTrack[] }>(
     ["tracks", timeRange],
     () => getTopTracks(token, 50, 0, timeRange),
@@ -123,6 +139,35 @@ export const Favorites = (props: Props) => {
     }
   );
 
+  const allTracks = useMemo(() => {
+    if (!tracksQueryFirst.isLoading && !tracksQuerySecond.isLoading) {
+      return [
+        ...(tracksQueryFirst.data?.items.map((x) => x.uri) as string[]),
+        ...(tracksQuerySecond.data?.items
+          .map((x) => x.uri)
+          .filter((x, i) => i !== 0) as string[]),
+      ];
+    }
+  }, [tracksQueryFirst, tracksQuerySecond]);
+
+  //Query to make a playlist
+  const createPlaylistQuery = useQuery<CreatePlaylistResult>(
+    "top-playlist",
+    () =>
+      createPlaylist(
+        token,
+        (user as IUser).id,
+        playlistName,
+        "A playlist of recommendations",
+        allTracks!
+      ),
+
+    {
+      staleTime: 1,
+      enabled: false,
+    }
+  );
+
   const tracksPopularity = useMemo(() => {
     if (tracksQueryFirst.data && tracksQuerySecond.data) {
       return getAveragePopularity([
@@ -146,89 +191,115 @@ export const Favorites = (props: Props) => {
   }
 
   return (
-    <Wrapper>
-      <select
-        className="time-range"
-        value={timeRange}
-        onChange={(e) => {
-          const val = e.target.value as
-            | "medium_term"
-            | "short_term"
-            | "long_term";
-          setTimeRange(val);
-        }}
-      >
-        <option value="short_term">4 weeks</option>
-        <option value="medium_term">6 months</option>
-        <option value="long_term">All time</option>
-      </select>
-
-      <header>
-        <h1>Top {isTracks ? "Tracks" : "Artists"}</h1>
-      </header>
-      <div className="fave-switch-container">
-        <SwitchBtn
-          className="fave-switch"
-          isActive={isTracks}
-          onClick={() => setIsTracks(true)}
-        >
-          Tracks
-        </SwitchBtn>
-
-        <SwitchBtn
-          isActive={!isTracks}
-          className="fave-switch"
-          onClick={() => {
-            setIsTracks(false);
+    <>
+      <Wrapper>
+        <select
+          className="time-range"
+          value={timeRange}
+          onChange={(e) => {
+            const val = e.target.value as
+              | "medium_term"
+              | "short_term"
+              | "long_term";
+            setTimeRange(val);
           }}
         >
-          Artists
-        </SwitchBtn>
-      </div>
-      {isTracks ? (
-        <div className="top-tracks-container">
-          <TrackTile>
-            <div></div>
-            <h3>Popularity: </h3>
-            <h3>{tracksPopularity}</h3>
-          </TrackTile>
-          {tracksQueryFirst.data?.items.map((x, i) => (
-            <TrackTile data={x} place={i + 1} key={uuid()} />
-          ))}
-          {tracksQuerySecond.data?.items.map((x, i) => {
-            if (i === 0) {
-              return "";
-            } else {
-              return <TrackTile key={uuid()} data={x} place={i + 50} />;
-            }
-          })}
+          <option value="short_term">4 weeks</option>
+          <option value="medium_term">6 months</option>
+          <option value="long_term">All time</option>
+        </select>
+
+        <header>
+          <h1>Top {isTracks ? "Tracks" : "Artists"}</h1>
+        </header>
+        <div className="fave-switch-container">
+          <SwitchBtn
+            className="fave-switch"
+            isActive={isTracks}
+            onClick={() => setIsTracks(true)}
+          >
+            Tracks
+          </SwitchBtn>
+
+          <SwitchBtn
+            isActive={!isTracks}
+            className="fave-switch"
+            onClick={() => {
+              setIsTracks(false);
+            }}
+          >
+            Artists
+          </SwitchBtn>
         </div>
-      ) : (
-        <div className="top-artists-container">
-          <TrackTile className="popularity">
-            <div></div>
-            <h3>Popularity: </h3>
-            <h3>{artistsPopularity}</h3>
-          </TrackTile>
-          {artistsQueryFirst.data?.items.map((x, i) => (
-            <ArtistTile data={x} place={i + 1} key={uuid()} />
-          ))}
-          {artistsQuerySecond.data?.items.map((x, i) => {
-            if (i === 0) {
-              return "";
-            } else {
-              return <ArtistTile data={x} place={i + 50} key={uuid()} />;
-            }
-          })}
-        </div>
-      )}
-      {isTracks ? <CreateButton>Create Playlist</CreateButton> : ""}
-    </Wrapper>
+        {isTracks ? (
+          <div className="top-tracks-container">
+            <TrackTile>
+              <div></div>
+              <h3>Popularity: </h3>
+              <h3>{tracksPopularity}</h3>
+            </TrackTile>
+            {tracksQueryFirst.data?.items.map((x, i) => (
+              <TrackTile data={x} place={i + 1} key={uuid()} />
+            ))}
+            {tracksQuerySecond.data?.items.map((x, i) => {
+              if (i === 0) {
+                return "";
+              } else {
+                return <TrackTile key={uuid()} data={x} place={i + 50} />;
+              }
+            })}
+          </div>
+        ) : (
+          <div className="top-artists-container">
+            <TrackTile className="popularity">
+              <div></div>
+              <h3>Popularity: </h3>
+              <h3>{artistsPopularity}</h3>
+            </TrackTile>
+            {artistsQueryFirst.data?.items.map((x, i) => (
+              <ArtistTile data={x} place={i + 1} key={uuid()} />
+            ))}
+            {artistsQuerySecond.data?.items.map((x, i) => {
+              if (i === 0) {
+                return "";
+              } else {
+                return <ArtistTile data={x} place={i + 50} key={uuid()} />;
+              }
+            })}
+          </div>
+        )}
+        {isTracks ? (
+          <CreateButton onClick={openModal}>Create Playlist</CreateButton>
+        ) : (
+          ""
+        )}
+      </Wrapper>
+      <Modal isOpen={isModalOpen} onRequestClose={closeModal}>
+        <CreatePlaylistModal
+          createPlaylist={refetchCreatePlaylist}
+          playlistName={playlistName}
+          setPlaylistName={setPlaylistName}
+          data={createPlaylistQuery.data}
+          isStale={createPlaylistQuery.isStale}
+        />
+      </Modal>
+    </>
   );
+  function refetchCreatePlaylist() {
+    createPlaylistQuery.refetch();
+  }
 
-  // function reFetch(params:type) {
+  function openModal() {
+    setIsModalOpen(true);
+  }
 
-  // }
+  function closeModal(
+    e: React.MouseEvent<Element, MouseEvent> | React.KeyboardEvent<Element>
+  ) {
+    e.stopPropagation();
+    e.nativeEvent.stopImmediatePropagation();
+    setIsModalOpen(false);
+  }
 };
 
 function getAveragePopularity(arr: Array<ResultArtist | ResultTrack>) {
