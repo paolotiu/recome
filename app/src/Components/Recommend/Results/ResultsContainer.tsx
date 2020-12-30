@@ -19,9 +19,9 @@ import { defaultFeature } from "../defaultOptions";
 import { useQuery } from "react-query";
 import { getTrackFeatures, createPlaylist } from "../../../functions/api";
 import { useHistory } from "react-router";
-import { Button, Modal } from "../../index";
+import { Button, Modal, CreatePlaylistModal } from "../../index";
 import { useUser } from "../../../UserContext";
-import { CurrentRecoModal, CreatingPlaylistModal } from "./ModalContent";
+import { CurrentRecoModal } from "./ModalContent";
 import { v4 as uuid } from "uuid";
 // kick off the polyfill!
 smoothscroll.polyfill();
@@ -209,7 +209,7 @@ const Results: React.FC<Props> = React.memo(({ results }) => {
 
       <Modal isOpen={isModalOpen} onRequestClose={closeModal}>
         {isCreatingPlaylist ? (
-          <CreatingPlaylistModal
+          <CreatePlaylistModal
             createPlaylist={refetchCreatePlaylistQuery}
             playlistName={playlistName}
             setPlaylistName={setPlaylistName}

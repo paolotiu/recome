@@ -1,9 +1,9 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import styled from "styled-components";
-import { CreatePlaylistResult } from "../../../../types";
-import { Button } from "../../../General";
-import { ReactComponent as Spotify } from "../../../../static/spotify.svg";
-
+import { CreatePlaylistResult } from "../../types";
+import { Button } from "./Button";
+import { ReactComponent as Spotify } from "../../static/spotify.svg";
+import { toast } from "react-hot-toast";
 const ModalContent = styled.div`
   transition: all 0.4s ease-in;
   width: 100%;
@@ -78,45 +78,48 @@ interface Props {
   isStale: boolean;
 }
 
-export const CreatingPlaylistModal: React.FC<Props> = ({
+export const CreatePlaylistModal: React.FC<Props> = ({
   playlistName,
   setPlaylistName,
   createPlaylist,
   data,
   isStale,
 }) => {
+  const formRef = useRef<HTMLFormElement>(null);
+  const previewRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    const form = document.querySelector(
-      ".create-playlist-form"
-    ) as HTMLFormElement;
-    const btn = document.querySelector(
-      ".playlist-preview-after"
-    ) as HTMLDivElement;
-    if (!isStale) {
-      form.classList.add("go-out");
+    const form = formRef.current;
+    const btn = previewRef.current;
+    if (form && btn) {
+      if (!isStale) {
+        form.classList.add("go-out");
+        toast.dismiss();
+        toast.success("Created!");
+        setTimeout(() => {
+          btn.classList.remove("hidden");
+          form.classList.add("hidden");
 
-      setTimeout(() => {
-        btn.classList.remove("hidden");
-        form.classList.add("hidden");
-
-        btn.classList.add("go-in");
-      }, 1000);
-    } else {
-      form.classList.remove("go-out");
+          btn.classList.add("go-in");
+        }, 1000);
+      } else {
+        form.classList.remove("go-out");
+      }
     }
   }, [data, isStale]);
   return (
     <>
       <ModalContent className="create-playlist-modal">
         <form
+          ref={formRef}
           className="create-playlist-form"
           onSubmit={(e) => {
             e.preventDefault();
             createPlaylist();
+            toast.loading("Making Playlist");
 
-            (document.querySelector(
-              "#create-playlist"
-            ) as HTMLButtonElement).disabled = true;
+            if (formRef.current) {
+              formRef.current.disabled = true;
+            }
           }}
         >
           <div className="input-container">
@@ -137,7 +140,7 @@ export const CreatingPlaylistModal: React.FC<Props> = ({
           </Button>
         </form>
 
-        <div className="playlist-preview-after hidden">
+        <div className="playlist-preview-after hidden" ref={previewRef}>
           <h3>{data?.name}</h3>
           <Button newTab={true} link={data?.external_urls.spotify}>
             <Spotify id="spotify-logo" />

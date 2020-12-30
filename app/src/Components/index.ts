@@ -7,6 +7,7 @@ export {
   ProgressBar,
   Modal,
   ResultTile,
+  CreatePlaylistModal,
 } from "./General";
 
 export { Login } from "./Login/Login";
