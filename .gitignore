@@ -27,3 +27,13 @@ server/.gitignore
 .eslintcache
 Procfile
 testing
+logo
+# Local Netlify folder
+.netlify
+*/config.json
+app/netlify_functions/config.json
+app/netlify_functions/config.js
+app/functions-build/callback.js
+app/functions-build/config.js
+app/functions-build/login.js
+app/debug.log
