@@ -10,7 +10,7 @@ export function convertToPositiveRange(x: number) {
 }
 
 export function responsivefy(
-  svg: d3.Selection<SVGSVGElement, unknown, HTMLElement, any>,
+  svg: d3.Selection<SVGSVGElement, any, any, any>,
   ...args: any[]
 ) {
   // get container + svg aspect ratio

@@ -1,5 +1,5 @@
 import toPairsIn from "lodash.topairsin";
-import { SeedOptions, Options } from "./../types";
+import { SeedOptions, Options, AllTracksData } from "./../types";
 import axios from "axios";
 import queryString from "query-string";
 
@@ -106,7 +106,9 @@ export const getTrackFeatures = async (token: string, ids: string[]) => {
   return res.data;
 };
 
-export const getAllSavedTracks = async (token: string) => {
+export const getAllSavedTracks = async (
+  token: string
+): Promise<AllTracksData[]> => {
   const initial = await axios.get(url + "/me/tracks?limit=50", {
     headers: {
       Authorization: "Bearer " + token,

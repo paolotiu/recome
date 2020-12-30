@@ -140,3 +140,10 @@ export interface Artist {
   id: string;
   genre: string[];
 }
+
+export interface AllTracksData {
+  id: string;
+  name: string;
+  popularity: number;
+  artistID: string;
+}
