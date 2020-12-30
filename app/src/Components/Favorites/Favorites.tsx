@@ -142,10 +142,10 @@ export const Favorites = (props: Props) => {
   const allTracks = useMemo(() => {
     if (!tracksQueryFirst.isLoading && !tracksQuerySecond.isLoading) {
       return [
-        ...(tracksQueryFirst.data?.items.map((x) => x.uri) as string[]),
-        ...(tracksQuerySecond.data?.items
-          .map((x) => x.uri)
-          .filter((x, i) => i !== 0) as string[]),
+        ...(tracksQueryFirst.data?.items as ResultTrack[]),
+        ...(tracksQuerySecond.data?.items.filter(
+          (x, i) => i !== 0
+        ) as ResultTrack[]),
       ];
     }
   }, [tracksQueryFirst, tracksQuerySecond]);
@@ -159,7 +159,7 @@ export const Favorites = (props: Props) => {
         (user as IUser).id,
         playlistName,
         "A playlist of recommendations",
-        allTracks!
+        allTracks!.map((x) => x.uri)
       ),
 
     {
@@ -186,6 +186,23 @@ export const Favorites = (props: Props) => {
     }
   }, [artistsQueryFirst, artistsQuerySecond]);
 
+  const tracks = useMemo(
+    () => (
+      <div className="top-tracks-container">
+        <TrackTile>
+          <div></div>
+          <h3>Popularity: </h3>
+          <h3>{tracksPopularity}</h3>
+        </TrackTile>
+        {allTracks
+          ? allTracks.map((x, i) => (
+              <TrackTile data={x} place={i + 1} key={uuid()} />
+            ))
+          : ""}
+      </div>
+    ),
+    [allTracks, tracksPopularity]
+  );
   if (tracksQueryFirst.isLoading || tracksQuerySecond.isLoading) {
     return <> </>;
   }
@@ -232,23 +249,24 @@ export const Favorites = (props: Props) => {
           </SwitchBtn>
         </div>
         {isTracks ? (
-          <div className="top-tracks-container">
-            <TrackTile>
-              <div></div>
-              <h3>Popularity: </h3>
-              <h3>{tracksPopularity}</h3>
-            </TrackTile>
-            {tracksQueryFirst.data?.items.map((x, i) => (
-              <TrackTile data={x} place={i + 1} key={uuid()} />
-            ))}
-            {tracksQuerySecond.data?.items.map((x, i) => {
-              if (i === 0) {
-                return "";
-              } else {
-                return <TrackTile key={uuid()} data={x} place={i + 50} />;
-              }
-            })}
-          </div>
+          // <div className="top-tracks-container">
+          //   <TrackTile>
+          //     <div></div>
+          //     <h3>Popularity: </h3>
+          //     <h3>{tracksPopularity}</h3>
+          //   </TrackTile>
+          //   {tracksQueryFirst.data?.items.map((x, i) => (
+          //     <TrackTile data={x} place={i + 1} key={uuid()} />
+          //   ))}
+          //   {tracksQuerySecond.data?.items.map((x, i) => {
+          //     if (i === 0) {
+          //       return "";
+          //     } else {
+          //       return <TrackTile key={uuid()} data={x} place={i + 50} />;
+          //     }
+          //   })}
+          // </div>
+          tracks
         ) : (
           <div className="top-artists-container">
             <TrackTile className="popularity">
