@@ -10,7 +10,7 @@ export function convertToPositiveRange(x: number) {
 }
 
 export function responsivefy(
-  svg: d3.Selection<SVGSVGElement, any, any, any>,
+  svg: d3.Selection<any, any, any, any>,
   ...args: any[]
 ) {
   // get container + svg aspect ratio
@@ -19,7 +19,6 @@ export function responsivefy(
     height = parseInt(svg.style("height"));
 
   let aspect = width / height;
-  console.log(container);
   // add viewBox and preserveAspectRatio properties,
   // and call resize so that svg resizes on inital page load
   svg

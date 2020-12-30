@@ -58,7 +58,7 @@ export const GenreChart: React.FC<Props> = ({
       const counted = countBy<string[]>(genres);
       const genreArray = toObjArray(counted);
       const top5 = getTopFive(genreArray);
-      console.log("rendering");
+
       renderChart(top5, containerRef.current);
       let windowWidth = window.innerWidth;
       const render = () => {
@@ -91,6 +91,8 @@ function renderChart(
   container: HTMLDivElement
 ) {
   const margin = { top: 10, bottom: 40, left: 80, right: 60 };
+  //Delete previous chart when rerender
+  d3.select(container).selectAll("svg").remove();
 
   // For responsiveness
   let width = 500 - margin.right - margin.left;
@@ -102,11 +104,9 @@ function renderChart(
   } else {
     height = 300 - margin.top - margin.bottom;
   }
-  // If device is small then change height
 
   const animTime = 2000;
   const ease = d3.easeSinIn;
-  d3.select(container).selectAll("svg").remove();
   const svg = d3
     .select(container)
     .append("svg")
