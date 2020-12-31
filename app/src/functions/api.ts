@@ -4,7 +4,7 @@ import axios from "axios";
 import queryString from "query-string";
 
 const url = "https://api.spotify.com/v1";
-
+const whisperifyUrl = "https://whisperify.net/api";
 axios.defaults.baseURL = url;
 export const getUser = async (token: string) => {
   const res = await axios.get(url + "/me", {
@@ -164,6 +164,15 @@ export const getGenresofArtists = async (
   return genres;
 };
 
+//Get audio features for a country
+export const getCountryFeatures = async (code: string) => {
+  const res = await axios.get(
+    whisperifyUrl + `/features/group/country?code=${code}`
+  );
+
+  return res.data;
+};
+
 // Create Playlist then add songs
 export const createPlaylist = async (
   token: string,
@@ -228,6 +237,7 @@ export const deleteOneTrack = async (token: string, id: string) => {
 
   return res.data;
 };
+
 function stringifySeedOptions(seedOptions: SeedOptions) {
   const arr = toPairsIn(seedOptions);
   let q = "";

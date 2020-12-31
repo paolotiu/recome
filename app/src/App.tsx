@@ -61,6 +61,7 @@ function App() {
   useEffect(() => {
     if (status === "success") {
       setUser({
+        country: data.country,
         displayName: data.display_name,
         id: data.id,
         product: data.product,

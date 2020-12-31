@@ -4,12 +4,11 @@ import { getAllSavedTracks } from "../../functions/api";
 import { ScaleLoader } from "react-spinners";
 import { CenterGrid } from "../General";
 import styled from "styled-components";
-import { GenreChart } from "./Charts/GenreChart";
+import { GenreChart, MoodChart, PopularityHistogram } from "./Charts";
 import uniq from "lodash.uniq";
 import { transparentize } from "polished";
 import {} from "module";
 import { AllTracksData } from "../../types";
-import { PopularityHistogram } from "./Charts/PopularityHistogram";
 interface Props {}
 
 const Wrapper = styled(CenterGrid)`
@@ -110,6 +109,13 @@ export const Analyze = (props: Props) => {
           <small>* Based on the tracks you saved</small>
         </div>
         <PopularityHistogram popularityNums={poplarityNums!} uid="popchart" />
+      </div>
+      <div className="chart-section">
+        <div className="chart-text first">
+          <h1>Popularity</h1>
+          <small>* Based on the tracks you saved</small>
+        </div>
+        <MoodChart />
       </div>
     </Wrapper>
   );

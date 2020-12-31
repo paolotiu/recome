@@ -22,7 +22,8 @@ export const Landing: React.FC<Props> = ({ setToken }) => {
     if (data) {
       setToken(access_token);
       setUser({
-        displayName: data.display_name!,
+        country: data.country,
+        displayName: data.display_name,
         product: data.product,
         url: data.external_urls.spotify,
         followers: data.followers.total,

@@ -2,6 +2,7 @@ export interface IUser {
   displayName: string;
   product: string;
   followers: number;
+  country: string;
   id: string;
   url: string;
 }
