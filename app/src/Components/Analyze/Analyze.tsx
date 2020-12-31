@@ -57,7 +57,8 @@ const Wrapper = styled(CenterGrid)`
       }
       h1 {
         font-size: 3em;
-
+        width: fit-content;
+        margin: 0 auto;
         @media (max-width: 320px) {
           font-size: 2.5em;
         }
@@ -112,8 +113,7 @@ export const Analyze = (props: Props) => {
       </div>
       <div className="chart-section">
         <div className="chart-text first">
-          <h1>Popularity</h1>
-          <small>* Based on the tracks you saved</small>
+          <h1>Mood</h1>
         </div>
         <MoodChart />
       </div>

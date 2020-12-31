@@ -173,6 +173,12 @@ export const getCountryFeatures = async (code: string) => {
   return res.data;
 };
 
+export const getUserFeatures = async (userID: string) => {
+  const res = await axios.get(whisperifyUrl + `/features/user/${userID}`);
+
+  return res.data;
+};
+
 // Create Playlist then add songs
 export const createPlaylist = async (
   token: string,
