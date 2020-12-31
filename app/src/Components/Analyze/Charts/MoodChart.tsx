@@ -324,6 +324,19 @@ function Chart(features: string[]) {
       .attr("fill", color)
       .attr("stroke-opacity", 1)
       .attr("opacity", 0.5);
+
+    svg
+      .selectAll(".dot-" + count)
+      .data(coordinates)
+      .enter()
+      .append("circle")
+
+      .attr("cx", (d) => d[0])
+      .attr("cy", (d) => d[1])
+      .attr("r", 2)
+      .attr("fill", color)
+      .attr("opacity", 0.78);
+
     count++;
   };
 
