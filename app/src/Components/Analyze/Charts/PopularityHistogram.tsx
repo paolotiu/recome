@@ -33,6 +33,7 @@ export const PopularityHistogram: React.FC<Props> = ({
   uid,
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     if (containerRef.current) {
       const nonZeroPops = popularityNums.filter((x) => x);
@@ -51,12 +52,17 @@ export const PopularityHistogram: React.FC<Props> = ({
     }
   }, [popularityNums]);
 
-  return <StyledChart ref={containerRef} className="pop-chart" />;
+  return (
+    <StyledChart ref={containerRef} className="pop-chart">
+      <div style={{ height: "500px", width: "80vw" }} id="placeholder"></div>
+    </StyledChart>
+  );
 };
 
 function renderChart(data: number[], container: HTMLDivElement) {
   //Delete previous chart when rerender
   d3.select(container).selectAll("*").remove();
+  d3.select(container).select("#placeholder").remove();
 
   const margin = { top: 10, bottom: 40, left: 20, right: 10 };
 

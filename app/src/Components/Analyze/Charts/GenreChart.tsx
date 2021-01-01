@@ -82,7 +82,9 @@ export const GenreChart: React.FC<Props> = ({
       id={uid ? (id ? uid + id : uid) : id}
       className={className}
       ref={containerRef}
-    ></StyledChart>
+    >
+      <div style={{ height: "500px", width: "80vw" }} id="placeholder"></div>
+    </StyledChart>
   );
 };
 
@@ -93,7 +95,7 @@ function renderChart(
   const margin = { top: 10, bottom: 40, left: 80, right: 60 };
   //Delete previous chart when rerender
   d3.select(container).selectAll("svg").remove();
-
+  d3.select(container).select("#placeholder").remove();
   // For responsiveness
   let width = 500 - margin.right - margin.left;
   let height = 300 - margin.top - margin.bottom;
