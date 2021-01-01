@@ -120,17 +120,12 @@ interface Features {
 
 export const MoodChart: React.FC<Props> = ({ className, uid, id }) => {
   const user = useUser() as IUser;
-  const sessionFeatures = sessionStorage.getItem("features");
-  const [features, setFeatures] = useState<FeaturesState>(
-    typeof sessionFeatures === "string" ? JSON.parse(sessionFeatures) : ""
-  );
+  const [features, setFeatures] = useState<FeaturesState>();
 
-  const [currentCountry, setCurrentCountry] = useState(
-    sessionStorage.getItem("country") || user.country
-  );
+  const [currentCountry, setCurrentCountry] = useState(user.country || "GB");
   const [listColors, setListColors] = useState<string[]>([]);
   const containerRef = useRef<HTMLDivElement>(null);
-  const { refetch: refetchCountry } = useQuery(
+  const { data: countriesFeatures } = useQuery(
     "countryFeatures",
     () => getAllCountryFeatures(),
     {
@@ -158,35 +153,43 @@ export const MoodChart: React.FC<Props> = ({ className, uid, id }) => {
     }
   );
 
-  useQuery("userFeatures", () => getUserFeatures(user.id), {
-    onSuccess: (d) => {
-      if (d) {
-        setFeatures((prev) => {
-          if (prev) {
-            return { ...prev, user: d };
-          } else {
-            return { user: d };
-          }
-        });
-      }
-    },
-    staleTime: Infinity,
-  });
+  const { data: userFeatures, isSuccess } = useQuery(
+    "userFeatures",
+    () => getUserFeatures(user.id),
+    {
+      onSuccess: (d) => {
+        if (d) {
+          setFeatures((prev) => {
+            if (prev) {
+              return { ...prev, user: d };
+            } else {
+              return { user: d };
+            }
+          });
+        }
+      },
+      staleTime: Infinity,
+    }
+  );
 
-  useQuery("globalFeatures", () => getGlobalFeatures(), {
-    onSuccess: (d) => {
-      if (d) {
-        setFeatures((prev) => {
-          if (prev) {
-            return { ...prev, global: d[0] };
-          } else {
-            return { global: d[0] };
-          }
-        });
-      }
-    },
-    staleTime: Infinity,
-  });
+  const { data: globalFeatures } = useQuery(
+    "globalFeatures",
+    () => getGlobalFeatures(),
+    {
+      onSuccess: (d) => {
+        if (d) {
+          setFeatures((prev) => {
+            if (prev) {
+              return { ...prev, global: d[0] };
+            } else {
+              return { global: d[0] };
+            }
+          });
+        }
+      },
+      staleTime: Infinity,
+    }
+  );
 
   useEffect(() => {
     const container = containerRef.current;
@@ -212,8 +215,6 @@ export const MoodChart: React.FC<Props> = ({ className, uid, id }) => {
             acousticness: features[currentCountry]?.acousticness * 100,
             danceability: features[currentCountry]?.danceability * 100,
           });
-        } else {
-          refetchCountry();
         }
       };
       if (features.user && features.global) {
@@ -231,14 +232,23 @@ export const MoodChart: React.FC<Props> = ({ className, uid, id }) => {
 
       return () => window.removeEventListener("resize", render);
     }
-  }, [features, currentCountry, refetchCountry]);
-  useEffect(() => {
-    return () => {
-      // Remember on unmount
-      sessionStorage.setItem("features", JSON.stringify(features));
-      sessionStorage.setItem("country", currentCountry);
-    };
   }, [features, currentCountry]);
+
+  // Set features state
+  useEffect(() => {
+    if (!features && isSuccess) {
+      var tempObj = countriesFeatures?.reduce(
+        // eslint-disable-next-line no-sequences
+        (obj: FeaturesState, item) => ((obj[item._id] = item), obj),
+        {}
+      );
+      setFeatures({
+        ...tempObj,
+        user: userFeatures,
+        global: globalFeatures[0],
+      });
+    }
+  }, [features, isSuccess, countriesFeatures, userFeatures, globalFeatures]);
   return (
     <StyledChart
       id={uid ? (id ? uid + id : uid) : id}
