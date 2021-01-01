@@ -203,9 +203,6 @@ export const Favorites = (props: Props) => {
     ),
     [allTracks, tracksPopularity]
   );
-  if (tracksQueryFirst.isLoading || tracksQuerySecond.isLoading) {
-    return <> </>;
-  }
 
   return (
     <>
@@ -249,23 +246,6 @@ export const Favorites = (props: Props) => {
           </SwitchBtn>
         </div>
         {isTracks ? (
-          // <div className="top-tracks-container">
-          //   <TrackTile>
-          //     <div></div>
-          //     <h3>Popularity: </h3>
-          //     <h3>{tracksPopularity}</h3>
-          //   </TrackTile>
-          //   {tracksQueryFirst.data?.items.map((x, i) => (
-          //     <TrackTile data={x} place={i + 1} key={uuid()} />
-          //   ))}
-          //   {tracksQuerySecond.data?.items.map((x, i) => {
-          //     if (i === 0) {
-          //       return "";
-          //     } else {
-          //       return <TrackTile key={uuid()} data={x} place={i + 50} />;
-          //     }
-          //   })}
-          // </div>
           tracks
         ) : (
           <div className="top-artists-container">

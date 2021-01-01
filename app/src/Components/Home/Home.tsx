@@ -79,45 +79,6 @@ export const Home: React.FC = () => {
   useEffect(() => {
     ReactGA.pageview("/home");
   }, []);
-  const prefetchTop = async () => {
-    // queryClient.prefetchQuery("allTracks", () => getAllSavedTracks(token), {
-    //   staleTime: Infinity,
-    // });
-    time_ranges.forEach((range) => {
-      queryClient.prefetchQuery(
-        ["tracks", range],
-        () => getTopTracks(token, 50, 0, range),
-        {
-          staleTime: Infinity,
-        }
-      );
-
-      queryClient.prefetchQuery(
-        ["tracks", 49, range],
-        () => getTopTracks(token, 50, 49, range),
-        {
-          staleTime: Infinity,
-        }
-      );
-
-      queryClient.prefetchQuery(
-        ["artists", range],
-        () => getTopArtists(token, 50, 0, range),
-        {
-          staleTime: Infinity,
-        }
-      );
-
-      queryClient.prefetchQuery(
-        ["artists", 49, range],
-        () => getTopArtists(token, 50, 49, range),
-        {
-          staleTime: Infinity,
-        }
-      );
-    });
-  };
-  prefetchTop();
 
   if (!token) {
     return <Redirect to="/login" />;
