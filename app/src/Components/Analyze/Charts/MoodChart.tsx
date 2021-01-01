@@ -5,6 +5,7 @@ import { useQuery } from "react-query";
 import styled from "styled-components";
 import arrowDown from "../../../static/arrowDown.png";
 import {
+  getAllCountryFeatures,
   getCountryFeatures,
   getGlobalFeatures,
   getUserFeatures,
@@ -101,17 +102,20 @@ interface Props {
 }
 
 interface FeaturesState {
-  [key: string]: {
-    acousticness: number;
-    danceability: number;
-    tempo: number;
-    energy: number;
-    instrumentalness: number;
-    liveness: number;
-    loudness: number;
-    speechiness: number;
-    valence: number;
-  };
+  [key: string]: Features;
+}
+
+interface Features {
+  _id: string;
+  acousticness: number;
+  danceability: number;
+  tempo: number;
+  energy: number;
+  instrumentalness: number;
+  liveness: number;
+  loudness: number;
+  speechiness: number;
+  valence: number;
 }
 
 export const MoodChart: React.FC<Props> = ({ className, uid, id }) => {
@@ -127,29 +131,29 @@ export const MoodChart: React.FC<Props> = ({ className, uid, id }) => {
   const [listColors, setListColors] = useState<string[]>([]);
   const containerRef = useRef<HTMLDivElement>(null);
   const { refetch: refetchCountry } = useQuery(
-    ["countryFeatures", currentCountry],
-    () => getCountryFeatures(currentCountry),
+    "countryFeatures",
+    () => getAllCountryFeatures(),
     {
-      onSuccess: (d) => {
+      onSuccess: (d: Features[]) => {
         if (d) {
           setFeatures((prev) => {
+            let temp: { [key: string]: Features } = {};
+            d.forEach((x) => {
+              temp[x._id] = x;
+            });
             if (prev) {
-              return { ...prev, [d._id]: d };
+              temp = { ...prev, ...temp };
+
+              return temp;
             } else {
-              return { [d._id]: d };
+              return temp;
             }
           });
-          toast.dismiss();
-          toast.success("Got it!");
-          setCurrentCountry(d._id);
         }
       },
-      onError: () => {
-        toast.dismiss();
-        toast.error("Failed to fetch data");
-      },
+
       staleTime: Infinity,
-      retry: 50,
+      retry: 10,
       retryDelay: 1,
     }
   );
@@ -209,7 +213,6 @@ export const MoodChart: React.FC<Props> = ({ className, uid, id }) => {
             danceability: features[currentCountry]?.danceability * 100,
           });
         } else {
-          toast.loading("Fetching country data");
           refetchCountry();
         }
       };

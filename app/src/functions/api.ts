@@ -175,6 +175,12 @@ export const getCountryFeatures = async (code: string) => {
   return res.data;
 };
 
+export const getAllCountryFeatures = async () => {
+  const res = await axios.get(whisperifyUrl + `/features/group/country`);
+
+  return res.data;
+};
+
 export const getUserFeatures = async (userID: string) => {
   const res = await axios.get(whisperifyUrl + `/features/user/${userID}`);
 
