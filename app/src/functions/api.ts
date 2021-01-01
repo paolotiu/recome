@@ -169,7 +169,9 @@ export const getCountryFeatures = async (code: string) => {
   const res = await axios.get(
     whisperifyUrl + `/features/group/country?code=${code}`
   );
-
+  if (!res.data) {
+    throw new Error("No data");
+  }
   return res.data;
 };
 

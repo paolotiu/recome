@@ -3,6 +3,7 @@ import { v4 as uuid } from "uuid";
 import React, { useEffect, useRef, useState } from "react";
 import { useQuery } from "react-query";
 import styled from "styled-components";
+import arrowDown from "../../../static/arrowDown.png";
 import {
   getCountryFeatures,
   getGlobalFeatures,
@@ -12,7 +13,7 @@ import { responsivefy, getKeyByValue } from "../../../functions/util";
 import { IUser } from "../../../types";
 import { useUser } from "../../../UserContext";
 import { COUNTRIES, COUNTRY_TO_CODE } from "./data";
-import { CurrentRecoModal } from "../../Recommend/Results/ModalContent";
+import { toast } from "react-hot-toast";
 const StyledChart = styled.div`
   width: 100%;
 
@@ -66,8 +67,31 @@ const StyledChart = styled.div`
     }
   }
   select {
+    appearance: none;
+    display: grid;
     align-self: center;
-    width: clamp(200px, 50%, 400px);
+    width: clamp(200px, 50%, 300px);
+    padding: 0;
+    height: fit-content;
+    background-color: transparent;
+    border: none;
+    color: ${(props) => props.theme.light};
+    font-weight: bold;
+    font-size: 1.2em;
+    padding-right: 29px;
+    background: url(${arrowDown}) no-repeat right;
+
+    :after {
+      content: " sadad";
+      width: 0.8em;
+      height: 0.5em;
+      background-color: black;
+      clip-path: polygon(100% 0%, 0 0%, 50% 100%);
+    }
+    option {
+      font-family: Poppins;
+      color: ${(props) => props.theme.darkBg};
+    }
   }
 `;
 interface Props {
@@ -91,13 +115,18 @@ interface FeaturesState {
 }
 
 export const MoodChart: React.FC<Props> = ({ className, uid, id }) => {
-  const token = localStorage.getItem("token")!;
   const user = useUser() as IUser;
-  const [features, setFeatures] = useState<FeaturesState>();
-  const [currentCountry, setCurrentCountry] = useState(user.country);
+  const sessionFeatures = sessionStorage.getItem("features");
+  const [features, setFeatures] = useState<FeaturesState>(
+    typeof sessionFeatures === "string" ? JSON.parse(sessionFeatures) : ""
+  );
+
+  const [currentCountry, setCurrentCountry] = useState(
+    sessionStorage.getItem("country") || user.country
+  );
   const [listColors, setListColors] = useState<string[]>([]);
   const containerRef = useRef<HTMLDivElement>(null);
-  const countryFeaturesQuery = useQuery(
+  const { refetch: refetchCountry } = useQuery(
     ["countryFeatures", currentCountry],
     () => getCountryFeatures(currentCountry),
     {
@@ -110,54 +139,51 @@ export const MoodChart: React.FC<Props> = ({ className, uid, id }) => {
               return { [d._id]: d };
             }
           });
+          toast.dismiss();
+          toast.success("Got it!");
           setCurrentCountry(d._id);
-        } else {
-          setTimeout(() => {
-            countryFeaturesQuery.refetch();
-          }, 300);
         }
       },
+      onError: () => {
+        toast.dismiss();
+        toast.error("Failed to fetch data");
+      },
       staleTime: Infinity,
+      retry: 50,
+      retryDelay: 1,
     }
   );
 
-  const userFeaturesQuery = useQuery(
-    "userFeatures",
-    () => getUserFeatures(user.id),
-    {
-      onSuccess: (d) => {
-        if (d) {
-          setFeatures((prev) => {
-            if (prev) {
-              return { ...prev, user: d };
-            } else {
-              return { user: d };
-            }
-          });
-        }
-      },
-      staleTime: Infinity,
-    }
-  );
+  useQuery("userFeatures", () => getUserFeatures(user.id), {
+    onSuccess: (d) => {
+      if (d) {
+        setFeatures((prev) => {
+          if (prev) {
+            return { ...prev, user: d };
+          } else {
+            return { user: d };
+          }
+        });
+      }
+    },
+    staleTime: Infinity,
+  });
 
-  const globalFeaturesQuery = useQuery(
-    "globalFeatures",
-    () => getGlobalFeatures(),
-    {
-      onSuccess: (d) => {
-        if (d) {
-          setFeatures((prev) => {
-            if (prev) {
-              return { ...prev, global: d[0] };
-            } else {
-              return { global: d[0] };
-            }
-          });
-        }
-      },
-      staleTime: Infinity,
-    }
-  );
+  useQuery("globalFeatures", () => getGlobalFeatures(), {
+    onSuccess: (d) => {
+      if (d) {
+        setFeatures((prev) => {
+          if (prev) {
+            return { ...prev, global: d[0] };
+          } else {
+            return { global: d[0] };
+          }
+        });
+      }
+    },
+    staleTime: Infinity,
+  });
+
   useEffect(() => {
     const container = containerRef.current;
     const chart = Chart(["happiness", "danceability", "acousticness"]);
@@ -182,6 +208,9 @@ export const MoodChart: React.FC<Props> = ({ className, uid, id }) => {
             acousticness: features[currentCountry]?.acousticness * 100,
             danceability: features[currentCountry]?.danceability * 100,
           });
+        } else {
+          toast.loading("Fetching country data");
+          refetchCountry();
         }
       };
       if (features.user && features.global) {
@@ -199,6 +228,13 @@ export const MoodChart: React.FC<Props> = ({ className, uid, id }) => {
 
       return () => window.removeEventListener("resize", render);
     }
+  }, [features, currentCountry, refetchCountry]);
+  useEffect(() => {
+    return () => {
+      // Remember on unmount
+      sessionStorage.setItem("features", JSON.stringify(features));
+      sessionStorage.setItem("country", currentCountry);
+    };
   }, [features, currentCountry]);
   return (
     <StyledChart
@@ -226,7 +262,6 @@ export const MoodChart: React.FC<Props> = ({ className, uid, id }) => {
         value={currentCountry}
         onChange={(e) => {
           setCurrentCountry(e.target.value);
-          countryFeaturesQuery.refetch();
         }}
       >
         {COUNTRIES.map((x) => (
