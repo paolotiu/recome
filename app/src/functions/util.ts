@@ -63,3 +63,9 @@ export function getTopFive(arr: { key: string; value: number }[]) {
   });
   return arr.slice(0, 5);
 }
+export function getKeyByValue(
+  object: { [key: string]: string },
+  value: string
+) {
+  return Object.keys(object).find((key) => object[key] === value);
+}

@@ -166,9 +166,9 @@ function renderChart(data: number[], container: HTMLDivElement) {
     .on(
       "touchmove mousemove",
       function (e, d) {
-        if (e.cancelable) {
-          e.preventDefault();
-        }
+        // if (e.cancelable) {
+        //   e.preventDefault();
+        // }
         if (e.type === "touchmove") {
           const touch = e.changedTouches[0];
           const elem = document.elementFromPoint(touch.clientX, touch.clientY);
