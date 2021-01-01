@@ -70,26 +70,20 @@ const StyledChart = styled.div`
     display: grid;
     align-self: center;
     width: clamp(200px, 50%, 300px);
-    padding: 0;
+    padding: 0.5em;
     height: fit-content;
     background-color: transparent;
     border: none;
     color: ${(props) => props.theme.light};
     font-weight: bold;
     font-size: 1.2em;
-    padding-right: 29px;
-    background: url(${arrowDown}) no-repeat right;
+    border-radius: 4px;
+    background: url(${arrowDown}) no-repeat ${(props) => props.theme.background};
+    background-position: 90% 50%;
 
-    :after {
-      content: " sadad";
-      width: 0.8em;
-      height: 0.5em;
-      background-color: black;
-      clip-path: polygon(100% 0%, 0 0%, 50% 100%);
-    }
     option {
       font-family: Poppins;
-      color: ${(props) => props.theme.darkBg};
+      color: ${(props) => props.theme.light};
     }
   }
 `;
