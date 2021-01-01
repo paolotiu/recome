@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useQuery } from "react-query";
 import { getAllSavedTracks } from "../../functions/api";
 import { ScaleLoader } from "react-spinners";
@@ -9,6 +9,7 @@ import uniq from "lodash.uniq";
 import { transparentize } from "polished";
 import {} from "module";
 import { AllTracksData } from "../../types";
+import ReactGA from "react-ga";
 interface Props {}
 
 const Wrapper = styled(CenterGrid)`
@@ -77,6 +78,10 @@ export const Analyze = (props: Props) => {
       staleTime: Infinity,
     }
   );
+
+  useEffect(() => {
+    ReactGA.pageview("/analyze");
+  }, []);
 
   const artistIDs = uniq(allTracks?.map((x) => x.artistID as string));
   const poplarityNums = allTracks?.map((x) => x.popularity);
