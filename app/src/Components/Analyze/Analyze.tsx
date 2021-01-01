@@ -16,6 +16,7 @@ const Wrapper = styled(CenterGrid)`
   flex-direction: column;
   align-items: center;
   padding: 0 2em;
+  padding-bottom: 100px;
   .spinner-container {
     margin-top: 100px;
     display: flex;
@@ -114,6 +115,7 @@ export const Analyze = (props: Props) => {
       <div className="chart-section">
         <div className="chart-text first">
           <h1>Mood</h1>
+          <small>* Based on the tracks you saved</small>
         </div>
         <MoodChart />
       </div>
