@@ -6,7 +6,6 @@ import styled from "styled-components";
 import arrowDown from "../../../static/arrowDown.png";
 import {
   getAllCountryFeatures,
-  getCountryFeatures,
   getGlobalFeatures,
   getUserFeatures,
 } from "../../../functions/api";
@@ -14,7 +13,6 @@ import { responsivefy, getKeyByValue } from "../../../functions/util";
 import { IUser } from "../../../types";
 import { useUser } from "../../../UserContext";
 import { COUNTRIES, COUNTRY_TO_CODE } from "./data";
-import { toast } from "react-hot-toast";
 const StyledChart = styled.div`
   width: 100%;
 

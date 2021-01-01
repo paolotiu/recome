@@ -9,7 +9,6 @@ import { ReactComponent as Gears } from "../../static/gears.svg";
 import { ReactComponent as Chart } from "../../static/chart.svg";
 import { v4 as uuid } from "uuid";
 
-import { useQueryClient } from "react-query";
 import ReactGA from "react-ga";
 
 const Wrapper = styled(CenterGrid)`
