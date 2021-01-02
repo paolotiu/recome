@@ -69,3 +69,8 @@ export function getKeyByValue(
 ) {
   return Object.keys(object).find((key) => object[key] === value);
 }
+
+export function logOut() {
+  localStorage.removeItem("token");
+  window.location.assign(window.location.hostname);
+}
