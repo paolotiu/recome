@@ -7,6 +7,7 @@ import styled from "styled-components";
 import { ResultArtist, ResultTrack } from "../../types";
 import { Photo } from "./Photo/Photo";
 import { saveAs } from "file-saver";
+import { Fade } from "react-awesome-reveal";
 import ReactGA from "react-ga";
 
 const SwitchBtn = styled.button<{ isActive: boolean }>`
@@ -59,10 +60,6 @@ export const Generate = () => {
     () => getTopArtists(token, 50, 0, timeRange)
   );
 
-  if (!topTracks.data || !topArtists.data) {
-    return <> </>;
-  }
-
   return (
     <Wrapper>
       <div className="gen-controls">
@@ -103,13 +100,26 @@ export const Generate = () => {
           </SwitchBtn>
         </div>
       </div>
-      <Photo
-        isTracks={isTracks}
-        refObj={ref}
-        artistsData={topArtists.data.items}
-        tracksData={topTracks.data.items}
-        timeRange={timeRange}
-      />
+      <Fade>
+        {topArtists.data && topTracks.data ? (
+          <Photo
+            isTracks={isTracks}
+            refObj={ref}
+            artistsData={topArtists.data.items}
+            tracksData={topTracks.data.items}
+            timeRange={timeRange}
+          />
+        ) : (
+          <div
+            style={{
+              height: "1000px",
+              maxWidth: "90vw",
+              width: "500px",
+              backgroundColor: "#212121",
+            }}
+          ></div>
+        )}
+      </Fade>
 
       <Button
         onClick={() => {
