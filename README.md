@@ -10,18 +10,14 @@
 
 
 
-<style>
-bold{
-    font-weight: bold
-}
-</style>
+
 Get recommendations exactly the way you want them. With multiple metrics to adjust you can find new songs recommended for you by you.
 
 Aside from recommendations there are other cool things to see. Recome is able to generate photos of your top tracks and artists from various time ranges. Recome also makes an analysis based of the tracks you saved and visualizes them into charts and graphs.
 
 Recome is built with React Typescript, NodeJS, and is hosted on Netlify with Netlify Lambda functions.
 
-###Installation
+# Installation
 
 
 
@@ -37,28 +33,28 @@ Recome was first built with a NodeJS server, but eventually ported over to lambd
 
 
 
-#### Creating a spotify app
+# Creating a spotify app
 Recome needs Spotify authentication to function. 
 <ol>
     <li>
-    Login to your <a href="https://developer.spotify.com/dashboard/applications"> Spotify Dashboard </a> and click <bold> Create an App </bold>
+    Login to your <a href="https://developer.spotify.com/dashboard/applications"> Spotify Dashboard </a> and click <strong>  Create an App </strong>
     </li>
     <li>
         Give your app a name and description, accept the terms, and click
-        <bold> Create </bold>
+        <strong> Create </strong>
     </li>
     <li>
-    The app view will open. Click on <bold> Edit Settings </bold> and add <code>http://localhost:8888/.netlify/functions/callback</code> or <code>http://localhost:8888/callback</code> to the Redirect URIs field depending on which kind of server you choose
+    The app view will open. Click on <strong>  Edit Settings </strong> and add <code>http://localhost:8888/.netlify/functions/callback</code> or <code>http://localhost:8888/callback</code> to the Redirect URIs field depending on which kind of server you choose
     </li>
 </ol>
 More detailed instructions can be found on the <a href="https://developer.spotify.com/"> Spotify Developers </a> page
 
 
-### Setup
+# Setup
 
 This section will be divided into 2 paths. The first is if you'll be using netlify/lambda functions. The second is for a seperate NodeJS server.
 
-#### Path #1: Netlify Functions Integration 
+## Path #1: Netlify Functions Integration 
 ##### Configure your user variables
 
 In `/app` create a `.env` file and replace your credentials with the template below.
@@ -81,7 +77,7 @@ $ netlify dev
 
 
 &nbsp;
-#### Path #2: Seperate NodeJS server
+## Path #2: Seperate NodeJS server
 ##### Configure your user variables
 In the `/app` folder create a `.env` file then copy and paste the line below.
 ```
