@@ -16,6 +16,7 @@ const StyledDropdown = styled.div<{ isDropdownOpen: boolean }>`
   font-size: 0.9em;
   font-weight: 300;
   white-space: nowrap;
+  z-index: 1000;
   > span,
   > a {
     cursor: pointer;
