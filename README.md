@@ -17,7 +17,7 @@ Aside from recommendations there are other cool things to see. Recome is able to
 
 Recome is built with React Typescript, NodeJS, and is hosted on Netlify with Netlify Lambda functions.
 
-### Installation
+# Installation
 
 
 
@@ -33,7 +33,7 @@ Recome was first built with a NodeJS server, but eventually ported over to lambd
 
 
 
-#### Creating a spotify app
+# Creating a spotify app
 Recome needs Spotify authentication to function. 
 <ol>
     <li>
@@ -50,11 +50,11 @@ Recome needs Spotify authentication to function.
 More detailed instructions can be found on the <a href="https://developer.spotify.com/"> Spotify Developers </a> page
 
 
-### Setup
+# Setup
 
 This section will be divided into 2 paths. The first is if you'll be using netlify/lambda functions. The second is for a seperate NodeJS server.
 
-#### Path #1: Netlify Functions Integration 
+## Path #1: Netlify Functions Integration 
 ##### Configure your user variables
 
 In `/app` create a `.env` file and replace your credentials with the template below.
@@ -77,7 +77,7 @@ $ netlify dev
 
 
 &nbsp;
-#### Path #2: Seperate NodeJS server
+## Path #2: Seperate NodeJS server
 ##### Configure your user variables
 In the `/app` folder create a `.env` file then copy and paste the line below.
 ```
