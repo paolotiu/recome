@@ -125,7 +125,11 @@ export const Generate = () => {
         onClick={() => {
           const node = ref.current;
           const scale = 2;
-
+          ReactGA.event({
+            category: "Generate",
+            action: "click",
+            label: "Downloaded Photo Generation",
+          });
           if (node) {
             const options = {
               quality: 1,
