@@ -21,6 +21,9 @@ const StyledDropdown = styled.div<{ isDropdownOpen: boolean }>`
   > a {
     cursor: pointer;
     padding: 1em 1em 1em 1em;
+    :first-child {
+      padding-bottom: 0;
+    }
     :last-child {
       border-top: 1px solid ${(props) => props.theme.lightenedDark};
     }
@@ -79,6 +82,9 @@ export const Header: React.FC<Props> = () => {
       <StyledDropdown isDropdownOpen={isDropdownOpen} className="dropdown">
         <Link to="/home">
           <span>Home</span>
+        </Link>
+        <Link to="/contact">
+          <span>Contact</span>
         </Link>
         <span id="logout" onClick={logOut}>
           Log out
