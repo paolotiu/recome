@@ -126,8 +126,8 @@ export const Generate = () => {
           const node = ref.current;
           const scale = 2;
           ReactGA.event({
-            category: "Generate",
-            action: "click",
+            category: "Button Click",
+            action: "Generate Download",
             label: "Downloaded Photo Generation",
           });
           if (node) {
