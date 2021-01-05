@@ -22,7 +22,7 @@ const StyledDropdown = styled.div<{ isDropdownOpen: boolean }>`
     cursor: pointer;
     padding: 1em 1em 1em 1em;
     :first-child {
-      padding-bottom: 0;
+      padding-bottom: 0.3em;
     }
     :last-child {
       border-top: 1px solid ${(props) => props.theme.lightenedDark};
@@ -30,7 +30,7 @@ const StyledDropdown = styled.div<{ isDropdownOpen: boolean }>`
   }
 
   #logout {
-    padding-top: 0.4em;
+    padding-top: 0.8em;
   }
 `;
 const StyledHeader = styled.header`
