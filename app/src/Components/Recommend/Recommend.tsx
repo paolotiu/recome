@@ -205,6 +205,11 @@ export const Recommend: React.FC<Props> = () => {
                   },
                   {}
                 );
+                ReactGA.event({
+                  category: "Button Click",
+                  action: "Recommendation",
+                  label: "Got Recommendation",
+                });
               }}
               //Disabled white fetching
               disabled={artistsQuery.isLoading || tracksQuery.isLoading}
