@@ -53,7 +53,7 @@ function App() {
     },
     {
       enabled: !!token,
-
+      retry: 0,
       refetchOnMount: "always",
       staleTime: Infinity,
     }
