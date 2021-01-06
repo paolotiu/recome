@@ -7,7 +7,6 @@ const Wrapper = styled(CenterGrid)`
   display: flex;
   justify-items: center;
   place-items: center;
-
   margin-top: 50px;
   a {
     margin: 0 1em;
@@ -21,7 +20,7 @@ const Wrapper = styled(CenterGrid)`
 `;
 const ContactTile = styled(Tile)`
   display: grid;
-
+  height: 100%;
   grid-template-rows: 60% auto;
   min-height: 300px;
   .logo {
