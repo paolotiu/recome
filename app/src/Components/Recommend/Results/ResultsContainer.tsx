@@ -123,7 +123,7 @@ const Results: React.FC<Props> = React.memo(({ results }) => {
       ),
 
     {
-      staleTime: 1,
+      staleTime: 10,
       enabled: false,
     }
   );
