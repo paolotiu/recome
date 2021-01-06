@@ -7,6 +7,7 @@ import { HomeTile } from "./HomeTile/HomeTile";
 import { ReactComponent as Heart } from "../../static/heart.svg";
 import { ReactComponent as Gears } from "../../static/gears.svg";
 import { ReactComponent as Chart } from "../../static/chart.svg";
+import { toast } from "react-hot-toast";
 import { v4 as uuid } from "uuid";
 
 import ReactGA from "react-ga";
@@ -66,6 +67,7 @@ const Wrapper = styled(CenterGrid)`
 
 export const Home: React.FC = () => {
   const token = localStorage.getItem("token")!;
+  toast.dismiss();
   useEffect(() => {
     ReactGA.pageview("/home");
   }, []);
