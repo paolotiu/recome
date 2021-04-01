@@ -13,7 +13,7 @@ interface Props {
 
 const StyledHomeTile = styled(Tile)`
   transition: background-color, transform 0.1s ease-in;
-
+  overflow: hidden;
   padding: 2em 1.4em;
   svg {
     stroke: ${(props) => props.theme.light};
@@ -76,6 +76,16 @@ const StyledHomeTile = styled(Tile)`
     }
     p {
       grid-column: 1/3;
+      max-width: 24em;
+    }
+  }
+
+  @media (max-width: 410px) {
+    h2 {
+      padding-left: 0.4em;
+    }
+    p {
+      max-width: 12em;
     }
   }
 `;

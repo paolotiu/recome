@@ -67,8 +67,9 @@ const Wrapper = styled(CenterGrid)`
 
 export const Home: React.FC = () => {
   const token = localStorage.getItem("token")!;
-  toast.dismiss();
+
   useEffect(() => {
+    toast.dismiss();
     ReactGA.pageview("/home");
   }, []);
 
