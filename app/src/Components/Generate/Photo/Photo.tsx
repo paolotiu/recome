@@ -1,8 +1,8 @@
-import React from "react";
-import styled from "styled-components";
-import { ResultArtist, ResultTrack } from "../../../types";
-import { v4 as uuid } from "uuid";
-import { darken } from "polished";
+import React from 'react';
+import styled from 'styled-components';
+import { ResultArtist, ResultTrack } from '../../../types';
+import { v4 as uuid } from 'uuid';
+import { darken } from 'polished';
 const StyledPhoto = styled.div`
   width: 500px;
   max-width: 70vw;
@@ -89,9 +89,9 @@ const StyledPhoto = styled.div`
 `;
 
 const rangeValues: { [key: string]: string } = {
-  short_term: "Last 4 weeks",
-  medium_term: "Last 6 months",
-  long_term: "All time",
+  short_term: 'Last 4 weeks',
+  medium_term: 'Last 6 months',
+  long_term: 'All time',
 };
 interface Props {
   refObj: React.RefObject<HTMLDivElement>;
@@ -115,7 +115,7 @@ export const Photo: React.FC<Props> = ({
   return (
     <StyledPhoto ref={refObj}>
       <header>
-        <h1>Top {isTracks ? "Tracks" : "Artists"}</h1>
+        <h1>Top {isTracks ? 'Tracks' : 'Artists'}</h1>
         <p>{range}</p>
       </header>
 
@@ -135,12 +135,7 @@ export const Photo: React.FC<Props> = ({
       ) : (
         <>
           <div className="gen-artist-photo">
-            <img
-              src={artists[0].images[1].url}
-              alt=""
-              width="100px"
-              height="100px"
-            />
+            <img src={artists[0].images[1].url} alt="" width="100px" height="100px" />
             {/* {artists.map((x) => (
               <img
                 src={x.images[1].url}
@@ -158,7 +153,7 @@ export const Photo: React.FC<Props> = ({
           </ol>
         </>
       )}
-      <span className="watermark">recome.site</span>
+      <span className="watermark">recome.netlify.app</span>
     </StyledPhoto>
   );
 };
